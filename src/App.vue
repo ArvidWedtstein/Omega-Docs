@@ -1,8 +1,6 @@
 <template>
   <div id="app" class="container-xxl mt-3 docs-layout">
-    <aside class="docs-sidebar border-end">
-      <Sidebar @tab-selected="setSelectedTab" :groupedTabs="groupedTabs" />
-    </aside>
+    <Sidebar @tab-selected="setSelectedTab" :groupedTabs="groupedTabs" />
 
     <main class="docs-main order-1">
       <button
@@ -33,6 +31,8 @@
       <div class="" v-if="selectedTab_ID > 0">
         <div class="py-5 text-center">
           <h1 class="display-5 fw-bold">{{ getTab(selectedTab_ID)?.title }}</h1>
+          <CodeBuilder :tab="(getTab(selectedTab_ID) as Tab)" />
+
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ getTab(selectedTab_ID)?.description }}</p>
 
@@ -43,7 +43,7 @@
                 <template #code>
                   <pre
                     class="mb-0"
-                  ><code contenteditable="false" tabindex="0" spellcheck="false">Import insert component here from 'insert path here'</code></pre>
+                  ><code contenteditable="false" tabindex="0" spellcheck="false">Import {{ getTab(selectedTab_ID)?.title }} from 'insert path here'</code></pre>
                 </template>
               </CodeBlock>
             </section>
@@ -82,8 +82,8 @@
                   title="List view"
                   :class="[
                     vSelectedPropView === 'list'
-                      ? 'btn-dark'
-                      : 'btn-outline-dark',
+                      ? 'btn-secondary'
+                      : 'btn-outline-secondary',
                   ]"
                 >
                   <svg
@@ -104,8 +104,8 @@
                   class="btn"
                   :class="[
                     vSelectedPropView === 'table'
-                      ? 'btn-dark'
-                      : 'btn-outline-dark',
+                      ? 'btn-secondary'
+                      : 'btn-outline-secondary',
                   ]"
                 >
                   <svg
@@ -281,6 +281,7 @@
 import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
+import CodeBuilder from "./components/CodeBuilder.vue";
 
 interface Tab {
   id: number;
@@ -613,20 +614,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@media (min-width: 992px) {
-  .docs-sidebar {
-    position: sticky;
-    top: 5rem;
-    display: block !important;
-    height: calc(100vh - 6rem);
-    padding-left: 0.25rem;
-    margin-left: -0.25rem;
-    overflow-y: auto;
-  }
-}
-.docs-sidebar {
-  grid-area: sidebar;
-}
 @media (min-width: 992px) {
   .docs-layout {
     display: grid;

@@ -1,50 +1,52 @@
 <template>
-  <div id="docsSidebar" class="offcanvas-lg offcanvas-start" tabindex="-1">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title" id="docsSidebarOffcanvasLabel">
-        Browse docs
-      </h5>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="offcanvas"
-        aria-label="Close"
-        data-bs-target="#docsSidebar"
-      ></button>
-    </div>
+  <aside class="docs-sidebar border-end">
+    <div id="docsSidebar" class="offcanvas-lg offcanvas-start" tabindex="-1">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="docsSidebarOffcanvasLabel">
+          Browse docs
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+          data-bs-target="#docsSidebar"
+        ></button>
+      </div>
 
-    <div class="offcanvas-body">
-      <nav class="w-100" id="bd-docs-nav" aria-label="Docs navigation">
-        <ul
-          class="nav flex-column mb-0 pb-3 pb-md-2 pe-lg-2"
-          v-for="(vGroupContent, vGroupName, vIndex) in groupedTabs"
-          :key="vIndex"
-        >
-          <li class="nav-item py-2">
-            <strong class="d-flex w-100 align-items-center fw-semibold">
-              {{ vGroupName }}
-            </strong>
+      <div class="offcanvas-body">
+        <nav class="w-100" id="bd-docs-nav" aria-label="Docs navigation">
+          <ul
+            class="nav flex-column mb-0 pb-3 pb-md-2 pe-lg-2"
+            v-for="(vGroupContent, vGroupName, vIndex) in groupedTabs"
+            :key="vIndex"
+          >
+            <li class="nav-item py-2">
+              <strong class="d-flex w-100 align-items-center fw-semibold">
+                {{ vGroupName }}
+              </strong>
 
-            <ul class="nav flex-column fw-normal pb-2 small">
-              <li
-                class="nav-item"
-                v-for="(vTab, vTabIndex) in vGroupContent"
-                :key="vTabIndex"
-              >
-                <button
-                  type="button"
-                  class="btn btn-link d-inline-block rounded"
-                  @click="selectTab(vTab.id)"
+              <ul class="nav flex-column fw-normal pb-2 small">
+                <li
+                  class="nav-item"
+                  v-for="(vTab, vTabIndex) in vGroupContent"
+                  :key="vTabIndex"
                 >
-                  {{ vTab.title }}
-                </button>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
+                  <button
+                    type="button"
+                    class="btn btn-link d-inline-block rounded"
+                    @click="selectTab(vTab.id)"
+                  >
+                    {{ vTab.title }}
+                  </button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
-  </div>
+  </aside>
 </template>
 
 <script setup lang="ts">
@@ -85,4 +87,19 @@ const selectTab = (pTab_ID: Tab["id"]) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (min-width: 992px) {
+  .docs-sidebar {
+    position: sticky;
+    top: 5rem;
+    display: block !important;
+    height: calc(100vh - 6rem);
+    padding-left: 0.25rem;
+    margin-left: -0.25rem;
+    overflow-y: auto;
+  }
+}
+.docs-sidebar {
+  grid-area: sidebar;
+}
+</style>
