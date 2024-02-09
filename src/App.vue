@@ -1,52 +1,7 @@
 <template>
   <div id="app" class="container-xxl mt-3 docs-layout">
     <aside class="docs-sidebar border-end">
-      <div id="docsSidebar" class="offcanvas-lg offcanvas-start" tabindex="-1">
-        <div class="offcanvas-header border-bottom">
-          <h5 class="offcanvas-title" id="docsSidebarOffcanvasLabel">
-            Browse docs
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-            data-bs-target="#docsSidebar"
-          ></button>
-        </div>
-
-        <div class="offcanvas-body">
-          <nav class="w-100" id="bd-docs-nav" aria-label="Docs navigation">
-            <ul
-              class="nav flex-column mb-0 pb-3 pb-md-2 pe-lg-2"
-              v-for="(vGroupContent, vGroupName, vIndex) in groupedTabs"
-              :key="vIndex"
-            >
-              <li class="nav-item py-2">
-                <strong class="d-flex w-100 align-items-center fw-semibold">
-                  {{ vGroupName }}
-                </strong>
-
-                <ul class="nav flex-column fw-normal pb-2 small">
-                  <li
-                    class="nav-item"
-                    v-for="(vTab, vTabIndex) in vGroupContent"
-                    :key="vTabIndex"
-                  >
-                    <button
-                      type="button"
-                      class="btn btn-link d-inline-block rounded"
-                      @click="setSelectedTab(vTab.id)"
-                    >
-                      {{ vTab.title }}
-                    </button>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
+      <Sidebar @tab-selected="setSelectedTab" :groupedTabs="groupedTabs" />
     </aside>
 
     <main class="docs-main order-1">
@@ -109,7 +64,13 @@
                       />
                     </svg>
                   </label>
-                  <input class="form-control" id="search" type="text" />
+                  <input
+                    class="form-control"
+                    id="search"
+                    type="text"
+                    v-model="vSearch"
+                    @input="onSearchChange"
+                  />
                 </div>
               </div>
 
@@ -179,7 +140,7 @@
                   <div
                     class="row"
                     role="row"
-                    v-for="(vProp, vPropIndex) in getTab(selectedTab_ID)?.props"
+                    v-for="(vProp, vPropIndex) in vSearchItems"
                     :key="vPropIndex"
                   >
                     <div class="col">
@@ -255,7 +216,7 @@
                 >
                   <div
                     class="accordion-item"
-                    v-for="(vProp, vPropIndex) in getTab(selectedTab_ID)?.props"
+                    v-for="(vProp, vPropIndex) in vSearchItems"
                     :key="vPropIndex"
                   >
                     <h2
@@ -317,8 +278,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
+import Sidebar from "./components/Sidebar.vue";
 
 interface Tab {
   id: number;
@@ -346,7 +308,14 @@ interface GroupedTabs {
 
 const selectedTab_ID = ref(2);
 const vSelectedPropView = ref("list");
+const vSearchItems = ref<Tab["props"]>([]);
+const vSearch = ref("");
 const groupedTabs = ref<GroupedTabs>({});
+
+watch(selectedTab_ID, async (newTab_ID, oldTab_ID) => {
+  vSearchItems.value = getTab(newTab_ID)?.props || [];
+});
+
 const tabs: Tab[] = [
   {
     id: 1,
@@ -608,6 +577,12 @@ const tabs: Tab[] = [
         </div>`,
   },
 ];
+
+const onSearchChange = (pSearchEvent: Event) => {
+  vSearchItems.value = getTab(selectedTab_ID.value)?.props?.filter((vProp) =>
+    vProp.name.toLowerCase().includes(vSearch.value.toLowerCase())
+  );
+};
 
 const setSelectedTab = (pTab_ID: number) => {
   selectedTab_ID.value = pTab_ID;
