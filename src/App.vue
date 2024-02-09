@@ -97,12 +97,11 @@
             <div class="row align-items-center g-3">
               <div class="col-auto flex-grow-1">
                 <div class="input-group">
-                  <label for="search">
+                  <label for="search" class="input-group-text">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
                       width="40"
-                      class="input-group-text"
                       fill="currentColor"
                     >
                       <path
