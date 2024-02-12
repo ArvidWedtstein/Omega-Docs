@@ -1,7 +1,7 @@
 <template>
   <div class="rounded border">
-    <div class="row">
-      <div class="col-auto flex-grow-1">
+    <div class="row h-100">
+      <div class="col-auto pe-0 flex-grow-1 h-100">
         <CodeBlock>
           <template #code>
             <pre
@@ -10,7 +10,7 @@
           </template>
         </CodeBlock>
       </div>
-      <div class="col-4">
+      <div class="col-4 ps-0">
         <ul
           v-if="tab"
           class="overflow-y-auto list-group text-start rounded-start-none"
@@ -81,32 +81,13 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import CodeBlock from "./CodeBlock.vue";
+import type { Tab } from "@/App.vue";
 
 /**
  * Converts array type to single type
  */
 export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
-
-interface Tab {
-  id: number;
-  title: string;
-  description: string;
-  type?: string;
-  category: string;
-  slots?: Array<{
-    name: string;
-  }>;
-  props?: Array<{
-    name: string;
-    type: string;
-    default: string;
-    description: string;
-    required: boolean;
-    example?: string;
-  }>;
-  content: string;
-}
 
 const { tab } = defineProps<{
   tab: NonNullable<Tab>;
@@ -126,7 +107,7 @@ const checkProp = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
 
 const generateCode = computed(() => {
   if (!tab || !vSelectedProps.value) return "";
-  return `<${tab.title}
+  return `<${tab.name}
 ${vSelectedProps.value
   .map(
     (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`

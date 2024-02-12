@@ -1,0 +1,991 @@
+{
+  "components": [
+    {
+      "name": "DataObject",
+      "description": "",
+      "type": "Class",
+      "category": "Data",
+      "props": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "Id of the DataObject",
+          "default": "null",
+          "example": "",
+          "required": true
+        },
+        {
+          "name": "viewName",
+          "type": "string",
+          "description": "Viewname from which to select",
+          "default": "null",
+          "example": "",
+          "required": true
+        },
+        {
+          "name": "appId",
+          "type": "string",
+          "description": "App id to which this DataObject belongs to",
+          "default": "null",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "reshiftItem",
+          "type": "function",
+          "default": "",
+          "description": "Reshifts items to new position.",
+          "example": "dsWorkflows.reshiftItem(vIndexOfItem, vNewIndex)",
+          "required": false
+        },
+        {
+          "name": "fileUpload",
+          "type": "object",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "uniqueTable",
+          "type": "String",
+          "default": "undefined",
+          "description": "Table used for inserting, updating and deleting records.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "expandView",
+          "type": "Boolean",
+          "description": "When true will add context filtering in the backend",
+          "default": "null",
+          "required": false
+        },
+        {
+          "name": "deleteConfirm",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Show confirmation prompt before deleting a row.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "allowInsert",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Allow inserting rows from this DataObject.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "allowUpdate",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Allow updating rows from this DataObject.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "allowDelete",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Allow deleting rows from this DataObject.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "createNewAtTheEnd",
+          "type": "Boolean",
+          "description": "Push new records instead of unshifting them.",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "clientSideFiltering",
+          "type": "Boolean",
+          "description": "Use already retrieved data when filtering instead of fetching from database",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableSaveOncurrentIndexChange",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Skip saving tries when current index is changed.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "selectFirstRowOnLoad",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Selects first row on load",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "fields",
+          "type": "DataObjectDefinitionFieldType[]",
+          "description": "List of select fields used by this DataObject.",
+          "default": "undefined",
+          "example": "",
+          "required": true
+        },
+        {
+          "name": "viewDefinition",
+          "type": "ViewDefinitionFieldType[]",
+          "description": "View definition object used to set up DataObject.Fields.",
+          "default": "undefined",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "uniqueTableDefinition",
+          "type": "ViewDefinitionFieldType[]",
+          "description": "Unique table definition oobject used to set up DataObject.Fields.",
+          "default": "undefined",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableLayouts",
+          "type": "Boolean",
+          "description": "Disable layout module.",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "filterString",
+          "type": "string",
+          "description": "Initial filter string.",
+          "default": "undefined",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "whereClause",
+          "type": "string",
+          "description": "Initial where clause.",
+          "default": "undefined",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "distinctRows",
+          "type": "Boolean",
+          "description": "Select distinct rows.",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "maxRecords",
+          "type": "number",
+          "description": "Max records used in retrieve requests.",
+          "default": -1,
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "loadRecents",
+          "type": "Boolean",
+          "description": "Load recents for lookups. Default is false here, but it can be enabled by the lookup component itself.",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "dynamicLoading",
+          "type": "Boolean",
+          "description": "Use dynamic loading (legacy paging | virtual list paging ). Default is false, but it can be enabled by the grid component.",
+          "default": "raw => !(raw.treeColumnDefinition || raw.groupBy)",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "optimisticLocking",
+          "type": "Boolean",
+          "description": "Don't allow updates if Updated value is diffrent from currently loaded one",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "dataHandler",
+          "type": "IDataHandler<T>",
+          "description": "Optional custom DataHandler class, must implement IDataHandler interface.",
+          "default": "DataHandler",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "masterDataObject_ID",
+          "type": "string",
+          "description": "Id of the master DataObject if this DataObject has MasterDetails defined",
+          "default": "null",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "masterDetailDefinition",
+          "type": "MasterDetailsDefinition[]",
+          "description": "MasterDetails bindings",
+          "default": "null",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableAutoLoad",
+          "type": "Boolean",
+          "description": "Don't auto load this details object when master index changes",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "enableProperties",
+          "type": "Boolean",
+          "description": "When set to true will check fop properties configuration in the database and attempt to initialize properties data extension",
+          "default": "null",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableSaveOnBeforeLoad",
+          "type": "Boolean",
+          "description": "When true will stop attempting to save changes when load is called",
+          "default": "false",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "localizeFields",
+          "type": "Boolean",
+          "description": "To call localize fields prop. Used for translating Headers",
+          "default": "null",
+          "example": "",
+          "required": false
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "alert",
+      "description": "Used to alert user",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.controls.alert.ts",
+      "props": [],
+      "params": [
+        {
+          "name": "pText",
+          "type": "String",
+          "default": ""
+        },
+        {
+          "name": "pType",
+          "default": "danger",
+          "type": "danger | success | info"
+        },
+        {
+          "name": "pOptions",
+          "type": "Object",
+          "default": "{ autohide: false, delay: 5000, slimVersion: false }"
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "snippets": [
+        {
+          "title": "Error",
+          "content": "When displaying alert for error",
+          "code": "alert('Something Went Wrong')"
+        }
+      ]
+    },
+    {
+      "name": "DataGrid",
+      "description": "",
+      "type": "Component",
+      "category": "Grid",
+      "path": "o365.vue.components.DataGrid.vue",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "The data object used in the grid",
+          "required": false
+        },
+        {
+          "name": "columns",
+          "type": "array",
+          "default": "null",
+          "description": "Columns passed as an array instead of slots",
+          "required": false
+        },
+        {
+          "name": "data",
+          "type": "array",
+          "default": "",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "rowClass",
+          "type": "[Function, Object, String]",
+          "default": "null",
+          "description": "String, dynamic class object or function that will be bound to the row class property. The current row is provided to the function as an argument.",
+          "required": false
+        },
+        {
+          "name": "rowStyle",
+          "type": "[Function, Object, String]",
+          "default": "null",
+          "description": "String, dynamic class object or function that will be bound to the row class property. The current row is provided to the function as an argument.",
+          "required": false
+        },
+        {
+          "name": "headerTitle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "menuTabs",
+          "type": "Record<string, any>[]",
+          "default": "null",
+          "description": "An array of custom tab definitions for the grid sidemenu details tab.",
+          "example": ":menuTabs=\"[{ title: 'Custom Tab', id: 'tab1', iconClass: 'bi bi-1-square-fill', component: MyTabComponent]\"",
+          "required": false
+        },
+        {
+          "name": "rowclickhandler",
+          "type": "Function",
+          "default": "null",
+          "description": "Override the row click handler, when provided will not set current index",
+          "required": false
+        },
+        {
+          "name": "noHeader",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render header.",
+          "required": false
+        },
+        {
+          "name": "disableFilterRow",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render filter row.",
+          "required": false
+        },
+        {
+          "name": "detailIframe",
+          "type": "string",
+          "default": "null",
+          "description": "Path for detail iframe",
+          "example": ":detailIframe=\"`/nt/your_app_here?ID=${ID_TO_CHILD}&HideNav=true&Context=${dsYourDataSource.current.Domain_ID}`\"",
+          "required": false
+        },
+        {
+          "name": "detailTabTitle",
+          "type": "",
+          "default": "",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "multilineHeader",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables word wrapping for header columns",
+          "required": false
+        },
+        {
+          "name": "importData",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When true, will show importData",
+          "required": false
+        },
+        {
+          "name": "initialMenuWidth",
+          "type": "String",
+          "default": "400px",
+          "description": "Sets the initial width of the grid menu, accepts values either in 'px' or '%' ",
+          "required": false
+        },
+        {
+          "name": "groupByFolders",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Adds group by folders selector into right panel",
+          "required": false
+        },
+        {
+          "name": "dynamicLoading",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Enables dynamic loading for the grid. When set to false will set the inner height to loaded data length.",
+          "required": false
+        },
+        {
+          "name": "disableNavigation",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will disable grid navigation features.",
+          "required": false
+        },
+        {
+          "name": "collapseGridMenu",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` the grid setup menu will be initially collapsed.",
+          "required": false
+        },
+        {
+          "name": "hideGridMenu",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render the grid setup menu.",
+          "required": false
+        },
+        {
+          "name": "fieldFilters",
+          "type": "Array",
+          "default": "null",
+          "description": "An array of initial field filters. For example `['Title', {name:'StatusCode', distinct:'StatusCode'}]`",
+          "required": false
+        },
+        {
+          "name": "disableDeleteConfirm",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When true will disable confirm dialog on delete actions in grid.",
+          "required": false
+        },
+        {
+          "name": "noRowsFound",
+          "type": "string | Boolean",
+          "default": "'No rows found...'",
+          "description": "Then set to true, will show default message and enable for custom overriding via 'noRowsFound' slot. Can also be used to override default message.",
+          "required": false
+        },
+        {
+          "name": "eagerGridControl",
+          "type": "Function",
+          "default": "null",
+          "description": "Returns grid control ref immediately after creation",
+          "required": false
+        },
+        {
+          "name": "onDemandFields",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Select list will contain only visible grid columns and sort order columns set on data object",
+          "required": false
+        },
+        {
+          "name": "loadDataObject",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true the grid will load the dataobject after mount",
+          "required": false
+        },
+        {
+          "name": "softDelete",
+          "type": "Boolean",
+          "default": "",
+          "description": "Use soft delete for ActionDelete in grid",
+          "required": false
+        },
+        {
+          "name": "autoFilterDebounce",
+          "type": "Number",
+          "default": "500",
+          "description": "If provided will filter automaticly when typing in filter cells with the debounce value.",
+          "required": false
+        },
+        {
+          "name": "noGroupByContainer",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will disable the group by container, used when you don't want to allow the user to change group by settings",
+          "required": false
+        },
+        {
+          "name": "groupColumnDefinition",
+          "type": "any",
+          "default": "null",
+          "description": "The column definition used when grouping is enabled for the Group column",
+          "required": false
+        },
+        {
+          "name": "treeColumnDefinition",
+          "type": "any",
+          "default": "null",
+          "description": "The column definition used to render TreeColumn when treeify is enabled on the provided dataobject",
+          "required": false
+        },
+        {
+          "name": "itemsToRender",
+          "type": "Number",
+          "default": "500",
+          "description": "Initial number of items to render for visual scroll.",
+          "required": false
+        },
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "detailTab"
+        },
+        {
+          "name": "detailActions"
+        },
+        {
+          "name": "cardheader"
+        },
+        {
+          "name": "noRowsFound"
+        },
+        {
+          "name": "overlay"
+        },
+        {
+          "name": "contextmenuTop"
+        },
+        {
+          "name": "contextmenu"
+        },
+        {
+          "name": "contextmenuBottom"
+        },
+        {
+          "name": "statusbar"
+        }
+      ],
+      "events": [],
+      "params": [],
+      "snippets": [
+        {
+          "title": "Template",
+          "content": "",
+          "code": "<DataGrid\n  multilineHeader\n  :dataObject=\"\"\n>\n  <Column field=\"\" />\n</DataGrid>"
+        }
+      ]
+    },
+    {
+      "name": "OColumn",
+      "description": "Used in DataGrid and DataLookup",
+      "type": "Component",
+      "category": "Grid",
+      "path": "o365.vue.components.DataGrid.Column.jsx",
+      "template": "",
+      "props": [
+        {
+          "name": "pinned",
+          "type": "left | right",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "colId",
+          "type": "String",
+          "default": "field",
+          "description": "ptional unique id used for unbound columns.  ",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "field",
+          "type": "String",
+          "default": "null",
+          "description": "Field from Data Object",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "default": "from field",
+          "description": "width of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "minWidth",
+          "type": "Number",
+          "default": "50",
+          "description": "minimum width of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "default": "from field",
+          "description": "width of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "flexwidth",
+          "type": "Number (0-100)",
+          "default": "null",
+          "description": "A percentage of the unused width that should be added to this column. If provided, should be a value between 1 = 100",
+          "example": ":flexwidth=\"69\"",
+          "required": false
+        },
+        {
+          "name": "editable",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enabled editing",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "sortable",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enabled sorting",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "menu",
+          "type": "Boolean",
+          "default": "true",
+          "description": "disabled menu on this column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "hide",
+          "type": "Boolean",
+          "default": "false",
+          "description": "hides column from view. Can still be selected from Column Chooser",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "pinned",
+          "type": "left | right",
+          "default": "null",
+          "description": "set to left or right to pin column.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "default": "null",
+          "description": "Format used by default editors and when rendering values.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "filter",
+          "type": "Component",
+          "default": "OFilter",
+          "description": "Can be used to provide custom filter component.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "filterField",
+          "type": "Component",
+          "default": "OFilter",
+          "description": "Optional field to use for sorting instead of the main 'field' of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "cellrenderer",
+          "type": "Component | string",
+          "default": "null",
+          "description": "Optional cell renderer component definition or registered component name. When provided overrides #default slot",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "celleditor",
+          "type": "Component",
+          "default": "null",
+          "description": "Optional cell renderer component definition or registered component name. When provided overrides #editor slot",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "cellrendererparams",
+          "type": "Object",
+          "default": "null",
+          "description": "Additional props object that will be provided to the cell renderer component",
+          "example": ":cellrendererparams=\"{href:'/nt/workflow-task?ID={{ID}}',target:'_workflow_item'}\"",
+          "required": false
+        },
+        {
+          "name": "celleditorparams",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "cellTitle",
+          "type": "Function | String",
+          "default": "null",
+          "description": "Cell tooltip function. Should be a function that takes in a row and returns a string",
+          "example": ":cellTitle=\"function(pRow) { pRow.Name }\"",
+          "required": false
+        },
+        {
+          "name": "cellStyle",
+          "type": "Function | String",
+          "default": "null",
+          "description": "Cell style. Can either be a static one for all cells or a per row function",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableDistinct",
+          "type": "Boolean",
+          "default": "false",
+          "description": "disabled distinct filter for this column's field",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "suppressSelection",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disable drag selection for this column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "bulkUpdate",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enable bulk update for this column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "singleClickEdit",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Enter edit mode after a single click on this column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "utc",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When enabled will force UTC mode for datepickers and formatted date renderers",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "getCopyValue",
+          "type": "Function",
+          "default": "null",
+          "description": "Function called when copying values that takes in a row and returns the value for copying.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableResize",
+          "type": "Boolean",
+          "default": "false",
+          "description": "disables resizing of this column.",
+          "example": "disableResize",
+          "required": false
+        },
+        {
+          "name": "class",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "Class for all cells in this column.",
+          "example": "class=\"bg-secondary p-2\"",
+          "required": false
+        },
+        {
+          "name": "required",
+          "type": "Boolean",
+          "default": "false",
+          "description": "sets column/field as required when editing",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "sortField",
+          "type": "Field",
+          "default": "null",
+          "description": "Field to sort on",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DataLookup",
+      "description": "Lookup component. Takes Column component as children.",
+      "type": "Component",
+      "category": "Lookup",
+      "path": "o365.vue.components.DataLookup.vue",
+      "template": "<DataLookup\n:dataObject=\"\"\nv-model=\"\"\n:bind=\"sel=>{}\"\n></DataLookup>",
+      "snippets": [
+        {
+          "title": "",
+          "content": ""
+        }
+      ],
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables lookup.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "bind",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "placeholder",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "columns",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "height",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "whereClause",
+          "type": "String",
+          "default": "null",
+          "description": "Set custom whereclause on dataobject in Lookup. Can be used to create bound whereclauses.",
+          "example": ":whereClause=\"`[${your_field}] IS NOT NULL`\"",
+          "required": false
+        },
+        {
+          "name": "reloadOnWhereClauseChange",
+          "type": "",
+          "default": "",
+          "description": "For when you need the lookup to reload on any where clause change.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "template": "#actions"
+        },
+        {
+          "name": "desktopActions",
+          "template": "#desktopActions"
+        },
+        {
+          "name": "target",
+          "template": "#target=\"{target}\""
+        }
+      ],
+      "events": [
+        {
+          "name": "beforeopen",
+          "syntax": "@beforeopen=\"\""
+        },
+        {
+          "name": "beforeclose",
+          "syntax": "@beforeclose=\"\""
+        }
+      ],
+      "params": []
+    }
+  ]
+}

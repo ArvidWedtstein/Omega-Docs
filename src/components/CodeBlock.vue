@@ -1,5 +1,5 @@
 <template>
-  <figure>
+  <figure class="mb-0">
     <figcaption
       class="d-flex justify-content-between px-2 py-1 align-items-center bg-black text-light fw-semibold text-start"
       v-if="filename"

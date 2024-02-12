@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container-xxl mt-3 docs-layout">
-    <Sidebar @tab-selected="setSelectedTab" :groupedTabs="groupedTabs" />
+    <Sidebar @tab-selected="setSelectedTab" />
 
     <main class="docs-main order-1">
       <button
@@ -30,246 +30,248 @@
 
       <div class="" v-if="selectedTab_ID > 0">
         <div class="py-5 text-center">
-          <h1 class="display-5 fw-bold">{{ getTab(selectedTab_ID)?.title }}</h1>
-          <CodeBuilder :tab="(getTab(selectedTab_ID) as Tab)" />
+          <h1 class="display-5 fw-bold">{{ selectedTab?.name }}</h1>
+          <CodeBuilder
+            v-if="selectedTab?.type !== 'Function'"
+            :tab="(selectedTab as Tab)"
+            class="h-100"
+          />
 
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ getTab(selectedTab_ID)?.description }}</p>
 
-            <section class="text-start">
+            <section class="text-start mb-3" v-if="selectedTab?.path">
               <h5>Import:</h5>
 
-              <CodeBlock>
+              <CodeBlock class="h-100">
                 <template #code>
                   <pre
                     class="mb-0"
-                  ><code contenteditable="false" tabindex="0" spellcheck="false">Import {{ getTab(selectedTab_ID)?.title }} from 'insert path here'</code></pre>
+                  ><code contenteditable="false" tabindex="0" spellcheck="false">Import {{ selectedTab?.name }} from '{{ `${getTab(selectedTab_ID)?.path}` }}'</code></pre>
                 </template>
               </CodeBlock>
             </section>
 
-            <p class="h5">Props:</p>
-            <div class="row align-items-center g-3">
-              <div class="col-auto flex-grow-1">
-                <div class="input-group">
-                  <label for="search" class="input-group-text">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      height="20"
-                      fill="currentColor"
+            <section class="text-start" v-if="selectedTab?.params?.length">
+              <h5>Syntax:</h5>
+
+              <CodeBlock class="h-100">
+                <template #code>
+                  <pre
+                    class="mb-0"
+                  ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
+                </template>
+              </CodeBlock>
+            </section>
+
+            <section class="text-start" v-if="selectedTab?.snippets?.length">
+              <h5>Snippets</h5>
+
+              <PropSelector class="mb-3" @search="" />
+
+              <div
+                class="accordion accordion-flush"
+                id="accordionPanelsStayOpenExample"
+              >
+                <div
+                  class="accordion-item"
+                  v-for="(vSnippet, vSnippetIndex) in selectedTab?.snippets"
+                  :key="vSnippetIndex"
+                >
+                  <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#panelsStayOpen-collapseOne"
+                      aria-expanded="false"
+                      aria-controls="panelsStayOpen-collapseOne"
                     >
-                      <path
-                        d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-                      />
-                    </svg>
-                  </label>
-                  <input
-                    class="form-control"
-                    id="search"
-                    type="text"
-                    v-model="vSearch"
-                    @input="onSearchChange"
-                  />
-                </div>
-              </div>
-
-              <div class="btn-group btn-group-sm col-auto">
-                <button
-                  type="button"
-                  @click="vSelectedPropView = 'list'"
-                  class="btn"
-                  title="List view"
-                  :class="[
-                    vSelectedPropView === 'list'
-                      ? 'btn-secondary'
-                      : 'btn-outline-secondary',
-                  ]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512"
-                    fill="currentColor"
-                    width="20"
-                    height="28"
-                  >
-                    <path
-                      d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  @click="vSelectedPropView = 'table'"
-                  class="btn"
-                  :class="[
-                    vSelectedPropView === 'table'
-                      ? 'btn-secondary'
-                      : 'btn-outline-secondary',
-                  ]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512"
-                    fill="currentColor"
-                    width="20"
-                  >
-                    <path
-                      d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div
-              class="mt-3 container"
-              :id="`${getTab(selectedTab_ID)?.title}-prop-options`"
-            >
-              <div class="props-table" v-if="vSelectedPropView === 'table'">
-                <div class="" role="rowheader">
-                  <div class="row fw-bold">
-                    <div class="col">Name</div>
-                    <div class="col">Type</div>
-                    <div class="col">Default</div>
-                    <div class="col">Description</div>
-                    <div class="col-1"></div>
-                  </div>
-                </div>
-                <div class="" role="rowgroup">
+                      {{ vSnippet.title }}
+                    </button>
+                  </h2>
                   <div
-                    class="row"
-                    role="row"
-                    v-for="(vProp, vPropIndex) in vSearchItems"
-                    :key="vPropIndex"
+                    id="panelsStayOpen-collapseOne"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="panelsStayOpen-headingOne"
                   >
-                    <div class="col">
-                      <span class="text-start"
-                        >{{ vProp.name }}{{ vProp.required ? "*" : "" }}</span
-                      >
-                    </div>
-                    <div class="col">
-                      <small
-                        v-if="vProp.type"
-                        class="d-inline-flex px-1 py-0.5 fw-semibold text-secondary bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2"
-                      >
-                        {{ vProp.type }}
-                      </small>
-                    </div>
-                    <div class="col">
-                      <span>
-                        {{ vProp.default }}
-                      </span>
-                    </div>
-                    <div class="col">
-                      <p class="prop-table-description">
-                        {{ vProp.description }}
-                      </p>
-                    </div>
-                    <div class="col-1 d-flex justify-content-center">
-                      <button
-                        class="btn btn-secondary d-inline-flex justify-content-center align-items-center"
-                        style="width: 32px; height: 32px"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        :data-bs-target="`#prop-${vPropIndex}-collapse`"
-                        aria-expanded="false"
-                        :aria-controls="`prop-${vPropIndex}-collapse`"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 384 512"
-                          class="text-light"
-                          fill="currentColor"
-                          width="20"
-                          height="20"
-                        >
-                          <path
-                            d="M32 64C14.3 64 0 49.7 0 32S14.3 0 32 0l96 0c53 0 96 43 96 96l0 306.7 73.4-73.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-128 128c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 402.7 160 96c0-17.7-14.3-32-32-32L32 64z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <div
-                      class="collapse text-start"
-                      :id="`prop-${vPropIndex}-collapse`"
-                    >
-                      <span class="mb-0">Example:</span>
-                      <CodeBlock linenumbers>
+                    <div class="" v-if="vSnippet.code">
+                      <CodeBlock>
                         <template #code>
                           <pre
                             class="mb-0"
-                          ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `<ODataGrid
-  :${vProp.name}="${vProp.default}"
-/>` }}</code></pre>
+                          ><code contenteditable="false" tabindex="0" spellcheck="false">{{ vSnippet.code }}</code></pre>
                         </template>
                       </CodeBlock>
                     </div>
                   </div>
                 </div>
               </div>
+            </section>
 
-              <div v-else-if="vSelectedPropView === 'list'">
-                <div
-                  class="accordion accordion-flush"
-                  id="accordionPanelsStayOpenExample"
-                >
-                  <div
-                    class="accordion-item"
-                    v-for="(vProp, vPropIndex) in vSearchItems"
-                    :key="vPropIndex"
-                  >
-                    <h2
-                      class="accordion-header d-inline-flex w-100 justify-content-between align-items-center py-1"
-                      :id="`collapse-panel-heading-${vPropIndex}`"
-                    >
-                      <span class="text-primary h6 mb-0">
-                        {{ vProp.name }}
-                      </span>
+            <section v-if="selectedTab?.props?.length">
+              <p class="h5">Props:</p>
 
-                      <button
-                        class="btn d-inline-flex justify-content-center align-items-center"
-                        style="width: 32px; height: 32px"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        :data-bs-target="`#collapse-panel-${vPropIndex}`"
-                        aria-expanded="true"
-                        :aria-controls="`collapse-panel-${vPropIndex}`"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 384 512"
-                          fill="currentColor"
-                          width="20"
-                          height="20"
-                        >
-                          <path
-                            d="M32 64C14.3 64 0 49.7 0 32S14.3 0 32 0l96 0c53 0 96 43 96 96l0 306.7 73.4-73.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-128 128c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 402.7 160 96c0-17.7-14.3-32-32-32L32 64z"
-                          />
-                        </svg>
-                      </button>
-                    </h2>
+              <PropSelector
+                @search="onSearchChange"
+                @view-change="(view) => (vSelectedPropView = view)"
+              />
+
+              <div
+                class="mt-3 container"
+                :id="`${getTab(selectedTab_ID)?.name}-prop-options`"
+              >
+                <div class="props-table" v-if="vSelectedPropView === 'table'">
+                  <div class="" role="rowheader">
+                    <div class="row fw-bold">
+                      <div class="col">Name</div>
+                      <div class="col">Type</div>
+                      <div class="col">Default</div>
+                      <div class="col">Description</div>
+                      <div class="col-1"></div>
+                    </div>
+                  </div>
+                  <div class="" role="rowgroup">
                     <div
-                      :id="`collapse-panel-${vPropIndex}`"
-                      class="accordion-collapse collapse show text-start"
-                      :aria-labelledby="`collapse-panel-heading-${vPropIndex}`"
+                      class="row"
+                      role="row"
+                      v-for="(vProp, vPropIndex) in vSearchItems"
+                      :key="vPropIndex"
                     >
-                      <div class="d-flex flex-column gap-1 pb-3">
-                        <span>{{ vProp.description }}</span>
-                        <span v-if="vProp.type">
-                          Type:
-                          <small
-                            class="d-inline-flex px-1 py-0.5 fw-semibold text-secondary bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2"
-                          >
-                            {{ vProp.type }}
-                          </small>
+                      <div class="col">
+                        <span class="text-start"
+                          >{{ vProp.name }}{{ vProp.required ? "*" : "" }}</span
+                        >
+                      </div>
+                      <div class="col">
+                        <small
+                          v-if="vProp.type"
+                          class="d-inline-flex px-1 py-0.5 fw-semibold text-secondary bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2"
+                        >
+                          {{ vProp.type }}
+                        </small>
+                      </div>
+                      <div class="col">
+                        <span>
+                          {{ vProp.default }}
                         </span>
+                      </div>
+                      <div class="col">
+                        <p class="prop-table-description">
+                          {{ vProp.description }}
+                        </p>
+                      </div>
+                      <div class="col-1 d-flex justify-content-center">
+                        <button
+                          class="btn d-inline-flex justify-content-center align-items-center"
+                          style="width: 36px; height: 36px"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          :data-bs-target="`#prop-${vPropIndex}-collapse`"
+                          aria-expanded="false"
+                          :aria-controls="`prop-${vPropIndex}-collapse`"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            fill="currentColor"
+                            width="30"
+                            height="30"
+                          >
+                            <path
+                              d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div
+                        class="collapse text-start"
+                        :id="`prop-${vPropIndex}-collapse`"
+                      >
+                        <span class="mb-0">Example:</span>
+                        <CodeBlock linenumbers>
+                          <template #code>
+                            <pre
+                              class="mb-0"
+                            ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `<ODataGrid
+  :${vProp.name}="${vProp.default}"
+/>` }}</code></pre>
+                          </template>
+                        </CodeBlock>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div v-else-if="vSelectedPropView === 'list'">
+                  <div class="accordion accordion-flush">
+                    <div
+                      class="accordion-item"
+                      v-for="(vProp, vPropIndex) in vSearchItems"
+                      :key="vPropIndex"
+                    >
+                      <h2
+                        class="accordion-header d-inline-flex w-100 justify-content-between align-items-center py-1"
+                        :id="`collapse-panel-heading-${vPropIndex}`"
+                      >
+                        <span class="text-primary h6 mb-0">
+                          {{ vProp.name }}
+                        </span>
+
+                        <button
+                          class="btn d-inline-flex justify-content-center align-items-center"
+                          style="width: 36px; height: 36px"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          :data-bs-target="`#collapse-panel-${vPropIndex}`"
+                          aria-expanded="true"
+                          :aria-controls="`collapse-panel-${vPropIndex}`"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            fill="currentColor"
+                            width="30"
+                            height="30"
+                          >
+                            <path
+                              d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                            />
+                          </svg>
+                        </button>
+                      </h2>
+                      <div
+                        :id="`collapse-panel-${vPropIndex}`"
+                        class="accordion-collapse collapse show text-start"
+                        :aria-labelledby="`collapse-panel-heading-${vPropIndex}`"
+                      >
+                        <div class="d-flex flex-column gap-1 pb-3">
+                          <span>{{ vProp.description }}</span>
+                          <span v-if="vProp.type">
+                            Type:
+                            <small
+                              class="d-inline-flex px-1 py-0.5 fw-semibold text-secondary bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2"
+                            >
+                              {{ vProp.type }}
+                            </small>
+                          </span>
+
+                          <CodeBlock linenumbers v-if="vProp.example">
+                            <template #code>
+                              <pre
+                                class="mb-0"
+                              ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `<ODataGrid
+  ${vProp.example}
+/>` }}</code></pre>
+                            </template>
+                          </CodeBlock>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
         </div>
       </div>
@@ -278,338 +280,96 @@
 </template>
 
 <script setup lang="ts">
+import components from "./assets/Components.json";
 import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
+import PropSelector from "./components/PropSelector.vue";
 
-interface Tab {
-  id: number;
-  title: string;
-  description: string;
+interface Events {
+  name?: string;
+  syntax?: string;
+}
+interface Slots {
+  name?: string;
+  template?: string;
+}
+interface Snippets {
+  title?: string;
+  content?: string;
+}
+interface Param {
+  name?: string;
+  type?: string;
+  default?: string;
+}
+interface Property {
+  name?: string;
+  type?: string;
+  default?: string;
+  description?: string;
+  required?: boolean;
+  template?: string;
+  example?: string;
+}
+export interface Tab {
+  id?: number;
+  name: string;
+  description?: string;
+  template?: string;
   type?: string;
   category: string;
-  slots?: Array<{
-    name: string;
-  }>;
-  props?: Array<{
-    name: string;
-    type: string;
-    default: string;
-    description: string;
-    required: boolean;
-    example?: string;
-  }>;
-  content: string;
+  path?: string;
+  params?: Partial<Array<Param>>;
+  slots?: Partial<Array<Slots>>;
+  events?: Partial<Array<Events>>;
+  props?: Array<Partial<Property>>;
+  snippets?: Array<any>;
 }
 
-interface GroupedTabs {
-  [category: string]: Tab[];
-}
-
-const selectedTab_ID = ref(2);
+const selectedTab_ID = ref();
+const selectedTab = ref<Tab>();
 const vSelectedPropView = ref("list");
 const vSearchItems = ref<Tab["props"]>([]);
 const vSearch = ref("");
-const groupedTabs = ref<GroupedTabs>({});
 
 watch(selectedTab_ID, async (newTab_ID, oldTab_ID) => {
   vSearchItems.value = getTab(newTab_ID)?.props || [];
 });
 
-const tabs: Tab[] = [
-  {
-    id: 1,
-    title: "Dataobject",
-    description: "",
-    type: "Class",
-    category: "Data",
-    props: [
-      {
-        name: "reshiftItem",
-        type: "function",
-        default: "",
-        description: "Reshifts items to new position.",
-        example: `dsWorkflows.reshiftItem(vIndexOfItem, vNewIndex)`,
-        required: false,
-      },
-      {
-        name: "fileUpload",
-        type: "object",
-        default: "",
-        description: "",
-        example: ``,
-        required: false,
-      },
-    ],
-    content: `<div>
-        Dataobject description
-        
-        </div>`,
-  },
-  {
-    id: 2,
-    title: "DataGrid",
-    description: "",
-    type: "Element",
-    category: "Grid",
-    slots: [
-      { name: "detailTab" },
-      { name: "detailActions" },
-      { name: "cardheader" },
-      { name: "noRowsFound" },
-      { name: "overlay" },
-      { name: "contextmenuTop" },
-      { name: "contextmenu" },
-      { name: "contextmenuBottom" },
-      { name: "statusbar" },
-    ],
-    props: [
-      {
-        name: "dataObject",
-        type: "DataObject",
-        default: "null",
-        description: "The data object used in the grid",
-        required: false,
-      },
-      {
-        name: "columns",
-        type: "array",
-        default: "null",
-        description: "Columns passed as an array instead of slots",
-        required: false,
-      },
-      {
-        name: "data",
-        type: "array",
-        default: "",
-        description: "",
-        required: false,
-      },
-      {
-        name: "rowClass",
-        type: "[Function, Object, String]",
-        default: "null",
-        description:
-          "String, dynamic class object or function that will be bound to the row class property. The current row is provided to the function as an argument.",
-        required: false,
-      },
-      {
-        name: "rowStyle",
-        type: "[Function, Object, String]",
-        default: "null",
-        description:
-          "String, dynamic class object or function that will be bound to the row class property. The current row is provided to the function as an argument.",
-        required: false,
-      },
-      {
-        name: "headerTitle",
-        type: "",
-        default: "",
-        description: "",
-        required: false,
-      },
-      {
-        name: "menuTabs",
-        type: "Record<string, any>[]",
-        default: "null",
-        description:
-          "An array of custom tab definitions for the grid sidemenu details tab. Example: [{ title: 'Custom Tab', id: 'tab1', iconClass: 'bi bi-1-square-fill', component: MyTabComponent]",
-        required: false,
-      },
-      {
-        name: "rowclickhandler",
-        type: "Function",
-        default: "null",
-        description:
-          "Override the row click handler, when provided will not set current index",
-        required: false,
-      },
-      {
-        name: "noHeader",
-        type: "Boolean",
-        default: "false",
-        description: "When set to `true` will not render header.",
-        required: false,
-      },
-      {
-        name: "disableFilterRow",
-        type: "Boolean",
-        default: "false",
-        description: "When set to `true` will not render filter row.",
-        required: false,
-      },
-      {
-        name: "detailIframe",
-        type: "",
-        default: "",
-        description: "",
-        required: false,
-      },
-      {
-        name: "detailTabTitle",
-        type: "",
-        default: "",
-        description: "",
-        required: false,
-      },
-      {
-        name: "multilineHeader",
-        type: "Boolean",
-        default: "false",
-        description: "Enables word wrapping for header columns",
-        required: false,
-      },
-      {
-        name: "importData",
-        type: "Boolean",
-        default: "false",
-        description: "When true, will show importData",
-        required: false,
-      },
-      {
-        name: "initialMenuWidth",
-        type: "String",
-        default: "400px",
-        description:
-          "Sets the initial width of the grid menu, accepts values either in 'px' or '%' ",
-        required: false,
-      },
-      {
-        name: "groupByFolders",
-        type: "Boolean",
-        default: "false",
-        description: "Adds group by folders selector into right panel",
-        required: false,
-      },
-      {
-        name: "dynamicLoading",
-        type: "Boolean",
-        default: "true",
-        description:
-          "Enables dynamic loading for the grid. When set to false will set the inner height to loaded data length.",
-        required: false,
-      },
-      {
-        name: "disableNavigation",
-        type: "Boolean",
-        default: "false",
-        description:
-          "When set to `true` will disable grid navigation features.",
-        required: false,
-      },
-      {
-        name: "collapseGridMenu",
-        type: "Boolean",
-        default: "false",
-        description:
-          "When set to `true` the grid setup menu will be initially collapsed.",
-        required: false,
-      },
-      {
-        name: "hideGridMenu",
-        type: "Boolean",
-        default: "false",
-        description: "When set to `true` will not render the grid setup menu.",
-        required: false,
-      },
-      {
-        name: "fieldFilters",
-        type: "Array",
-        default: "null",
-        description:
-          "An array of initial field filters. For example `['Title', {name:'StatusCode', distinct:'StatusCode'}]`",
-        required: false,
-      },
-      {
-        name: "disableDeleteConfirm",
-        type: "Boolean",
-        default: "false",
-        description:
-          "When true will disable confirm dialog on delete actions in grid.",
-        required: false,
-      },
-      {
-        name: "noRowsFound",
-        type: "string | boolean",
-        default: "'No rows found...'",
-        description:
-          "Then set to true, will show default message and enable for custom overriding via 'noRowsFound' slot. Can also be used to override default message.",
-        required: false,
-      },
-      {
-        name: "eagerGridControl",
-        type: "Function",
-        default: "null",
-        description: "Returns grid control ref immediately after creation",
-        required: false,
-      },
-      {
-        name: "",
-        type: "",
-        default: "",
-        description: "",
-        required: false,
-      },
-    ],
-    content: `<div>
-        datagrid description
-        
-        </div>`,
-  },
-  {
-    id: 3,
-    title: "OColumn",
-    description: "",
-    type: "Element",
-    category: "Grid",
-    props: [
-      {
-        name: "pinned",
-        type: "left | right",
-        default: "",
-        description: "",
-        required: false,
-      },
-    ],
-    content: `<div>
-        datagrid description
-        
-        </div>`,
-  },
-];
+const vTabs = ref<Partial<Tab[]>>([]);
 
-const onSearchChange = (pSearchEvent: Event) => {
+const onSearchChange = (pSearchValue: String) => {
   vSearchItems.value = getTab(selectedTab_ID.value)?.props?.filter((vProp) =>
-    vProp.name.toLowerCase().includes(vSearch.value.toLowerCase())
+    vProp.name?.toLowerCase().includes(pSearchValue.toLowerCase())
   );
 };
 
 const setSelectedTab = (pTab_ID: number) => {
   selectedTab_ID.value = pTab_ID;
+
+  let vTab = getTab(pTab_ID);
+
+  if (vTab) {
+    selectedTab.value = vTab;
+  }
 };
 
 const getTab = (pTab_ID: number): Tab | null => {
-  const vTab = tabs.find((vTab) => vTab.id === pTab_ID);
+  const vTab = vTabs.value.find((vTab) => vTab?.id === pTab_ID);
   return vTab || null;
 };
 
-const groupBy = <T extends Tab, K extends keyof T>(
-  array: T[],
-  key: K
-): GroupedTabs => {
-  return array.reduce((rv, x) => {
-    const keyValue = x[key] as string;
-    (rv[keyValue] = rv[keyValue] || []).push(x);
-    return rv;
-  }, {} as GroupedTabs);
-};
-
 onMounted(() => {
-  groupedTabs.value = groupBy(
-    tabs.filter((t) => t.type === "Element" || !t.type),
-    "category"
-  );
+  const vComponents = components.components.map((vComponent, id) => ({
+    id,
+    ...vComponent,
+  }));
+
+  vTabs.value = vComponents;
+
+  setSelectedTab(1);
 });
 </script>
 
@@ -688,5 +448,12 @@ onMounted(() => {
   padding: 0.5rem 0.5rem;
   box-shadow: inset 0 0 0 9999px
     var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
+}
+
+.btn svg {
+  transition: 0.3s transform ease-in-out;
+}
+.btn.collapsed svg {
+  transform: rotate(180deg);
 }
 </style>
