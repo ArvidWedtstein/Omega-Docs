@@ -344,6 +344,78 @@
       ]
     },
     {
+      "name": "confirm",
+      "description": "Function that prompts the user with a confirm dialog",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.controls.confirm.ts",
+      "props": [],
+      "params": [
+        {
+          "name": "pOptions",
+          "type": "Object",
+          "default": "",
+          "required": false,
+          "params": [
+            {
+              "name": "message",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "required": false
+            },
+            {
+              "name": "btnClassOk",
+              "type": "String",
+              "default": "btn-primary",
+              "required": false
+            },
+            {
+              "name": "btnClassCancel",
+              "type": "String",
+              "default": "btn-secondary",
+              "required": false
+            },
+            {
+              "name": "btnTextOk",
+              "type": "String",
+              "default": "Ok",
+              "required": false
+            },
+            {
+              "name": "btnTextCancel",
+              "type": "String",
+              "default": "Cancel",
+              "required": false
+            },
+            {
+              "name": "textInputRequired",
+              "type": "Boolean",
+              "default": "false",
+              "required": false
+            },
+            {
+              "name": "initialTextInputValue",
+              "type": "String",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "confirm({ title: 'Confirm title', message: 'Confirm message to display' }).then(() => { // Handle action confirmed }).catch(() => { // Handle confirm rejected });"
+        }
+      ]
+    },
+    {
       "name": "DataGrid",
       "description": "",
       "type": "Component",
@@ -924,7 +996,7 @@
           "required": false
         },
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "",
           "default": "",
           "description": "",
@@ -1416,7 +1488,7 @@
       "path": "WIN365.vue.components.DisciplinesLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1439,6 +1511,10 @@
             {
               "name": "Domain_ID",
               "type": "Number"
+            },
+            {
+              "name": "PrimKey",
+              "type": "String"
             }
           ]
         }
@@ -1456,7 +1532,7 @@
       "path": "WIN365.vue.components.SFILookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1512,7 +1588,7 @@
       "path": "WIN365.vue.components.OrdersLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "example": ":bind=\"sel=>{ vOrderID = sel.ID }\"",
@@ -1579,7 +1655,7 @@
       "path": "WIN365.vue.components.WarehousesLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1607,7 +1683,7 @@
       "path": "WIN365.vue.components.QualificationsLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1643,7 +1719,7 @@
       "path": "WIN365.vue.components.DocumentsLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1709,7 +1785,7 @@
           "default": "false"
         },
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1765,7 +1841,7 @@
       "path": "WIN365.vue.components.DocumentsGroupsLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1805,7 +1881,7 @@
       "path": "WIN365.vue.components.DocumentOriginatorsLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1849,7 +1925,7 @@
       "path": "WIN365.vue.components.DocumentsStepsLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1913,7 +1989,7 @@
           "required": false
         },
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -1979,7 +2055,7 @@
           "required": false
         },
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -2027,7 +2103,7 @@
       "path": "WIN365.vue.components.DocumentsWestconAreaLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -2067,7 +2143,7 @@
       "path": "WIN365.vue.components.RevisionDistributionStatusesLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -2099,7 +2175,7 @@
       "path": "WIN365.vue.components.RevisionSendActionTypesLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "description": "Used to bind seleted values to your variables",
           "params": [
@@ -2218,7 +2294,7 @@
       "path": "WIN365.vue.components.SubProjectsLookup.vue",
       "props": [
         {
-          "name": "bind",
+          "name": ":bind",
           "type": "Row",
           "default": "null",
           "description": "Used to bind seleted values to your variables",
@@ -2347,7 +2423,7 @@
         {
           "title": "Example",
           "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\">\n  <FormControl class=\"col\">\n    <WInputGroup validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <WSubProjectsLookup class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" />\n    </WInputGroup>\n  </FormControl>\n</div>"
+          "code": "<div class=\"row\">\n  <OFormControl class=\"col\">\n    <WInputGroup validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <WSubProjectsLookup class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
         }
       ]
     },
@@ -2406,6 +2482,644 @@
         }
       ]
     },
+    {
+      "name": "Tabs",
+      "description": "",
+      "type": "Component",
+      "category": "Tabs",
+      "path": "o365.vue.components.Tabs.vue",
+      "props": [
+        {
+          "name": "tabsClass",
+          "type": "String | css classes",
+          "default": "nav nav-tabs",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "tabsStyle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "tabContentClass",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "tabContentStyle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "hideNavbar",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "persistentKey",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "enableCompactView",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "enableUrlFilter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables for URL filtering",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "compactViewMode",
+          "type": "String",
+          "default": "accordion",
+          "description": "",
+          "required": false
+        }
+      ],
+      "exposes": [
+        {
+          "name": "setActiveTab",
+          "type": "Function"
+        },
+        {
+          "name": "getActiveTab",
+          "type": "Function"
+        },
+        {
+          "name": "sm",
+          "type": "Boolean"
+        },
+        {
+          "name": "md",
+          "type": "Boolean"
+        },
+        {
+          "name": "lg",
+          "type": "Boolean"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "onHide",
+          "description": "",
+          "syntax": "@onHide=\"\""
+        },
+        {
+          "name": "onHidden",
+          "description": "",
+          "syntax": "@onHidden=\"\""
+        },
+        {
+          "name": "onShow",
+          "description": "",
+          "syntax": "@onShow=\"\""
+        },
+        {
+          "name": "onShown",
+          "description": "",
+          "syntax": "@onShown=\"\""
+        }
+      ],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "Tab",
+      "description": "",
+      "type": "Component",
+      "category": "Tabs",
+      "path": "o365.vue.components.Tab.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "Number",
+          "default": "null",
+          "description": "Will be used as id for the tab-content element",
+          "required": false
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "default": "null",
+          "description": "Title of tab",
+          "required": false
+        },
+        {
+          "name": "tabIndex",
+          "type": "Number",
+          "default": "1",
+          "description": "Index of tab",
+          "required": false
+        },
+        {
+          "name": "active",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Sets initially active tab.",
+          "required": true
+        },
+        {
+          "name": "linkClass",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "Classes for tablink",
+          "required": false
+        },
+        {
+          "name": "linkStyle",
+          "type": "String",
+          "default": "null",
+          "description": "Sets the style of the tab link",
+          "required": false
+        },
+        {
+          "name": "paneClass",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "Classes for pane",
+          "required": false
+        },
+        {
+          "name": "paneStyle",
+          "type": "String",
+          "default": "null",
+          "description": "Sets the style of the pane",
+          "required": false
+        },
+        {
+          "name": "itemClass",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "Classes for item",
+          "required": false
+        },
+        {
+          "name": "itemStyle",
+          "type": "String",
+          "default": "null",
+          "description": "Sets the style of the item",
+          "required": false
+        },
+        {
+          "name": "tabHeight",
+          "type": "Nuber",
+          "default": "null",
+          "description": "Height of tab",
+          "required": false
+        },
+        {
+          "name": "alwaysRender",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will always render tab",
+          "required": false
+        },
+        {
+          "name": "disableKeepAlive",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "title",
+          "description": "Title of tab",
+          "template": "#title"
+        }
+      ],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "SizerPanel",
+      "description": "",
+      "type": "Component",
+      "category": "Sider",
+      "path": "o365.vue.components.SizerPanel.vue",
+      "props": [
+        {
+          "name": "width",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "height",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "collapse",
+          "type": "String",
+          "default": "undefined",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "expand",
+          "type": "String",
+          "default": "undefined",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noContainerClass",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "hideIcons",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "useEvents",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enable EventEmitter on the Sizer control for Resized and Resizing events",
+          "required": false
+        },
+        {
+          "name": "initiallyCollapsed",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Set the panel as collapsed initially (must have collapse prop)",
+          "required": false
+        },
+        {
+          "name": "initiallyExpanded",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Set the panel as expanded initially (must have expand prop)",
+          "required": false
+        },
+        {
+          "name": "minWidth",
+          "type": "String",
+          "default": "null",
+          "description": "Sets the min width of the sizer panel. Value can be either in pixels or percentage. Ex: \"600px\" or \"20%\"",
+          "required": false
+        },
+        {
+          "name": "minHeight",
+          "type": "String",
+          "default": "null",
+          "description": "Sets the min height of the sizer panel. Value can be either in pixels or percentage. Ex: \"600px\" or \"20%\"",
+          "required": false
+        },
+        {
+          "name": "maxWidth",
+          "type": "String",
+          "default": "null",
+          "description": "Sets the max width of the sizer panel. Value can be either in pixels or percentage. Ex: \"600px\" or \"20%\"",
+          "required": false
+        },
+        {
+          "name": "maxHeight",
+          "type": "String",
+          "default": "null",
+          "description": "Sets the max height of the sizer panel. Value can be either in pixels or percentage. Ex: \"600px\" or \"20%\"",
+          "required": false
+        },
+        {
+          "name": "collapseAt",
+          "type": "String",
+          "default": "null",
+          "description": "Auto collapse when viewport is smaller than this value",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "collapsed",
+          "description": "Fires when sizer is collapsed",
+          "syntax": "@collapsed=\"\""
+        }
+      ],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "RowContainer",
+      "description": "",
+      "type": "Component",
+      "category": "Container",
+      "path": "o365.vue.components.RowContainer.vue",
+      "props": [
+        {
+          "name": "desktop",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "appContainer",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noToolbar",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "ColContainer",
+      "description": "",
+      "type": "",
+      "category": "Container",
+      "path": "o365.vue.components.ColContainer.vue",
+      "props": [
+        {
+          "name": "desktop",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "appContainer",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noToolbar",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "CardView",
+      "description": "Mobile alternative to grid. Uses Card component",
+      "type": "Component",
+      "category": "Card",
+      "path": "o365.vue.components.CardView.vue",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "linkParams",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "columns",
+          "type": "Array",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "headerColumns",
+          "type": "Array",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "cardMinWidth",
+          "type": "String",
+          "default": "20rem",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "cardGap",
+          "type": "String",
+          "default": "30px",
+          "description": "gap between cards",
+          "required": false
+        },
+        {
+          "name": "imagesView",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "imagesPrimKeyColumnName",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noInfoAction",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noFilter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noSort",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noSearch",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noAutoLoad",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "useSearchColumn",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Used search column for searching",
+          "required": false
+        },
+        {
+          "name": "fixedHeightCards",
+          "type": "Boolean",
+          "default": "true",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "multiselect",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "searchMask",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "enableAddNew",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "searchMaskPlaceholder",
+          "type": "String",
+          "default": "null",
+          "description": "Placeholder for search field",
+          "required": false
+        },
+        {
+          "name": "highlightCurrentRow",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "imageUrlParameters",
+          "type": "String",
+          "default": "mwidth=100",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "getItemCategory",
+          "type": "Function",
+          "default": "",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "rowClass",
+          "type": "Function",
+          "default": "null",
+          "description": "Passes current row as parameter. return string",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "customSearchControls",
+          "description": "Custom controls for Search",
+          "template": "#customSearchControls"
+        },
+        {
+          "name": "fallbackImage",
+          "description": "",
+          "template": "#fallbackImage"
+        },
+        {
+          "name": "actions",
+          "description": "Rendered in header",
+          "template": "#actions"
+        },
+        {
+          "name": "footer",
+          "description": "Card Footer",
+          "template": "#footer"
+        },
+        {
+          "name": "default",
+          "description": "",
+          "template": "#default"
+        },
+        {
+          "name": "header",
+          "description": "",
+          "template": "#header"
+        }
+      ],
+      "events": [
+        {
+          "name": "setCurrentItem",
+          "description": "Set current item",
+          "syntax": "@setCurrentItem=\"\""
+        },
+        {
+          "name": "onCreateNew",
+          "description": "Fires when new row is created",
+          "syntax": "@onCreateNew=\"\""
+        }
+      ],
+      "params": [],
+      "snippets": []
+    },
+
     {
       "name": "TEMPLATE",
       "description": "",

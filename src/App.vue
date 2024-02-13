@@ -280,6 +280,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: update lookup snippets
 import components from "./assets/Components.json";
 import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
@@ -296,6 +297,10 @@ interface Slot {
   name?: string | undefined;
   description?: string | undefined;
   template?: string | undefined;
+}
+interface Expose {
+  name?: string | undefined;
+  description?: string | undefined;
 }
 interface Snippet {
   title?: string | undefined;
@@ -331,6 +336,7 @@ export interface Tab {
   events?: Partial<Array<Event>> | undefined;
   props?: Array<Partial<Property>> | undefined;
   snippets?: Array<Snippet> | undefined;
+  exposes?: Array<Expose> | undefined;
 }
 
 const selectedTab_ID = ref();

@@ -67,11 +67,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, defineProps, withDefaults } from "vue";
 
-const vProps = defineProps({
-  filename: { type: String, required: false },
-  linenumbers: { type: Boolean, required: false, default: false },
+export interface Props {
+  filename?: string;
+  linenumbers?: boolean;
+}
+const vProps = withDefaults(defineProps<Props>(), {
+  filename: "",
+  linenumbers: false,
 });
 
 const vLines = computed(() => {
