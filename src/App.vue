@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container-xxl mt-3 docs-layout">
+  <div id="app" class="container-fluid mt-3 docs-layout">
     <Sidebar @tab-selected="setSelectedTab" />
 
     <main class="docs-main order-1">
@@ -316,7 +316,7 @@ interface Property {
   required?: boolean | undefined;
   template?: string | undefined;
   example?: string | undefined;
-  params?: Record<string, any> | undefined;
+  params?: Array<Record<string, any>> | undefined;
 }
 export interface Tab {
   id: number;

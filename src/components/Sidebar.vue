@@ -21,20 +21,20 @@
             v-for="(vGroupContent, vGroupName, vIndex) in vGroupedTabs"
             :key="vIndex"
           >
-            <li class="nav-item py-2">
+            <li class="nav-item py-2 d-block">
               <strong class="d-flex w-100 align-items-center fw-semibold">
                 {{ vGroupName }}
               </strong>
 
               <ul class="nav flex-column fw-normal pb-2 small">
                 <li
-                  class="nav-item"
+                  class="nav-item text-truncate"
                   v-for="(vTab, vTabIndex) in vGroupContent"
                   :key="vTabIndex"
                 >
                   <button
                     type="button"
-                    class="btn btn-link d-inline-block rounded"
+                    class="btn btn-link d-inline-block rounded text-truncate"
                     @click="selectTab(vTab.id)"
                   >
                     {{ vTab.name }}
@@ -97,6 +97,7 @@ onMounted(() => {
     padding-left: 0.25rem;
     margin-left: -0.25rem;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 .docs-sidebar {

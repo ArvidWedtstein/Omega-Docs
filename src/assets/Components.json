@@ -8,7 +8,7 @@
       "props": [
         {
           "name": "id",
-          "type": "string",
+          "type": "String",
           "description": "Id of the DataObject",
           "default": "null",
           "example": "",
@@ -16,7 +16,7 @@
         },
         {
           "name": "viewName",
-          "type": "string",
+          "type": "String",
           "description": "Viewname from which to select",
           "default": "null",
           "example": "",
@@ -24,7 +24,7 @@
         },
         {
           "name": "appId",
-          "type": "string",
+          "type": "String",
           "description": "App id to which this DataObject belongs to",
           "default": "null",
           "example": "",
@@ -159,7 +159,7 @@
         },
         {
           "name": "filterString",
-          "type": "string",
+          "type": "String",
           "description": "Initial filter string.",
           "default": "undefined",
           "example": "",
@@ -171,31 +171,37 @@
           "description": "Filter Object.",
           "default": "undefined",
           "example": "",
-          "params": {
-            "columns": {
+          "params": [
+            {
+              "name": "columns",
               "type": "Array"
             },
-            "urlFiltering": {
+            {
+              "name": "urlFiltering",
               "type": "Boolean"
             },
-            "filterItems": {
+            {
+              "name": "filterItems",
               "type": "Object"
             },
-            "dataObject": {
+            {
+              "name": "dataObject",
               "type": "DataObject"
             },
-            "columnDistinctOptions": {
+            {
+              "name": "columnDistinctOptions",
               "type": "Object"
             },
-            "distinctOptions": {
+            {
+              "name": "distinctOptions",
               "type": "Array"
             }
-          },
+          ],
           "required": false
         },
         {
           "name": "whereClause",
-          "type": "string",
+          "type": "String",
           "description": "Initial where clause.",
           "default": "undefined",
           "example": "",
@@ -211,7 +217,7 @@
         },
         {
           "name": "maxRecords",
-          "type": "number",
+          "type": "Number",
           "description": "Max records used in retrieve requests.",
           "default": -1,
           "example": "",
@@ -251,7 +257,7 @@
         },
         {
           "name": "masterDataObject_ID",
-          "type": "string",
+          "type": "String",
           "description": "Id of the master DataObject if this DataObject has MasterDetails defined",
           "default": "null",
           "example": "",
@@ -417,7 +423,7 @@
         },
         {
           "name": "detailIframe",
-          "type": "string",
+          "type": "String",
           "default": "null",
           "description": "Path for detail iframe",
           "example": ":detailIframe=\"`/nt/your_app_here?ID=${ID_TO_CHILD}&HideNav=true&Context=${dsYourDataSource.current.Domain_ID}`\"",
@@ -1410,29 +1416,31 @@
       "path": "WIN365.vue.components.DisciplinesLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "Number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "String",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "String",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "String",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "Number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1448,34 +1456,35 @@
       "path": "WIN365.vue.components.SFILookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "Number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "String",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "String",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "String",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "System",
-          "type": "String",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "Number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "System",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1501,11 +1510,54 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.OrdersLookup.vue",
-      "props": [],
+      "props": [
+        {
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "example": ":bind=\"sel=>{ vOrderID = sel.ID }\"",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "OrderName",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            },
+            {
+              "name": "IdPath",
+              "type": "String"
+            },
+            {
+              "name": "OrderNo",
+              "type": "String"
+            },
+            {
+              "name": "ProjectNo",
+              "type": "String"
+            },
+            {
+              "name": "Project_ID",
+              "type": "Number"
+            }
+          ]
+        }
+      ],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Orders Lookup Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\">\n  <OFormControl class=\"col\" :title=\"$t('Order:')\">\n    <WInputGroup validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <WOrdersLookup class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
+        }
+      ]
     },
     {
       "name": "ProjectsLookup",
@@ -1527,14 +1579,19 @@
       "path": "WIN365.vue.components.WarehousesLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "Number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Name",
-          "type": "String",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "Name",
+              "type": "String"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1550,24 +1607,27 @@
       "path": "WIN365.vue.components.QualificationsLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DescriptionNorwegian",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DescriptionEnglish",
-          "type": "string",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "Number"
+            },
+            {
+              "name": "DescriptionNorwegian",
+              "type": "String"
+            },
+            {
+              "name": "DescriptionEnglish",
+              "type": "String"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1583,49 +1643,47 @@
       "path": "WIN365.vue.components.DocumentsLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Title",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentNo",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "CurrentRevision",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentType_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentGroup_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "SubProject_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Order_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Project_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "Title",
+              "type": "String"
+            },
+            {
+              "name": "DocumentNo",
+              "type": "String"
+            },
+            {
+              "name": "CurrentRevision",
+              "type": "String"
+            },
+            {
+              "name": "DocumentType_ID",
+              "type": "Number"
+            },
+            {
+              "name": "DocumentGroup_ID",
+              "type": "Number"
+            },
+            {
+              "name": "SubProject_ID",
+              "type": "Number"
+            },
+            {
+              "name": "Order_ID",
+              "type": "Number"
+            },
+            {
+              "name": "Project_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1642,7 +1700,7 @@
       "props": [
         {
           "name": "documentId",
-          "type": "number",
+          "type": "Number",
           "default": "0"
         },
         {
@@ -1651,49 +1709,47 @@
           "default": "false"
         },
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Revision",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "RevisionItemNo",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "RevisionDate",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Document_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentNo",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Step_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Step",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "OrgUnit_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "Revision",
+              "type": "String"
+            },
+            {
+              "name": "RevisionItemNo",
+              "type": "Number"
+            },
+            {
+              "name": "RevisionDate",
+              "type": "String"
+            },
+            {
+              "name": "Document_ID",
+              "type": "Number"
+            },
+            {
+              "name": "DocumentNo",
+              "type": "Number"
+            },
+            {
+              "name": "Step_ID",
+              "type": "Number"
+            },
+            {
+              "name": "Step",
+              "type": "String"
+            },
+            {
+              "name": "OrgUnit_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1709,29 +1765,31 @@
       "path": "WIN365.vue.components.DocumentsGroupsLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1747,34 +1805,35 @@
       "path": "WIN365.vue.components.DocumentOriginatorsLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "CorporationName",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "CorporationName",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1790,39 +1849,39 @@
       "path": "WIN365.vue.components.DocumentsStepsLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "HideFromList",
-          "type": "boolean",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "ShowInForDistribution",
-          "type": "boolean",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "HideFromList",
+              "type": "Boolean"
+            },
+            {
+              "name": "ShowInForDistribution",
+              "type": "Boolean"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1854,44 +1913,43 @@
           "required": false
         },
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentGroup_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentGroupDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NumberingScheme",
-          "type": "string",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            },
+            {
+              "name": "DocumentGroup_ID",
+              "type": "Number"
+            },
+            {
+              "name": "DocumentGroupDescription",
+              "type": "String"
+            },
+            {
+              "name": "NumberingScheme",
+              "type": "String"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1911,7 +1969,6 @@
           "type": "Number",
           "default": "0",
           "description": "",
-          "example": "",
           "required": false
         },
         {
@@ -1919,43 +1976,42 @@
           "type": "Boolean",
           "default": "false",
           "description": "",
-          "example": "",
           "required": false
         },
         {
-          "name": "DocumentType_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentTypeNo",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentTypeDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "DocumentTypeNoAndDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NumberingScheme_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NumberingSchemeNo",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "DocumentType_ID",
+              "type": "Number"
+            },
+            {
+              "name": "DocumentTypeNo",
+              "type": "String"
+            },
+            {
+              "name": "DocumentTypeDescription",
+              "type": "String"
+            },
+            {
+              "name": "DocumentTypeNoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "NumberingScheme_ID",
+              "type": "Number"
+            },
+            {
+              "name": "NumberingSchemeNo",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -1971,29 +2027,31 @@
       "path": "WIN365.vue.components.DocumentsWestconAreaLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -2009,19 +2067,23 @@
       "path": "WIN365.vue.components.RevisionDistributionStatusesLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Domain_ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -2037,29 +2099,31 @@
       "path": "WIN365.vue.components.RevisionSendActionTypesLookup.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "number",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "No",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "Description",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "NoAndDescription",
-          "type": "string",
-          "description": "Only for binding with v-bind."
-        },
-        {
-          "name": "IsInternalReview",
-          "type": "boolean",
-          "description": "Only for binding with v-bind."
+          "name": "bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "NoAndDescription",
+              "type": "String"
+            },
+            {
+              "name": "IsInternalReview",
+              "type": "Boolean"
+            }
+          ]
         }
       ],
       "slots": [],
@@ -2154,6 +2218,59 @@
       "path": "WIN365.vue.components.SubProjectsLookup.vue",
       "props": [
         {
+          "name": "bind",
+          "type": "Row",
+          "default": "null",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "CompletedFinalAccount",
+              "type": "Boolean"
+            },
+            {
+              "name": "Domain",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            },
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "OrgUnitIdPath",
+              "type": "String"
+            },
+            {
+              "name": "ProjectName",
+              "type": "String"
+            },
+            {
+              "name": "ProjectNo",
+              "type": "Number"
+            },
+            {
+              "name": "Project_ID",
+              "type": "Number"
+            },
+            {
+              "name": "SearchColumn",
+              "type": "String"
+            },
+            {
+              "name": "SubProjectName",
+              "type": "String"
+            },
+            {
+              "name": "SubProjectNo",
+              "type": "String"
+            }
+          ],
+          "required": false
+        },
+        {
           "name": "Project_ID",
           "type": "Number",
           "default": "null",
@@ -2226,7 +2343,68 @@
         }
       ],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\">\n  <FormControl class=\"col\">\n    <WInputGroup validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <WSubProjectsLookup class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" />\n    </WInputGroup>\n  </FormControl>\n</div>"
+        }
+      ]
+    },
+    {
+      "name": "InputGroup",
+      "description": "Input group for Westcon",
+      "type": "Component",
+      "category": "WIN/Form",
+      "path": "WIN365.vue.components.FormInputGroup.vue",
+      "props": [
+        {
+          "name": "title",
+          "type": "String",
+          "default": "null",
+          "description": "Text to the left of input",
+          "required": false
+        },
+        {
+          "name": "icon",
+          "type": "String",
+          "default": "null",
+          "description": "Bootstrap icon class",
+          "example": "icon=\"bi-person-fill\"",
+          "required": false
+        },
+        {
+          "name": "append",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Include this prop if you want to append add-on instead of prepend",
+          "required": false
+        },
+        {
+          "name": "validate",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Adds validation support.",
+          "required": false
+        },
+        {
+          "name": "invalidFeedback",
+          "type": "String",
+          "default": "\"Please fill inn\"",
+          "description": "Message that is displayed if input fails validation",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<div class=\"row\">\n  <FormControl class=\"col\">\n    <WInputGroup validate :title=\"vSomeNo\" invalidFeedback=\"You forgot to fill you this field!\"></WInputGroup>\n  </FormControl>\n</div>"
+        }
+      ]
     },
     {
       "name": "TEMPLATE",
