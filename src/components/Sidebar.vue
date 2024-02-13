@@ -50,6 +50,8 @@
 </template>
 
 <script setup lang="ts">
+// TODO: Add folder support for category
+// TODO: add "W" before every win component
 import type { Tab } from "@/App.vue";
 import { components } from "./../assets/Components.json";
 import { ref, defineEmits, onMounted } from "vue";

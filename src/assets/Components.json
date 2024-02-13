@@ -166,6 +166,34 @@
           "required": false
         },
         {
+          "name": "filterObject",
+          "type": "Object",
+          "description": "Filter Object.",
+          "default": "undefined",
+          "example": "",
+          "params": {
+            "columns": {
+              "type": "Array"
+            },
+            "urlFiltering": {
+              "type": "Boolean"
+            },
+            "filterItems": {
+              "type": "Object"
+            },
+            "dataObject": {
+              "type": "DataObject"
+            },
+            "columnDistinctOptions": {
+              "type": "Object"
+            },
+            "distinctOptions": {
+              "type": "Array"
+            }
+          },
+          "required": false
+        },
+        {
           "name": "whereClause",
           "type": "string",
           "description": "Initial where clause.",
@@ -325,14 +353,14 @@
         },
         {
           "name": "columns",
-          "type": "array",
+          "type": "Array",
           "default": "null",
           "description": "Columns passed as an array instead of slots",
           "required": false
         },
         {
           "name": "data",
-          "type": "array",
+          "type": "Array",
           "default": "",
           "description": "",
           "required": false
@@ -559,31 +587,40 @@
       ],
       "slots": [
         {
-          "name": "detailTab"
+          "name": "detailTab",
+          "template": "#detailTab"
         },
         {
-          "name": "detailActions"
+          "name": "detailActions",
+          "template": "#detailActions"
         },
         {
-          "name": "cardheader"
+          "name": "cardheader",
+          "template": "#cardheader"
         },
         {
-          "name": "noRowsFound"
+          "name": "noRowsFound",
+          "template": "#noRowsFound"
         },
         {
-          "name": "overlay"
+          "name": "overlay",
+          "template": "#overlay"
         },
         {
-          "name": "contextmenuTop"
+          "name": "contextmenuTop",
+          "template": "#contextmenuTop"
         },
         {
-          "name": "contextmenu"
+          "name": "contextmenu",
+          "template": "#contextmenu"
         },
         {
-          "name": "contextmenuBottom"
+          "name": "contextmenuBottom",
+          "template": "#contextmenuBottom"
         },
         {
-          "name": "statusbar"
+          "name": "statusbar",
+          "template": "#statusbar"
         }
       ],
       "events": [],
@@ -864,11 +901,11 @@
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.DataLookup.vue",
-      "template": "<DataLookup\n:dataObject=\"\"\nv-model=\"\"\n:bind=\"sel=>{}\"\n></DataLookup>",
       "snippets": [
         {
-          "title": "",
-          "content": ""
+          "title": "Example",
+          "content": "",
+          "code": "<DataLookup\n:dataObject=\"\"\nv-model=\"\"\n:bind=\"sel=>{}\"\n></DataLookup>"
         }
       ],
       "props": [
@@ -986,6 +1023,1231 @@
         }
       ],
       "params": []
+    },
+    {
+      "name": "ButtonGroup",
+      "description": "Button Group is often used in combination with DataGrid",
+      "type": "",
+      "category": "WIN",
+      "path": "WIN365.vue.components.ButtonGroup.vue",
+      "props": [
+        {
+          "name": "onClickShowHidden",
+          "type": "Function",
+          "default": "() => {}",
+          "description": "Fires when \"Show Hidden\" btn is clicked and displayShowHidden prop is active",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "displayCommonTasks",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Displays \"Common Tasks\" dropdown. Usually functionality like \"Create new\" go in here.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "displayReports",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Displays \"Reports\" dropdown. Reports for your application go usually in here. Enables for #reports slot",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "displayFilters",
+          "type": "Boolean",
+          "default": "false",
+          "description": "For grid filters, like \"Include Inactive\". Enables for #filters slot.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "displayShowHidden",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Adds buttons to show hidden",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "smallButtons",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When true displays smaller buttons instead",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "handleDefaultFilterLinkClick",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "reportsAutoClose",
+          "type": "true | inside | outside | false",
+          "default": "true",
+          "description": "Auto closed reports.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "filtersAutoClose",
+          "type": "true | inside | outside | false",
+          "default": "true",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "tasksAutoClose",
+          "type": "true | inside | outside | false",
+          "default": "true",
+          "description": "Auto closes taks",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "prepend",
+          "description": "Adds buttons to the front of the buttongroup",
+          "template": "#prepend"
+        },
+        {
+          "name": "commonTasks",
+          "description": "Items will be added in \"Common Tasks\" dropdown.",
+          "template": "#commonTasks"
+        },
+        {
+          "name": "filters",
+          "description": "Items will be added into \"Filters\" dropdown. displayFilter prop must be true to show this slot.",
+          "template": "#filters"
+        },
+        {
+          "name": "reports",
+          "description": "Items will be added into \"Reports\" dropdown. displayReports prop is required for this to show.",
+          "template": "#filters"
+        },
+        {
+          "name": "append",
+          "description": "Add items to the end of the button group",
+          "template": "#append"
+        }
+      ],
+      "events": [],
+      "params": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<ButtonGroup displayCommonTasks displayFilters>\n  <template #commonTasks>\n</template>\n  <template #filters>\n</template>\n</ButtonGroup>"
+        }
+      ]
+    },
+    {
+      "name": "Modal",
+      "description": "",
+      "type": "Component",
+      "category": "Modal",
+      "path": "o365.vue.components.Modal.vue",
+      "props": [
+        {
+          "name": "title",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "to",
+          "type": "String",
+          "default": "body",
+          "description": "HTML Tag where modal should be rendered.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "modalOptions",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "params": [
+            {
+              "name": "backdrop",
+              "type": "Boolean"
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "class",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "HTML Classes",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "dialogClass",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableTeleport",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disabled teleport and renders modal directly where it is located inside your HTML code.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "alwaysRender",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will always render modal. If false it will render when modal opens.",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "shown",
+          "description": "The event is emitted when the modal is shown and the css transactions have finished",
+          "syntax": "@shown=\"\""
+        },
+        {
+          "name": "show",
+          "description": "The event is emitted when modal is transitioning to show",
+          "syntax": "@show=\"\""
+        },
+        {
+          "name": "hidden",
+          "description": "The event is emitted when the modal is hidden and the css transactions have finished",
+          "syntax": "@hidden=\"\""
+        },
+        {
+          "name": "hide",
+          "description": "The event is emitted when the modal is hidden and the css transactions have finished",
+          "syntax": "@hide=\"\""
+        }
+      ],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "Form",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.Form.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "FormControl",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.FormControl.vue",
+      "props": [
+        {
+          "name": "title",
+          "type": "String",
+          "default": "null",
+          "description": "Title shown over input",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "for",
+          "type": "String",
+          "default": "null",
+          "description": "ID of input field belonging to this label.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "helpText",
+          "type": "String",
+          "default": "null",
+          "description": "Helper text for clarifying a input field.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "inline",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will display label and input next to each other.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "inlineClasses",
+          "type": "Array",
+          "default": "null",
+          "description": "classes for inline group",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "PersonsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "Lookup",
+      "path": "o365.vue.components.PersonsLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "OrgUnitsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "Lookup",
+      "path": "o365.vue.components.OrgUnitsLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "CustomersLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.CustomersLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "SuppliersLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.SuppliersLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "CompaniesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.CompaniesLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "GangsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.GangsLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "WorkPackagesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.WorkPackagesLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DisciplinesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DisciplinesLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "Number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "Number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "SFILookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.SFILookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "Number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "System",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "Number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "ArticlesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.ArticlesLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "OrdersLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.OrdersLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "ProjectsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.ProjectsLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "WarehousesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.WarehousesLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "Number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Name",
+          "type": "String",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "QualificationsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.QualificationsLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DescriptionNorwegian",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DescriptionEnglish",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentsLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Title",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentNo",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "CurrentRevision",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentType_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentGroup_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "SubProject_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Order_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Project_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentsRevisionsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentsRevisionsLookup.vue",
+      "props": [
+        {
+          "name": "documentId",
+          "type": "number",
+          "default": "0"
+        },
+        {
+          "name": "documentRequired",
+          "type": "Boolean",
+          "default": "false"
+        },
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Revision",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "RevisionItemNo",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "RevisionDate",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Document_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentNo",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Step_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Step",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "OrgUnit_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentsGroupsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentsGroupsLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentOriginatorsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentOriginatorsLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "CorporationName",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentStepsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentsStepsLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "HideFromList",
+          "type": "boolean",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "ShowInForDistribution",
+          "type": "boolean",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentTypesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentsTypesLookup.vue",
+      "props": [
+        {
+          "name": "documentGroupId",
+          "type": "Number",
+          "default": "0",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "documentGroupRequired",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentGroup_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentGroupDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NumberingScheme",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentTypesNumberingSchemesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentTypesNumberingSchemesLookup.vue",
+      "props": [
+        {
+          "name": "documentTypeId",
+          "type": "Number",
+          "default": "0",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "documentTypeRequired",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "DocumentType_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentTypeNo",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentTypeDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "DocumentTypeNoAndDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NumberingScheme_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NumberingSchemeNo",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "DocumentsWestconAreaLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.DocumentsWestconAreaLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "RevisionDistributionStatusesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.RevisionDistributionStatusesLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Domain_ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "RevisionSendActionTypesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.RevisionSendActionTypesLookup.vue",
+      "props": [
+        {
+          "name": "ID",
+          "type": "number",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "No",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "NoAndDescription",
+          "type": "string",
+          "description": "Only for binding with v-bind."
+        },
+        {
+          "name": "IsInternalReview",
+          "type": "boolean",
+          "description": "Only for binding with v-bind."
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "LocationsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.LocationsLookup.vue",
+      "props": [
+        {
+          "name": "OnlyShowPersonnelLocations",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will only show locations that Personnel can be placed in"
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "PersonsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.PersonsLookup.vue",
+      "props": [
+        {
+          "name": "includeAllPersons",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes all persons",
+          "required": false
+        },
+        {
+          "name": "includeInactivePersons",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes inactive persons",
+          "required": false
+        },
+        {
+          "name": "showAsButton",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will render button instead of input",
+          "required": false
+        },
+        {
+          "name": "buttonIconClassName",
+          "type": "String",
+          "default": "null",
+          "description": "Icon class names. Required prop: showAsButton",
+          "required": false
+        },
+        {
+          "name": "buttonClassName",
+          "type": "String",
+          "default": "null",
+          "description": "Class names for button. Required prop: showAsButton",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "BranchesLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.BranchesLookup.vue",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "SubProjectsLookup",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Lookup",
+      "path": "WIN365.vue.components.SubProjectsLookup.vue",
+      "props": [
+        {
+          "name": "Project_ID",
+          "type": "Number",
+          "default": "null",
+          "description": "Filter on Project_ID (If you specify this dont specify Domain_ID)",
+          "required": false
+        },
+        {
+          "name": "Domain_ID",
+          "type": "Number",
+          "default": "null",
+          "description": "Filter on Domain_ID (Same as above)",
+          "required": false
+        },
+        {
+          "name": "hideCompleted",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Hide completed subprojects (SubProjects with CompletedFinalAccount = 0)",
+          "required": false
+        },
+        {
+          "name": "showAsButton",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will render button instead of input",
+          "required": false
+        },
+        {
+          "name": "buttonIconClassName",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "Icon class names. Required prop: showAsButton",
+          "required": false
+        },
+        {
+          "name": "buttonClassName",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "Class names for button. Required prop: showAsButton",
+          "required": false
+        },
+        {
+          "name": "disableContextFilter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Causes enableContextFilter to never be enabled",
+          "required": false
+        },
+        {
+          "name": "disableInputMask",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables masking for the InputMask component, fallback to normal input",
+          "required": false
+        },
+        {
+          "name": "IncludeCompletedFinalAccount",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes Completed Final Accounts",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "maskCompleted",
+          "description": "Emits matching row on SubProjectNo when mask is completed from manually typing SubProjectNo.",
+          "syntax": "@maskCompleted=\"sel=>{}\""
+        }
+      ],
+      "params": [],
+      "snippets": []
+    },
+    {
+      "name": "TEMPLATE",
+      "description": "",
+      "type": "",
+      "category": "",
+      "path": "",
+      "props": [
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": []
     }
   ]
 }

@@ -287,52 +287,56 @@ import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
 import PropSelector from "./components/PropSelector.vue";
 
-interface Events {
-  name?: string;
-  syntax?: string;
+interface Event {
+  name?: string | undefined;
+  description?: string | undefined;
+  syntax?: string | undefined;
 }
-interface Slots {
-  name?: string;
-  template?: string;
+interface Slot {
+  name?: string | undefined;
+  description?: string | undefined;
+  template?: string | undefined;
 }
-interface Snippets {
-  title?: string;
-  content?: string;
+interface Snippet {
+  title?: string | undefined;
+  content?: string | undefined;
+  code?: string | undefined;
 }
 interface Param {
-  name?: string;
-  type?: string;
-  default?: string;
+  name?: string | undefined;
+  type?: string | undefined;
+  default?: string | undefined;
 }
+
 interface Property {
-  name?: string;
-  type?: string;
-  default?: string;
-  description?: string;
-  required?: boolean;
-  template?: string;
-  example?: string;
+  name?: string | undefined;
+  type?: string | undefined;
+  default?: string | undefined;
+  description?: string | undefined;
+  required?: boolean | undefined;
+  template?: string | undefined;
+  example?: string | undefined;
+  params?: Record<string, any> | undefined;
 }
 export interface Tab {
-  id?: number;
+  id: number;
   name: string;
   description?: string;
   template?: string;
   type?: string;
   category: string;
   path?: string;
-  params?: Partial<Array<Param>>;
-  slots?: Partial<Array<Slots>>;
-  events?: Partial<Array<Events>>;
-  props?: Array<Partial<Property>>;
-  snippets?: Array<any>;
+  params?: Partial<Array<Param>> | undefined;
+  slots?: Partial<Array<Slot>> | undefined;
+  events?: Partial<Array<Event>> | undefined;
+  props?: Array<Partial<Property>> | undefined;
+  snippets?: Array<Snippet> | undefined;
 }
 
 const selectedTab_ID = ref();
 const selectedTab = ref<Tab>();
 const vSelectedPropView = ref("list");
 const vSearchItems = ref<Tab["props"]>([]);
-const vSearch = ref("");
 
 watch(selectedTab_ID, async (newTab_ID, oldTab_ID) => {
   vSearchItems.value = getTab(newTab_ID)?.props || [];
