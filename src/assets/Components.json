@@ -487,6 +487,20 @@
           "required": false
         },
         {
+          "name": "noHeaderRow",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render header row, but will still render the header container.",
+          "required": false
+        },
+        {
+          "name": "noFooter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render footer.",
+          "required": false
+        },
+        {
           "name": "disableFilterRow",
           "type": "Boolean",
           "default": "false",
@@ -555,6 +569,20 @@
           "type": "Boolean",
           "default": "false",
           "description": "When set to `true` the grid setup menu will be initially collapsed.",
+          "required": false
+        },
+        {
+          "name": "newRecordsPosition",
+          "type": "Boolean",
+          "default": "above-filters",
+          "description": "Position where new records are rendered.",
+          "required": false
+        },
+        {
+          "name": "disableSelectAll",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` the select all checkbox will not render",
           "required": false
         },
         {
@@ -649,6 +677,13 @@
           "required": false
         },
         {
+          "name": "createNewOverrideFn",
+          "type": "Function",
+          "default": "null",
+          "description": "Function for creating new",
+          "required": false
+        },
+        {
           "name": "hideSystemColumn",
           "type": "Boolean",
           "default": "false",
@@ -656,9 +691,16 @@
           "required": false
         },
         {
-          "name": "noActiveRows",
+          "name": "disableSorting",
           "type": "Boolean",
           "default": "false",
+          "description": "When set to true will disable sorting",
+          "required": false
+        },
+        {
+          "name": "activeRows",
+          "type": "Boolean",
+          "default": "true",
           "description": "When set to false will not stylize active (current) row",
           "required": false
         },
@@ -681,6 +723,20 @@
           "type": "Boolean",
           "default": "false",
           "description": "When set to true will not render multi-select column",
+          "required": false
+        },
+        {
+          "name": "showNewRecordsPanel",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "hideNewRecords",
+          "type": "Boolean",
+          "default": "raw => !!raw.isLookup",
+          "description": "When set to true will skip rendering of the new record rows",
           "required": false
         },
         {
@@ -722,28 +778,61 @@
         },
         {
           "name": "contextmenuTop",
-          "template": "#contextmenuTop"
+          "template": "#contextmenuTop=\"{row, column, close}\""
         },
         {
           "name": "contextmenu",
-          "template": "#contextmenu"
+          "template": "#contextmenu=\"{row, column, close}\""
         },
         {
           "name": "contextmenuBottom",
-          "template": "#contextmenuBottom"
+          "template": "#contextmenuBottom=\"{row, column, close}\""
         },
         {
           "name": "statusbar",
           "template": "#statusbar"
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "name": "mounted",
+          "description": "",
+          "syntax": "@mounted=\"\""
+        },
+        {
+          "name": "beforeCreate",
+          "description": "",
+          "syntax": "@beforeCreate=\"\""
+        }
+      ],
       "params": [],
       "snippets": [
         {
-          "title": "Template",
+          "title": "Example",
           "content": "",
           "code": "<DataGrid\n  multilineHeader\n  :dataObject=\"\"\n>\n  <Column field=\"\" />\n</DataGrid>"
+        }
+      ],
+      "exposes": [
+        {
+          "name": "dataColumns",
+          "type": "Array"
+        },
+        {
+          "name": "setViewPortWidth",
+          "type": "Function"
+        },
+        {
+          "name": "dataGridControl",
+          "type": "Object"
+        },
+        {
+          "name": "setScrollPosition",
+          "type": "Function"
+        },
+        {
+          "name": "getScrollPosition",
+          "type": "Function"
         }
       ]
     },
@@ -3198,11 +3287,32 @@
         }
       ],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Horizontal Example",
+          "content": "",
+          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <OSizerPanel width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </OSizerPanel>\n</OColContainer>"
+        },
+        {
+          "title": "Vertical Example",
+          "content": "",
+          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <OSizerPanel height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </OSizerPanel>\n</OColContainer>"
+        }
+      ],
+      "exposes": [
+        {
+          "name": "getSizer",
+          "type": "Function"
+        },
+        {
+          "name": "sizerPanel",
+          "type": "Node"
+        }
+      ]
     },
     {
       "name": "RowContainer",
-      "description": "",
+      "description": "For content positioned in flex-direction:column",
       "type": "Component",
       "category": "Container",
       "path": "o365.vue.components.RowContainer.vue",
@@ -3236,8 +3346,8 @@
     },
     {
       "name": "ColContainer",
-      "description": "",
-      "type": "",
+      "description": "For content positioned in flex-direction:row",
+      "type": "Component",
       "category": "Container",
       "path": "o365.vue.components.ColContainer.vue",
       "props": [

@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps, withDefaults } from "vue";
+import { ref, computed, withDefaults } from "vue";
 
 export interface Props {
   filename?: string;

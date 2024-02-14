@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container-fluid mt-3 docs-layout">
+  <div id="app" class="container-fluid mt-3 docs-layout h-100">
     <Sidebar @tab-selected="setSelectedTab" />
 
     <main class="docs-main order-1">
@@ -109,6 +109,7 @@
               </div>
             </section>
 
+            <Section v-if="selectedTab?.props?.length" title="Props"> </Section>
             <section v-if="selectedTab?.props?.length">
               <p class="h5">Props:</p>
 
@@ -288,6 +289,7 @@ import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
 import PropSelector from "./components/PropSelector.vue";
+import Section from "./components/Section.vue";
 
 interface Event {
   name?: string | undefined;
