@@ -498,14 +498,14 @@
           "type": "String",
           "default": "null",
           "description": "Path for detail iframe",
-          "example": ":detailIframe=\"`/nt/your_app_here?ID=${ID_TO_CHILD}&HideNav=true&Context=${dsYourDataSource.current.Domain_ID}`\"",
+          "template": ":detailIframe=\"`/nt/your_app_here?ID=${ID_TO_CHILD}&HideNav=true&Context=${dsYourDataSource.current.Domain_ID}`\"",
           "required": false
         },
         {
           "name": "detailTabTitle",
-          "type": "",
-          "default": "",
-          "description": "",
+          "type": "String",
+          "default": "null",
+          "description": "The label used on the detail iframe tab",
           "required": false
         },
         {
@@ -649,23 +649,59 @@
           "required": false
         },
         {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
+          "name": "hideSystemColumn",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will not render system column (current row indicator)",
           "required": false
         },
         {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
+          "name": "noActiveRows",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to false will not stylize active (current) row",
+          "required": false
+        },
+        {
+          "name": "disableBatchRecords",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will disable the new record button and new records container",
+          "required": false
+        },
+        {
+          "name": "hideActionColumn",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will not render action column",
+          "required": false
+        },
+        {
+          "name": "hideMultiselectColumn",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will not render multi-select column",
+          "required": false
+        },
+        {
+          "name": "detailMessageChannelId",
+          "type": "String",
+          "default": "null",
+          "description": "Optional id to enable the message channel on the detail iframe",
+          "required": false
+        },
+        {
+          "name": "detailMessageChannelFunctions",
+          "type": "String",
+          "default": "null",
+          "description": "Map of functions callable by the iframe message channel",
           "required": false
         }
       ],
       "slots": [
         {
           "name": "detailTab",
+          "description": "Alternative to rendering detail Iframe",
           "template": "#detailTab"
         },
         {
@@ -712,7 +748,7 @@
       ]
     },
     {
-      "name": "OColumn",
+      "name": "Column",
       "description": "Used in DataGrid and DataLookup",
       "type": "Component",
       "category": "Grid",
@@ -756,14 +792,6 @@
           "type": "Number",
           "default": "50",
           "description": "minimum width of column",
-          "example": "",
-          "required": false
-        },
-        {
-          "name": "width",
-          "type": "Number",
-          "default": "from field",
-          "description": "width of column",
           "example": "",
           "required": false
         },
@@ -835,7 +863,7 @@
           "name": "filterField",
           "type": "Component",
           "default": "OFilter",
-          "description": "Optional field to use for sorting instead of the main 'field' of column",
+          "description": "Optional field to use for filtering instead of the main 'field' of column",
           "example": "",
           "required": false
         },
@@ -966,12 +994,349 @@
           "description": "Field to sort on",
           "example": "",
           "required": false
+        },
+        {
+          "name": "summaryRound",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "summaryFormat",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "summaryAggregate",
+          "type": "String | Function",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "groupAggregate",
+          "type": "Column",
+          "default": "null",
+          "description": "Aggregate column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "groupAggregateFn",
+          "type": "Function",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "fallbackValue",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "resizable",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "hideFromChooser",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableGrouping",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Do not allow grouping of this column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "colspan",
+          "type": "Number",
+          "default": "12",
+          "description": "Span of this column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "headerName",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "headerTitle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
         }
       ],
       "slots": [],
       "events": [],
       "params": [],
       "snippets": []
+    },
+    {
+      "name": "NodeColumn",
+      "description": "Used in DataGrid for grouping",
+      "type": "Component",
+      "category": "Grid",
+      "path": "o365.vue.components.DataGrid.NodeColumn.vue",
+      "props": [
+        {
+          "name": "pinned",
+          "type": "left | right",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "field",
+          "type": "String",
+          "default": "null",
+          "description": "Field from Data Object",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "headerName",
+          "type": "String",
+          "default": "Group",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "headerTitle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "default": "400",
+          "description": "width of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "minWidth",
+          "type": "Number",
+          "default": "50",
+          "description": "minimum width of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "flexwidth",
+          "type": "Number (0-100)",
+          "default": "null",
+          "description": "A percentage of the unused width that should be added to this column. If provided, should be a value between 1 = 100",
+          "example": ":flexwidth=\"69\"",
+          "required": false
+        },
+        {
+          "name": "editable",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "filter",
+          "type": "Component",
+          "default": "OFilter",
+          "description": "Can be used to provide custom filter component.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "boldDisplay",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "cellTitle",
+          "type": "Function | String",
+          "default": "null",
+          "description": "Cell tooltip function. Should be a function that takes in a row and returns a string",
+          "example": ":cellTitle=\"function(pRow) { pRow.Name }\"",
+          "required": false
+        },
+        {
+          "name": "cellStyle",
+          "type": "Function | String",
+          "default": "null",
+          "description": "Cell style. Can either be a static one for all cells or a per row function",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "getDisplay",
+          "type": "Function",
+          "default": "null",
+          "description": "",
+          "example": ":getDisplay=\"function(pRow) { pRow.Name }\"",
+          "required": false
+        },
+        {
+          "name": "indent",
+          "type": "Number | String",
+          "default": "24",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "classFn",
+          "type": "Function",
+          "default": "null",
+          "description": "",
+          "example": ":classFn=\"function(pNode) {}\"",
+          "required": false
+        },
+        {
+          "name": "getCopyValue",
+          "type": "Function",
+          "default": "null",
+          "description": "Function called when copying values that takes in a row and returns the value for copying.",
+          "example": ":getCopyValue=\"function(pNode) {}\"",
+          "required": false
+        },
+        {
+          "name": "filterField",
+          "type": "String",
+          "default": "null",
+          "description": "Optional field to use for filter instead of the main 'field' of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "sortField",
+          "type": "String",
+          "default": "null",
+          "description": "Optional field to use for sorting instead of the main 'field' of column",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "sortable",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enabled sorting",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableMenu",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "disableResize",
+          "type": "Boolean",
+          "default": "false",
+          "description": "disables resizing of this column.",
+          "example": "disableResize",
+          "required": false
+        },
+        {
+          "name": "showPrefix",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When true the default renderer will display column captions for group by configurations ",
+          "required": false
+        },
+        {
+          "name": "hideCount",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When true the default rednerer will not display detail counts",
+          "required": false
+        },
+        {
+          "name": "groupBy",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enable group by mode in grid",
+          "required": false
+        },
+        {
+          "name": "cellrendererparams",
+          "type": "Object",
+          "default": "null",
+          "description": "Additional props object that will be provided to the cell renderer component",
+          "example": ":cellrendererparams=\"{href:'/nt/workflow-task?ID={{ID}}',target:'_workflow_item'}\"",
+          "required": false
+        },
+        {
+          "name": "loadFullStructure",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enable client side node structure",
+          "required": false
+        },
+        {
+          "name": "userAggregates",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enable user defined aggregates",
+          "required": false
+        },
+        {
+          "name": "onlyShowOnGroupBy",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When enabled this column will only be visible in grid when there is active group by",
+          "required": false
+        },
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "required": false
+        }
+      ],
+      "exposes": [
+        {
+          "name": "colId",
+          "type": "String"
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<ONodeColumn colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />"
+        }
+      ]
     },
     {
       "name": "DataLookup",

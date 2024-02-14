@@ -281,6 +281,7 @@
 
 <script setup lang="ts">
 // TODO: update lookup snippets
+// TODO: make view for snippets, exposes, events, params
 import components from "./assets/Components.json";
 import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
