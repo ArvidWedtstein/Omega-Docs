@@ -6,7 +6,8 @@
           <template #code>
             <pre
               class="mb-0"
-            ><code contenteditable="true" tabindex="0" spellcheck="false">{{ generateCode }}</code></pre>
+              style="margin-top: 0;"
+            ><code contenteditable="true" class="language-html" tabindex="0" spellcheck="false">{{ generateCode }}</code></pre>
           </template>
         </CodeBlock>
       </div>

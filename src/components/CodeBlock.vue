@@ -1,7 +1,7 @@
 <template>
   <figure class="mb-0">
     <figcaption
-      class="d-flex justify-content-between px-2 py-1 align-items-center bg-black text-light fw-semibold text-start"
+      class="d-flex justify-content-between px-2 py-1 align-items-center bg-black text-light fw-semibold text-start h-100"
       v-if="filename"
     >
       <span>{{ filename }}</span>
@@ -48,7 +48,7 @@
       </svg>
     </button>
 
-    <div class="d-flex p-3">
+    <div class="d-flex">
       <div v-if="linenumbers" class="me-2 line-numbers">
         <div
           v-for="(vLine, vIndex) in vLines"
@@ -104,7 +104,7 @@ figure {
   color: #f8f8f2;
   border: 1px solid #111;
   border-radius: 0.25rem;
-  background: rgb(55, 55, 55);
+  /* background: rgb(55, 55, 55); */
 }
 
 .line-numbers {
@@ -114,7 +114,7 @@ figure {
 }
 .line-number {
   counter-increment: line;
-  line-height: 1.8;
+  line-height: 1.77;
   font-size: 0.75rem;
 }
 

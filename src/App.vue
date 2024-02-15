@@ -40,12 +40,6 @@
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
             
-            <pre><code class="language-javascript">
-  // code here for example
-  function hello(){
-     console.log(Hello World)
-  } 
-</code></pre>
 
             <Section v-if="selectedTab?.params?.length" title="Syntax">
               <CodeBlock
@@ -56,7 +50,8 @@
                 <template #code>
                   <pre
                     class="mb-0"
-                  ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
+                    style="margin-top: 0;"
+                  ><code contenteditable="false" tabindex="0" class="language-html" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
                 </template>
               </CodeBlock>
             </Section>
@@ -65,15 +60,16 @@
               <CodeBlock class="h-100">
                 <template #code>
                   <pre
-                    class="mb-0"
-                  ><code contenteditable="false" tabindex="0" spellcheck="false">Import {{ selectedTab?.name }} from '{{ `${getTab(selectedTab_ID)?.path}` }}'</code></pre>
+                    class="mb-0 language-typescript"
+                    style="margin-top: 0;"
+                  ><code contenteditable="false" tabindex="0" spellcheck="false" class="language-typescript">Import {{ selectedTab?.name }} from '{{ `${getTab(selectedTab_ID)?.path}` }}'</code></pre>
                 </template>
               </CodeBlock>
             </Section>
 
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
               <PropSelector class="mb-3" @search="" />
-
+<!-- TODO: fix -->
               <div
                 class="accordion accordion-flush"
                 id="accordionPanelsStayOpenExample"
@@ -104,8 +100,9 @@
                       <CodeBlock>
                         <template #code>
                           <pre
-                            class="mb-0"
-                          ><code contenteditable="false" tabindex="0" spellcheck="false">{{ vSnippet.code }}</code></pre>
+                            class="language-html mb-0"
+                            style="margin-top: 0;"
+                          ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ vSnippet.code }}</code></pre>
                         </template>
                       </CodeBlock>
                     </div>
@@ -192,11 +189,13 @@
                         :id="`prop-${vPropIndex}-collapse`"
                       >
                         <span class="mb-0">Example:</span>
+                        <!-- TODO: fix -->
                         <CodeBlock linenumbers>
                           <template #code>
                             <pre
-                              class="mb-0"
-                            ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `<ODataGrid
+                              class="language-html mb-0"
+                              style="margin-top: 0;"
+                            ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ `<ODataGrid
   :${vProp.name}="${vProp.default}"
 />` }}</code></pre>
                           </template>
@@ -259,11 +258,13 @@
                             </small>
                           </span>
 
+                          <!-- TODO: fix -->
                           <CodeBlock linenumbers v-if="vProp.example">
                             <template #code>
                               <pre
                                 class="mb-0"
-                              ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `<ODataGrid
+                                style="margin-top: 0;"
+                              ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ `<ODataGrid
   ${vProp.example}
 />` }}</code></pre>
                             </template>
