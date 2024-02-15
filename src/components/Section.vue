@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="border-bottom py-3 border-dark">
     <p class="h5">{{ vProps.title }}</p>
 
     <slot></slot>

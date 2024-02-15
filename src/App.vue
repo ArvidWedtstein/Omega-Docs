@@ -33,16 +33,27 @@
           <h1 class="display-5 fw-bold">{{ selectedTab?.name }}</h1>
           <CodeBuilder
             v-if="selectedTab?.type !== 'Function'"
-            :tab="(selectedTab as Tab)"
+            :tab="selectedTab as Tab"
             class="h-100"
           />
 
           <div class="col-lg-12 mx-auto text-start">
-            <p class="lead mb-4">{{ getTab(selectedTab_ID)?.description }}</p>
+            <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
-            <section class="text-start mb-3" v-if="selectedTab?.path">
-              <h5>Import:</h5>
+            <Section v-if="selectedTab?.params?.length" title="Syntax">
+              <CodeBlock
+                class="h-100"
+                :code="`${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)`"
+              >
+                <template #code>
+                  <pre
+                    class="mb-0"
+                  ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
+                </template>
+              </CodeBlock>
+            </Section>
 
+            <Section v-if="selectedTab?.path" title="Import">
               <CodeBlock class="h-100">
                 <template #code>
                   <pre
@@ -50,23 +61,9 @@
                   ><code contenteditable="false" tabindex="0" spellcheck="false">Import {{ selectedTab?.name }} from '{{ `${getTab(selectedTab_ID)?.path}` }}'</code></pre>
                 </template>
               </CodeBlock>
-            </section>
+            </Section>
 
-            <section class="text-start" v-if="selectedTab?.params?.length">
-              <h5>Syntax:</h5>
-
-              <CodeBlock class="h-100">
-                <template #code>
-                  <pre
-                    class="mb-0"
-                  ><code contenteditable="false" tabindex="0" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
-                </template>
-              </CodeBlock>
-            </section>
-
-            <section class="text-start" v-if="selectedTab?.snippets?.length">
-              <h5>Snippets</h5>
-
+            <Section v-if="selectedTab?.snippets?.length" title="Snippets">
               <PropSelector class="mb-3" @search="" />
 
               <div
@@ -107,12 +104,9 @@
                   </div>
                 </div>
               </div>
-            </section>
+            </Section>
 
-            <Section v-if="selectedTab?.props?.length" title="Props"> </Section>
-            <section v-if="selectedTab?.props?.length">
-              <p class="h5">Props:</p>
-
+            <Section v-if="selectedTab?.props?.length" title="Props">
               <PropSelector
                 @search="onSearchChange"
                 @view-change="(view) => (vSelectedPropView = view)"
@@ -120,7 +114,7 @@
 
               <div
                 class="mt-3 container"
-                :id="`${getTab(selectedTab_ID)?.name}-prop-options`"
+                :id="`${selectedTab?.name}-prop-options`"
               >
                 <div class="props-table" v-if="vSelectedPropView === 'table'">
                   <div class="" role="rowheader">
@@ -272,7 +266,7 @@
                   </div>
                 </div>
               </div>
-            </section>
+            </Section>
           </div>
         </div>
       </div>
@@ -285,6 +279,7 @@
 // TODO: make view for snippets, exposes, events, params
 // TODO: make dynamic snippets. Replace {COMPONENT} with componentname and so on
 import components from "./assets/Components.json";
+
 import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
@@ -344,8 +339,11 @@ export interface Tab {
 }
 
 function checkForDuplicates(component: Tab): void {
-  function findDuplicates(array: Partial<{ name: string }>[]): string[] {
-    const names = array.map((item) => item.name);
+  function findDuplicates(
+    array: Partial<{ name: string; title: string }>[],
+    prop: string = "name",
+  ): string[] {
+    const names = array.map((item: any) => item[prop]);
     const uniqueNames = new Set(names);
     const duplicates: string[] = [];
 
@@ -360,6 +358,12 @@ function checkForDuplicates(component: Tab): void {
   }
 
   const duplicateProps = component.props ? findDuplicates(component.props) : [];
+  const duplicateSnippets = component.snippets
+    ? findDuplicates(component.snippets, "title")
+    : [];
+  const duplicateExposes = component.exposes
+    ? findDuplicates(component.exposes)
+    : [];
   const duplicateSlots = component.slots ? findDuplicates(component.slots) : [];
   const duplicateEvents = component.events
     ? findDuplicates(component.events)
@@ -372,7 +376,23 @@ function checkForDuplicates(component: Tab): void {
     console.error(
       `Duplicate props found in component: ${
         component.name
-      }\nDuplicate prop names: ${duplicateProps.join(", ")}`
+      }\nDuplicate prop names: ${duplicateProps.join(", ")}`,
+    );
+  }
+
+  if (duplicateSnippets.length > 0) {
+    console.error(
+      `Duplicate snippets found in component: ${
+        component.name
+      }\nDuplicate snippet names: ${duplicateSlots.join(", ")}`,
+    );
+  }
+
+  if (duplicateExposes.length > 0) {
+    console.error(
+      `Duplicate exposes found in component: ${
+        component.name
+      }\nDuplicate expose names: ${duplicateSlots.join(", ")}`,
     );
   }
 
@@ -380,7 +400,7 @@ function checkForDuplicates(component: Tab): void {
     console.error(
       `Duplicate slots found in component: ${
         component.name
-      }\nDuplicate slot names: ${duplicateSlots.join(", ")}`
+      }\nDuplicate slot names: ${duplicateSlots.join(", ")}`,
     );
   }
 
@@ -388,7 +408,7 @@ function checkForDuplicates(component: Tab): void {
     console.error(
       `Duplicate events found in component: ${
         component.name
-      }\nDuplicate event names: ${duplicateEvents.join(", ")}`
+      }\nDuplicate event names: ${duplicateEvents.join(", ")}`,
     );
   }
 
@@ -396,7 +416,7 @@ function checkForDuplicates(component: Tab): void {
     console.error(
       `Duplicate params found in component: ${
         component.name
-      }\nDuplicate param names: ${duplicateParams.join(", ")}`
+      }\nDuplicate param names: ${duplicateParams.join(", ")}`,
     );
   }
 }
@@ -414,7 +434,7 @@ const vTabs = ref<Partial<Tab[]>>([]);
 
 const onSearchChange = (pSearchValue: String) => {
   vSearchItems.value = getTab(selectedTab_ID.value)?.props?.filter((vProp) =>
-    vProp.name?.toLowerCase().includes(pSearchValue.toLowerCase())
+    vProp.name?.toLowerCase().includes(pSearchValue.toLowerCase()),
   );
 };
 
@@ -443,7 +463,7 @@ onMounted(() => {
         if (pSnippet.code) {
           pSnippet.code = pSnippet.code.replace(
             /{COMPONENT}/g,
-            pComponent.name
+            pComponent.name,
           );
         }
         return pSnippet;

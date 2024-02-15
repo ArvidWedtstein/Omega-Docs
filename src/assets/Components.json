@@ -32,22 +32,6 @@
           "required": false
         },
         {
-          "name": "reshiftItem",
-          "type": "function",
-          "default": "",
-          "description": "Reshifts items to new position.",
-          "example": "dsWorkflows.reshiftItem(vIndexOfItem, vNewIndex)",
-          "required": false
-        },
-        {
-          "name": "fileUpload",
-          "type": "object",
-          "default": "",
-          "description": "",
-          "example": "",
-          "required": false
-        },
-        {
           "name": "uniqueTable",
           "type": "String",
           "default": "undefined",
@@ -308,7 +292,25 @@
       "events": [],
       "slots": [],
       "params": [],
-      "snippets": []
+      "snippets": [],
+      "exposes": [
+        {
+          "name": "reshiftItem",
+          "type": "function",
+          "default": "",
+          "description": "Reshifts items to new position.",
+          "example": "dsWorkflows.reshiftItem(vIndexOfItem, vNewIndex)",
+          "required": false
+        },
+        {
+          "name": "fileUpload",
+          "type": "object",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ]
     },
     {
       "id": 2,

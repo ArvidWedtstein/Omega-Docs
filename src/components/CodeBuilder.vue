@@ -98,7 +98,7 @@ const vSelectedProps = ref<NonNullable<Tab["props"]>>([]);
 const checkProp = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
   if (vSelectedProps.value?.some(({ name }) => name === pProp.name)) {
     vSelectedProps.value = vSelectedProps.value.filter(
-      ({ name }) => name !== pProp.name
+      ({ name }) => name !== pProp.name,
     );
   } else {
     vSelectedProps.value?.push(pProp);
@@ -110,7 +110,7 @@ const generateCode = computed(() => {
   return `<${tab.name}
 ${vSelectedProps.value
   .map(
-    (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`
+    (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,
   )
   .join("\n")}
 />`;

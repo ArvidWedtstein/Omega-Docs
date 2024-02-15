@@ -136,7 +136,7 @@ interface GroupedTabs {
 
 const groupBy = <T extends Tab, K extends keyof T>(
   array: T[],
-  key: K
+  key: K,
 ): GroupedTabs => {
   return array.reduce((rv, x) => {
     const keyValue = x[key] as string;
@@ -158,9 +158,9 @@ const selectTab = (pTab_ID: Tab["id"]) => {
 
 onMounted(() => {
   vGroupedTabs.value = groupBy(
-    components.map((p, id) => ({ id, ...p })) as Tab[],
+    components as Tab[],
     // .filter((t) => t.type === "Component" || !t.type),
-    "category"
+    "category",
   );
 });
 </script>

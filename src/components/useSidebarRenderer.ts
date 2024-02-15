@@ -12,7 +12,7 @@ const groupByCategoryPath = (objects: any[]) => {
 
     categories.forEach((category: string, index: number) => {
       const foundCategory = currentGroup.find(
-        (item) => item.category === category
+        (item) => item.category === category,
       );
 
       if (!foundCategory) {

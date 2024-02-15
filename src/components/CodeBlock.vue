@@ -60,6 +60,10 @@
         </div>
       </div>
       <div class="text-start flex-grow-1" ref="vCodeRef">
+        <pre
+          v-if="code"
+          class="mb-0"
+        ><code contenteditable="false" tabindex="0" spellcheck="false">{{ prettier.format(code, { parser: 'ht', plugins: [parser]}) }}</code></pre>
         <slot name="code"></slot>
       </div>
     </div>
@@ -68,14 +72,18 @@
 
 <script setup lang="ts">
 import { ref, computed, withDefaults } from "vue";
+import * as prettier from "prettier";
+import parser from "prettier/parser-html.js";
 
 export interface Props {
   filename?: string;
   linenumbers?: boolean;
+  code?: string;
 }
 const vProps = withDefaults(defineProps<Props>(), {
   filename: "",
   linenumbers: false,
+  code: "",
 });
 
 const vLines = computed(() => {
@@ -87,9 +95,9 @@ const vCodeRef = ref();
 
 const onCopy = () => {
   navigator.clipboard.writeText(
-    vCodeRef.value["children"][0]["children"][0].innerText
+    vCodeRef.value["children"][0]["children"][0].innerText,
   );
-  console.log();
+
   alert("Copied!");
 };
 </script>
