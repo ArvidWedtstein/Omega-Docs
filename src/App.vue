@@ -283,6 +283,7 @@
 <script setup lang="ts">
 // TODO: update lookup snippets
 // TODO: make view for snippets, exposes, events, params
+// TODO: make dynamic snippets. Replace {COMPONENT} with componentname and so on
 import components from "./assets/Components.json";
 import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
@@ -315,7 +316,6 @@ interface Param {
   type?: string | undefined;
   default?: string | undefined;
 }
-
 interface Property {
   name?: string | undefined;
   type?: string | undefined;
@@ -330,16 +330,75 @@ export interface Tab {
   id: number;
   name: string;
   description?: string;
-  template?: string;
+  template?: string | undefined;
+  example?: string | undefined;
   type?: string;
   category: string;
   path?: string;
-  params?: Partial<Array<Param>> | undefined;
-  slots?: Partial<Array<Slot>> | undefined;
-  events?: Partial<Array<Event>> | undefined;
+  params?: Array<Partial<Param>> | undefined;
+  slots?: Array<Partial<Slot>> | undefined;
+  events?: Array<Partial<Event>> | undefined;
   props?: Array<Partial<Property>> | undefined;
-  snippets?: Array<Snippet> | undefined;
-  exposes?: Array<Expose> | undefined;
+  snippets?: Array<Partial<Snippet>> | undefined;
+  exposes?: Array<Partial<Expose>> | undefined;
+}
+
+function checkForDuplicates(component: Tab): void {
+  function findDuplicates(array: Partial<{ name: string }>[]): string[] {
+    const names = array.map((item) => item.name);
+    const uniqueNames = new Set(names);
+    const duplicates: string[] = [];
+
+    uniqueNames.forEach((name) => {
+      const count = names.filter((n) => n === name).length;
+      if (count > 1 && name) {
+        duplicates.push(name);
+      }
+    });
+
+    return duplicates;
+  }
+
+  const duplicateProps = component.props ? findDuplicates(component.props) : [];
+  const duplicateSlots = component.slots ? findDuplicates(component.slots) : [];
+  const duplicateEvents = component.events
+    ? findDuplicates(component.events)
+    : [];
+  const duplicateParams = component.params
+    ? findDuplicates(component.params)
+    : [];
+
+  if (duplicateProps.length > 0) {
+    console.error(
+      `Duplicate props found in component: ${
+        component.name
+      }\nDuplicate prop names: ${duplicateProps.join(", ")}`
+    );
+  }
+
+  if (duplicateSlots.length > 0) {
+    console.error(
+      `Duplicate slots found in component: ${
+        component.name
+      }\nDuplicate slot names: ${duplicateSlots.join(", ")}`
+    );
+  }
+
+  if (duplicateEvents.length > 0) {
+    console.error(
+      `Duplicate events found in component: ${
+        component.name
+      }\nDuplicate event names: ${duplicateEvents.join(", ")}`
+    );
+  }
+
+  if (duplicateParams.length > 0) {
+    console.error(
+      `Duplicate params found in component: ${
+        component.name
+      }\nDuplicate param names: ${duplicateParams.join(", ")}`
+    );
+  }
 }
 
 const selectedTab_ID = ref();
@@ -375,12 +434,25 @@ const getTab = (pTab_ID: number): Tab | null => {
 };
 
 onMounted(() => {
-  const vComponents = components.components.map((vComponent, id) => ({
-    id,
-    ...vComponent,
-  }));
+  const vComponents = components.components.map((pComponent) => {
+    checkForDuplicates(pComponent as Tab);
 
-  vTabs.value = vComponents;
+    return {
+      ...pComponent,
+      snippets: pComponent?.snippets?.map((pSnippet: Snippet) => {
+        if (pSnippet.code) {
+          pSnippet.code = pSnippet.code.replace(
+            /{COMPONENT}/g,
+            pComponent.name
+          );
+        }
+        return pSnippet;
+      }),
+    };
+  });
+
+  // console.log(vComponents);
+  vTabs.value = vComponents as Tab[];
 
   setSelectedTab(1);
 });

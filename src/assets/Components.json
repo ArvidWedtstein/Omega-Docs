@@ -1,6 +1,7 @@
 {
   "components": [
     {
+      "id": 1,
       "name": "DataObject",
       "description": "",
       "type": "Class",
@@ -310,6 +311,7 @@
       "snippets": []
     },
     {
+      "id": 2,
       "name": "alert",
       "description": "Used to alert user",
       "type": "Function",
@@ -344,6 +346,7 @@
       ]
     },
     {
+      "id": 3,
       "name": "confirm",
       "description": "Function that prompts the user with a confirm dialog",
       "type": "Function",
@@ -411,11 +414,12 @@
         {
           "title": "Example",
           "content": "",
-          "code": "confirm({ title: 'Confirm title', message: 'Confirm message to display' }).then(() => { // Handle action confirmed }).catch(() => { // Handle confirm rejected });"
+          "code": "{COMPONENT}({ title: 'Confirm title', message: 'Confirm message to display' }).then(() => { // Handle action confirmed }).catch(() => { // Handle confirm rejected });"
         }
       ]
     },
     {
+      "id": 4,
       "name": "DataGrid",
       "description": "",
       "type": "Component",
@@ -810,7 +814,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<DataGrid\n  multilineHeader\n  :dataObject=\"\"\n>\n  <Column field=\"\" />\n</DataGrid>"
+          "code": "<{COMPONENT}\n  multilineHeader\n  :dataObject=\"\"\n>\n  <{COMPONENT=5} field=\"\" />\n</{COMPONENT}>"
         }
       ],
       "exposes": [
@@ -837,6 +841,7 @@
       ]
     },
     {
+      "id": 5,
       "name": "Column",
       "description": "Used in DataGrid and DataLookup",
       "type": "Component",
@@ -921,14 +926,6 @@
           "type": "Boolean",
           "default": "false",
           "description": "hides column from view. Can still be selected from Column Chooser",
-          "example": "",
-          "required": false
-        },
-        {
-          "name": "pinned",
-          "type": "left | right",
-          "default": "null",
-          "description": "set to left or right to pin column.",
           "example": "",
           "required": false
         },
@@ -1185,6 +1182,7 @@
       "snippets": []
     },
     {
+      "id": 6,
       "name": "NodeColumn",
       "description": "Used in DataGrid for grouping",
       "type": "Component",
@@ -1423,11 +1421,12 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<ONodeColumn colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />"
+          "code": "<NodeColumn colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />"
         }
       ]
     },
     {
+      "id": 7,
       "name": "DataLookup",
       "description": "Lookup component. Takes Column component as children.",
       "type": "Component",
@@ -1451,10 +1450,10 @@
         },
         {
           "name": ":bind",
-          "type": "",
-          "default": "",
+          "type": "Function",
+          "default": "null",
           "description": "",
-          "example": "",
+          "example": ":bind=\"sel => { vValue = sel.ID }\"",
           "required": false
         },
         {
@@ -1496,38 +1495,6 @@
           "description": "For when you need the lookup to reload on any where clause change.",
           "example": "",
           "required": false
-        },
-        {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
-          "example": "",
-          "required": false
-        },
-        {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
-          "example": "",
-          "required": false
-        },
-        {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
-          "example": "",
-          "required": false
-        },
-        {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
-          "example": "",
-          "required": false
         }
       ],
       "slots": [
@@ -1557,6 +1524,7 @@
       "params": []
     },
     {
+      "id": 8,
       "name": "ButtonGroup",
       "description": "Button Group is often used in combination with DataGrid",
       "type": "",
@@ -1682,6 +1650,7 @@
       ]
     },
     {
+      "id": 9,
       "name": "Modal",
       "description": "",
       "type": "Component",
@@ -1786,6 +1755,7 @@
       "snippets": []
     },
     {
+      "id": 10,
       "name": "Form",
       "description": "",
       "type": "Component",
@@ -1798,6 +1768,7 @@
       "snippets": []
     },
     {
+      "id": 11,
       "name": "FormControl",
       "description": "",
       "type": "Component",
@@ -1816,8 +1787,7 @@
           "name": "for",
           "type": "String",
           "default": "null",
-          "description": "ID of input field belonging to this label.",
-          "example": "",
+          "description": "ID of input field referencing to this label.",
           "required": false
         },
         {
@@ -1840,17 +1810,24 @@
           "name": "inlineClasses",
           "type": "Array",
           "default": "null",
-          "description": "classes for inline group",
-          "example": "",
+          "description": "classes for inline group.",
+          "example": "['col-1', 'col-6']",
           "required": false
         }
       ],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<FormControl :title=\"$t('Example')\" for=\"exampleInput\">\n  <input type=\"text\" id=\"exampleInput\" v-model=\"vExampleValue\">\n</FormControl>"
+        }
+      ]
     },
     {
+      "id": 12,
       "name": "PersonsLookup",
       "description": "",
       "type": "Component",
@@ -1863,6 +1840,7 @@
       "snippets": []
     },
     {
+      "id": 13,
       "name": "OrgUnitsLookup",
       "description": "",
       "type": "Component",
@@ -1875,6 +1853,7 @@
       "snippets": []
     },
     {
+      "id": 14,
       "name": "CustomersLookup",
       "description": "",
       "type": "Component",
@@ -1887,6 +1866,7 @@
       "snippets": []
     },
     {
+      "id": 15,
       "name": "SuppliersLookup",
       "description": "",
       "type": "Component",
@@ -1899,6 +1879,7 @@
       "snippets": []
     },
     {
+      "id": 16,
       "name": "CompaniesLookup",
       "description": "",
       "type": "Component",
@@ -1911,6 +1892,7 @@
       "snippets": []
     },
     {
+      "id": 17,
       "name": "GangsLookup",
       "description": "",
       "type": "Component",
@@ -1923,6 +1905,7 @@
       "snippets": []
     },
     {
+      "id": 18,
       "name": "WorkPackagesLookup",
       "description": "",
       "type": "Component",
@@ -1935,6 +1918,7 @@
       "snippets": []
     },
     {
+      "id": 19,
       "name": "DisciplinesLookup",
       "description": "",
       "type": "Component",
@@ -1979,6 +1963,7 @@
       "snippets": []
     },
     {
+      "id": 20,
       "name": "SFILookup",
       "description": "",
       "type": "Component",
@@ -2023,6 +2008,7 @@
       "snippets": []
     },
     {
+      "id": 21,
       "name": "ArticlesLookup",
       "description": "",
       "type": "Component",
@@ -2035,6 +2021,7 @@
       "snippets": []
     },
     {
+      "id": 22,
       "name": "OrdersLookup",
       "description": "",
       "type": "Component",
@@ -2085,11 +2072,12 @@
         {
           "title": "Orders Lookup Example",
           "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\">\n  <OFormControl class=\"col\" :title=\"$t('Order:')\">\n    <WInputGroup validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <WOrdersLookup class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
+          "code": "<div class=\"row\">\n  <OFormControl class=\"col\" :title=\"$t('Order:')\">\n    <WInputGroup validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <OrdersLookup class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
         }
       ]
     },
     {
+      "id": 23,
       "name": "ProjectsLookup",
       "description": "",
       "type": "Component",
@@ -2102,6 +2090,7 @@
       "snippets": []
     },
     {
+      "id": 24,
       "name": "WarehousesLookup",
       "description": "",
       "type": "Component",
@@ -2130,6 +2119,7 @@
       "snippets": []
     },
     {
+      "id": 25,
       "name": "QualificationsLookup",
       "description": "",
       "type": "Component",
@@ -2166,6 +2156,7 @@
       "snippets": []
     },
     {
+      "id": 26,
       "name": "DocumentsLookup",
       "description": "",
       "type": "Component",
@@ -2222,6 +2213,7 @@
       "snippets": []
     },
     {
+      "id": 27,
       "name": "DocumentsRevisionsLookup",
       "description": "",
       "type": "Component",
@@ -2288,6 +2280,7 @@
       "snippets": []
     },
     {
+      "id": 28,
       "name": "DocumentsGroupsLookup",
       "description": "",
       "type": "Component",
@@ -2328,6 +2321,7 @@
       "snippets": []
     },
     {
+      "id": 29,
       "name": "DocumentOriginatorsLookup",
       "description": "",
       "type": "Component",
@@ -2372,6 +2366,7 @@
       "snippets": []
     },
     {
+      "id": 30,
       "name": "DocumentStepsLookup",
       "description": "",
       "type": "Component",
@@ -2420,6 +2415,7 @@
       "snippets": []
     },
     {
+      "id": 31,
       "name": "DocumentTypesLookup",
       "description": "",
       "type": "Component",
@@ -2488,6 +2484,7 @@
       "snippets": []
     },
     {
+      "id": 32,
       "name": "DocumentTypesNumberingSchemesLookup",
       "description": "",
       "type": "Component",
@@ -2550,6 +2547,7 @@
       "snippets": []
     },
     {
+      "id": 33,
       "name": "DocumentsWestconAreaLookup",
       "description": "",
       "type": "Component",
@@ -2590,6 +2588,7 @@
       "snippets": []
     },
     {
+      "id": 34,
       "name": "RevisionDistributionStatusesLookup",
       "description": "",
       "type": "Component",
@@ -2622,6 +2621,7 @@
       "snippets": []
     },
     {
+      "id": 35,
       "name": "RevisionSendActionTypesLookup",
       "description": "",
       "type": "Component",
@@ -2662,6 +2662,7 @@
       "snippets": []
     },
     {
+      "id": 36,
       "name": "LocationsLookup",
       "description": "",
       "type": "Component",
@@ -2681,6 +2682,7 @@
       "snippets": []
     },
     {
+      "id": 37,
       "name": "PersonsLookup",
       "description": "",
       "type": "Component",
@@ -2729,6 +2731,7 @@
       "snippets": []
     },
     {
+      "id": 38,
       "name": "BranchesLookup",
       "description": "",
       "type": "Component",
@@ -2741,6 +2744,7 @@
       "snippets": []
     },
     {
+      "id": 39,
       "name": "SubProjectsLookup",
       "description": "",
       "type": "Component",
@@ -2877,11 +2881,12 @@
         {
           "title": "Example",
           "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\">\n  <OFormControl class=\"col\">\n    <WInputGroup validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <WSubProjectsLookup class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
+          "code": "<div class=\"row\">\n  <OFormControl class=\"col\">\n    <WInputGroup validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <SubProjectsLookup class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
         }
       ]
     },
     {
+      "id": 40,
       "name": "InputGroup",
       "description": "Input group for Westcon",
       "type": "Component",
@@ -2932,11 +2937,12 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div class=\"row\">\n  <FormControl class=\"col\">\n    <WInputGroup validate :title=\"vSomeNo\" invalidFeedback=\"You forgot to fill you this field!\"></WInputGroup>\n  </FormControl>\n</div>"
+          "code": "<div class=\"row\">\n  <FormControl class=\"col\">\n    <InputGroup validate :title=\"vSomeNo\" invalidFeedback=\"You forgot to fill you this field!\"></InputGroup>\n  </FormControl>\n</div>"
         }
       ]
     },
     {
+      "id": 41,
       "name": "Tabs",
       "description": "",
       "type": "Component",
@@ -3063,6 +3069,7 @@
       "snippets": []
     },
     {
+      "id": 42,
       "name": "Tab",
       "description": "",
       "type": "Component",
@@ -3173,6 +3180,7 @@
       "snippets": []
     },
     {
+      "id": 43,
       "name": "SizerPanel",
       "description": "",
       "type": "Component",
@@ -3291,12 +3299,12 @@
         {
           "title": "Horizontal Example",
           "content": "",
-          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <OSizerPanel width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </OSizerPanel>\n</OColContainer>"
+          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <SizerPanel width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </SizerPanel>\n</OColContainer>"
         },
         {
           "title": "Vertical Example",
           "content": "",
-          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <OSizerPanel height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </OSizerPanel>\n</OColContainer>"
+          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <SizerPanel height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </SizerPanel>\n</OColContainer>"
         }
       ],
       "exposes": [
@@ -3311,6 +3319,7 @@
       ]
     },
     {
+      "id": 44,
       "name": "RowContainer",
       "description": "For content positioned in flex-direction:column",
       "type": "Component",
@@ -3345,6 +3354,7 @@
       "snippets": []
     },
     {
+      "id": 45,
       "name": "ColContainer",
       "description": "For content positioned in flex-direction:row",
       "type": "Component",
@@ -3379,6 +3389,7 @@
       "snippets": []
     },
     {
+      "id": 46,
       "name": "CardView",
       "description": "Mobile alternative to grid. Uses Card component",
       "type": "Component",
@@ -3594,8 +3605,8 @@
       "params": [],
       "snippets": []
     },
-
     {
+      "id": 47,
       "name": "TEMPLATE",
       "description": "",
       "type": "",

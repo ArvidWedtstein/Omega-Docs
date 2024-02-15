@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineEmits, defineProps, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 
 const vSelectedView = ref("list");
 const vSearch = ref("");
