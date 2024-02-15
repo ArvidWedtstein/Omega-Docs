@@ -39,10 +39,18 @@
 
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
+            
+            <pre><code class="language-javascript">
+  // code here for example
+  function hello(){
+     console.log(Hello World)
+  } 
+</code></pre>
 
             <Section v-if="selectedTab?.params?.length" title="Syntax">
               <CodeBlock
                 class="h-100"
+                linenumbers
                 :code="`${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)`"
               >
                 <template #code>
@@ -279,7 +287,6 @@
 // TODO: make view for snippets, exposes, events, params
 // TODO: make dynamic snippets. Replace {COMPONENT} with componentname and so on
 import components from "./assets/Components.json";
-
 import { ref, watch, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";

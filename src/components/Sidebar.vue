@@ -125,7 +125,7 @@
 // TODO: add "W" before every win component
 import type { Tab } from "@/App.vue";
 import { components } from "./../assets/Components.json";
-import { ref, defineEmits, onMounted, h, computed } from "vue";
+import { ref, onMounted, h, computed } from "vue";
 import useSidebarRenderer from "./useSidebarRenderer";
 interface GroupedTabs {
   [category: string]: Tab[];

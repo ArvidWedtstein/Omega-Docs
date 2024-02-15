@@ -49,7 +49,7 @@
     </button>
 
     <div class="d-flex p-3">
-      <div v-if="linenumbers" class="line-numbers me-2">
+      <div v-if="linenumbers" class="me-2 line-numbers">
         <div
           v-for="(vLine, vIndex) in vLines"
           :key="vIndex"
@@ -60,10 +60,6 @@
         </div>
       </div>
       <div class="text-start flex-grow-1" ref="vCodeRef">
-        <pre
-          v-if="code"
-          class="mb-0"
-        ><code contenteditable="false" tabindex="0" spellcheck="false">{{ prettier.format(code, { parser: 'ht', plugins: [parser]}) }}</code></pre>
         <slot name="code"></slot>
       </div>
     </div>
@@ -72,19 +68,16 @@
 
 <script setup lang="ts">
 import { ref, computed, withDefaults } from "vue";
-import * as prettier from "prettier";
-import parser from "prettier/parser-html.js";
 
 export interface Props {
   filename?: string;
   linenumbers?: boolean;
-  code?: string;
 }
 const vProps = withDefaults(defineProps<Props>(), {
   filename: "",
   linenumbers: false,
-  code: "",
 });
+
 
 const vLines = computed(() => {
   return vCodeRef.value && vProps.linenumbers
@@ -121,11 +114,9 @@ figure {
 }
 .line-number {
   counter-increment: line;
-  line-height: 1.7;
+  line-height: 1.8;
   font-size: 0.75rem;
 }
 
-pre code {
-  font-family: "Courier New", Courier, monospace;
-}
+
 </style>
