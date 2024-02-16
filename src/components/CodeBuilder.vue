@@ -5,9 +5,9 @@
         <CodeBlock>
           <template #code>
             <pre
-              class="mb-0"
+              class="mb-0 language-html"
               style="margin-top: 0;"
-            ><code contenteditable="true" class="language-html" tabindex="0" spellcheck="false">{{ generateCode }}</code></pre>
+            ><code contenteditable="true" class="language-html" tabindex="0" spellcheck="false">{{ vGeneratedCode }}</code></pre>
           </template>
         </CodeBlock>
       </div>
@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { watch, ref, computed, onMounted } from "vue";
 import CodeBlock from "./CodeBlock.vue";
 import type { Tab } from "@/App.vue";
 
@@ -94,7 +94,11 @@ const { tab } = defineProps<{
   tab: NonNullable<Tab>;
 }>();
 
+watch(tab, (newTab, oldTab) => {
+  console.log(newTab, oldTab)
+})
 const vSelectedProps = ref<NonNullable<Tab["props"]>>([]);
+const vGeneratedCode = ref<string>("");
 
 const checkProp = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
   if (vSelectedProps.value?.some(({ name }) => name === pProp.name)) {
@@ -106,9 +110,21 @@ const checkProp = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
   }
 };
 
-const generateCode = computed(() => {
-  if (!tab || !vSelectedProps.value) return "";
-  return `<${tab.name}
+watch(tab, (newTab, oldTab) => {
+  console.log(newTab, oldTab)
+  if (!newTab || !vSelectedProps.value) return "";
+
+  vGeneratedCode.value = `<${newTab.name}
+${vSelectedProps.value
+  .map(
+    (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,
+  )
+  .join("\n")}
+/>`;
+});
+
+onMounted(() => {
+  vGeneratedCode.value = `<${tab.name}
 ${vSelectedProps.value
   .map(
     (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,

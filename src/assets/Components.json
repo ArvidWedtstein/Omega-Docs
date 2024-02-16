@@ -5,6 +5,7 @@
       "name": "DataObject",
       "description": "",
       "type": "Class",
+      "path": "",
       "category": "Data",
       "props": [
         {
@@ -289,7 +290,251 @@
           "required": false
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "name": "FieldChanged",
+          "params": [
+            {
+              "name": "fieldName",
+              "type": "String"
+            },
+            {
+              "name": "newValue"
+            },
+            {
+              "name": "oldValue"
+            },
+            {
+              "name": "currentValues"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "ChangesCancelled",
+          "params": [
+            {
+              "name": "rows",
+              "type": "Array"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeDelete",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "AfterDelete",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeSoftDelete",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "AfterSoftDelete",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "CurrentIndexChanging",
+          "params": [
+            {
+              "name": "prevIndex",
+              "type": "Number"
+            },
+            {
+              "name": "newIndex",
+              "type": "Number"
+            }
+          ] 
+        },
+        {
+          "name": "CurrentIndexChanged",
+          "params": [
+            {
+              "name": "prevIndex",
+              "type": "Number"
+            },
+            {
+              "name": "newIndex",
+              "type": "Number"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeLoad",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "DataLoaded",
+          "params": [
+            {
+              "name": "data",
+              "type": "Array"
+            },
+            {
+              "name": "options",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "AfterSave",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "operation",
+              "type": "create | update"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            },
+            {
+              "name": "dataItem",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeSave",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            },
+            {
+              "name": "dataItem",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeUpdate",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeCreate",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "row",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "DynamicDataLoaded",
+          "params": [
+            {
+              "name": "pClear",
+              "type": "Object"
+            },
+            {
+              "name": "pNewData",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeBulkDelete",
+          "params": [
+            {
+              "name": "options",
+              "type": "Object"
+            },
+            {
+              "name": "item",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeExport",
+          "params": [
+            {
+              "name": "pExportConfig",
+              "type": "Object"
+            }
+          ] 
+        },
+        {
+          "name": "BeforeExportTemplate",
+          "params": [
+            {
+              "name": "pTemplateType",
+              "type": "String"
+            },
+            {
+              "name": "pExportConfig",
+              "type": "Object"
+            }
+          ] 
+        }
+      ],
       "slots": [],
       "params": [],
       "snippets": [],
@@ -304,7 +549,7 @@
         },
         {
           "name": "fileUpload",
-          "type": "object",
+          "type": "Object",
           "default": "",
           "description": "",
           "example": "",
@@ -472,7 +717,7 @@
         },
         {
           "name": "menuTabs",
-          "type": "Record<string, any>[]",
+          "type": "Record<String, any>[]",
           "default": "null",
           "description": "An array of custom tab definitions for the grid sidemenu details tab.",
           "example": ":menuTabs=\"[{ title: 'Custom Tab', id: 'tab1', iconClass: 'bi bi-1-square-fill', component: MyTabComponent]\"",
@@ -614,7 +859,7 @@
         },
         {
           "name": "noRowsFound",
-          "type": "string | Boolean",
+          "type": "String | Boolean",
           "default": "'No rows found...'",
           "description": "Then set to true, will show default message and enable for custom overriding via 'noRowsFound' slot. Can also be used to override default message.",
           "required": false
@@ -957,7 +1202,7 @@
         },
         {
           "name": "cellrenderer",
-          "type": "Component | string",
+          "type": "Component | String",
           "default": "null",
           "description": "Optional cell renderer component definition or registered component name. When provided overrides #default slot",
           "example": "",
@@ -1430,7 +1675,7 @@
     {
       "id": 7,
       "name": "DataLookup",
-      "description": "Lookup component. Takes Column component as children.",
+      "description": "Lookup component. Takes {COMPONENT=5} component as children.",
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.DataLookup.vue",
@@ -1438,7 +1683,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<DataLookup\n:dataObject=\"\"\nv-model=\"\"\n:bind=\"sel=>{}\"\n></DataLookup>"
+          "code": "<{COMPONENT} :dataObject=\"\"v-model=\"\":bind=\"sel=>{}\"></{COMPONENT}>"
         }
       ],
       "props": [
@@ -1460,23 +1705,23 @@
         },
         {
           "name": "placeholder",
-          "type": "",
-          "default": "",
+          "type": "String",
+          "default": "null",
           "description": "",
           "example": "",
           "required": false
         },
         {
           "name": "columns",
-          "type": "",
-          "default": "",
+          "type": "Array",
+          "default": "null",
           "description": "",
           "example": "",
           "required": false
         },
         {
           "name": "height",
-          "type": "",
+          "type": "Number | String",
           "default": "",
           "description": "",
           "example": "",
@@ -1492,10 +1737,48 @@
         },
         {
           "name": "reloadOnWhereClauseChange",
-          "type": "",
-          "default": "",
+          "type": "Boolean",
+          "default": "false",
           "description": "For when you need the lookup to reload on any where clause change.",
           "example": "",
+          "required": false
+        },
+        {
+          "name": "itemLoaded",
+          "type": "Boolean",
+          "default": "false",
+          "description": "For use in multiselect.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "currentRow",
+          "type": "Object",
+          "default": "null",
+          "description": "For setting currentRow on mobile.",
+          "example": ":currentRow=\"{ID: value}\"",
+          "required": false
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "default": "null",
+          "description": "Tooltip title for lookup on desktop. Will be used as header for lookup on mobile.",
+          "example": "title=\"CustomTitle\"",
+          "required": false
+        },
+        {
+          "name": "noSearch",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables search",
+          "required": false
+        },
+        {
+          "name": "focusField",
+          "type": "String",
+          "default": "null",
+          "description": "By default the desktop lookup will autofocus first visible column filter field. Use this prop to specify other field.",
           "required": false
         }
       ],
@@ -1510,6 +1793,7 @@
         },
         {
           "name": "target",
+          "description": "To use custom target instead of <input> you can pass #target slot. Scope object {target, open} is passed to this slot. By default a click listener is attached to the target that opens the lookup. This can be turned off with suppressClickEvent property on <ODataLookup>",
           "template": "#target=\"{target}\""
         }
       ],
@@ -3025,6 +3309,7 @@
       "exposes": [
         {
           "name": "setActiveTab",
+          "description": "Lets you set the active tab by passing the id of the tab you want to switch to. In such case you need to add ids on the <{COMPONENT=42}> components.",
           "type": "Function"
         },
         {
@@ -3068,7 +3353,18 @@
         }
       ],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT}><{COMPONENT=42} :title=\"$t('Tab 1')\" active>Tab 1 Content</{COMPONENT=42}><{COMPONENT=42}><template #title><i class=\"bi bi-bookmark\"></i> {{$t('Tab 2')}}</template>Tab 2 Content</{COMPONENT=42}></{COMPONENT}>"
+        },
+        {
+          "title": "Tabs with Url",
+          "content": "",
+          "code": ""
+        }
+      ]
     },
     {
       "id": 42,
@@ -3172,6 +3468,11 @@
       ],
       "slots": [
         {
+          "name": "default",
+          "description": "Panel content for this tab.",
+          "template": "#default"
+        },
+        {
           "name": "title",
           "description": "Title of tab",
           "template": "#title"
@@ -3179,7 +3480,9 @@
       ],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        
+      ]
     },
     {
       "id": 43,
@@ -3479,7 +3782,7 @@
           "name": "noSearch",
           "type": "Boolean",
           "default": "false",
-          "description": "",
+          "description": "Disables search",
           "required": false
         },
         {
@@ -3609,6 +3912,88 @@
     },
     {
       "id": 47,
+      "name": "TextArea",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.TextArea.vue",
+      "props": [
+        {
+          "name": "autoGrow",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "noResize",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "noEdit",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Same as readonly",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "rowHeight",
+          "type": "Number | String",
+          "default": "28",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "rows",
+          "type": "Number | String",
+          "default": "2",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "modalValue",
+          "type": "Number | String",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update",
+          "description": "",
+          "syntax": "@update:modelValue=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "activateEditor",
+          "type": "Boolean"
+        },
+        {
+          "name": "getControl",
+          "type": "Function"
+        },
+        {
+          "name": "calculateInputHeight",
+          "type": "Function"
+        }
+      ],
+      "snippets": []
+    },
+    {
+      "id": 48,
       "name": "TEMPLATE",
       "description": "",
       "type": "",
@@ -3624,10 +4009,34 @@
           "required": false
         }
       ],
-      "slots": [],
-      "events": [],
+      "slots": [
+        {
+          "name": "",
+          "description": "",
+          "template": "#"
+        }
+      ],
+      "events": [
+        {
+          "name": "",
+          "description": "",
+          "syntax": "@=\"\""
+        }
+      ],
       "params": [],
-      "snippets": []
+      "exposes": [
+        {
+          "name": "",
+          "type": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "",
+          "content": "",
+          "code": ""
+        }
+      ]
     }
   ]
 }

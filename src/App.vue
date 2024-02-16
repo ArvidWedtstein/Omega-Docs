@@ -22,7 +22,7 @@
           <path
             fill-rule="evenodd"
             d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
-          ></path>
+          />
         </svg>
 
         <span class="d-none fs-6 pe-1">Browse</span>
@@ -32,8 +32,8 @@
         <div class="py-5 text-center">
           <h1 class="display-5 fw-bold">{{ selectedTab?.name }}</h1>
           <CodeBuilder
-            v-if="selectedTab?.type !== 'Function'"
-            :tab="selectedTab as Tab"
+            v-if="selectedTab && selectedTab?.props?.length && selectedTab?.type !== 'Function' && selectedTab?.type !== 'Class'"
+            :tab="selectedTab"
             class="h-100"
           />
 
@@ -42,16 +42,12 @@
             
 
             <Section v-if="selectedTab?.params?.length" title="Syntax">
-              <CodeBlock
-                class="h-100"
-                linenumbers
-                :code="`${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)`"
-              >
+              <CodeBlock class="h-100">
                 <template #code>
                   <pre
-                    class="mb-0"
+                    class="mb-0 language-js"
                     style="margin-top: 0;"
-                  ><code contenteditable="false" tabindex="0" class="language-html" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
+                  ><code contenteditable="false" tabindex="0" class="language-js" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
                 </template>
               </CodeBlock>
             </Section>
@@ -60,9 +56,9 @@
               <CodeBlock class="h-100">
                 <template #code>
                   <pre
-                    class="mb-0 language-typescript"
+                    class="mb-0 language-js"
                     style="margin-top: 0;"
-                  ><code contenteditable="false" tabindex="0" spellcheck="false" class="language-typescript">Import {{ selectedTab?.name }} from '{{ `${getTab(selectedTab_ID)?.path}` }}'</code></pre>
+                  ><code contenteditable="false" tabindex="0" spellcheck="false" class="language-js">Import {{ selectedTab?.name }} from '{{ `${selectedTab?.path}` }}'</code></pre>
                 </template>
               </CodeBlock>
             </Section>
@@ -286,9 +282,8 @@
 <script setup lang="ts">
 // TODO: update lookup snippets
 // TODO: make view for snippets, exposes, events, params
-// TODO: make dynamic snippets. Replace {COMPONENT} with componentname and so on
 import components from "./assets/Components.json";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
@@ -320,16 +315,16 @@ interface Param {
   default?: string | undefined;
 }
 interface Property {
-  name?: string | undefined;
+  name: string;
   type?: string | undefined;
   default?: string | undefined;
   description?: string | undefined;
   required?: boolean | undefined;
   template?: string | undefined;
   example?: string | undefined;
-  params?: Array<Record<string, any>> | undefined;
+  params?: Array<Partial<Param>> | undefined;
 }
-export interface Tab {
+export type Tab = {
   id: number;
   name: string;
   description?: string;
@@ -341,10 +336,10 @@ export interface Tab {
   params?: Array<Partial<Param>> | undefined;
   slots?: Array<Partial<Slot>> | undefined;
   events?: Array<Partial<Event>> | undefined;
-  props?: Array<Partial<Property>> | undefined;
+  props: Array<Partial<Property>>;
   snippets?: Array<Partial<Snippet>> | undefined;
   exposes?: Array<Partial<Expose>> | undefined;
-}
+};
 
 function checkForDuplicates(component: Tab): void {
   function findDuplicates(
@@ -365,9 +360,10 @@ function checkForDuplicates(component: Tab): void {
     return duplicates;
   }
 
+
   const duplicateProps = component.props ? findDuplicates(component.props) : [];
   const duplicateSnippets = component.snippets
-    ? findDuplicates(component.snippets, "title")
+    ? findDuplicates(component?.snippets, "title")
     : [];
   const duplicateExposes = component.exposes
     ? findDuplicates(component.exposes)
@@ -429,60 +425,47 @@ function checkForDuplicates(component: Tab): void {
   }
 }
 
-const selectedTab_ID = ref();
+const selectedTab_ID = ref(0);
 const selectedTab = ref<Tab>();
 const vSelectedPropView = ref("list");
 const vSearchItems = ref<Tab["props"]>([]);
 
-watch(selectedTab_ID, async (newTab_ID, oldTab_ID) => {
-  vSearchItems.value = getTab(newTab_ID)?.props || [];
-});
-
 const vTabs = ref<Partial<Tab[]>>([]);
 
 const onSearchChange = (pSearchValue: String) => {
-  vSearchItems.value = getTab(selectedTab_ID.value)?.props?.filter((vProp) =>
+  if (selectedTab?.value) {
+
+    vSearchItems.value = selectedTab?.value?.props.filter((vProp) =>
     vProp.name?.toLowerCase().includes(pSearchValue.toLowerCase()),
-  );
+    );
+  }
 };
 
 const setSelectedTab = (pTab_ID: number) => {
   selectedTab_ID.value = pTab_ID;
-
-  let vTab = getTab(pTab_ID);
-
+  const vTab = vTabs.value.find((vTab) => vTab?.id === pTab_ID);
   if (vTab) {
     selectedTab.value = vTab;
+    vSearchItems.value = vTab.props || [];
   }
 };
 
-const getTab = (pTab_ID: number): Tab | null => {
-  const vTab = vTabs.value.find((vTab) => vTab?.id === pTab_ID);
-  return vTab || null;
-};
+const RefactorComponent = (component: Tab) => {
+  return JSON.parse(JSON.stringify(component)
+    .replace(/\{COMPONENT\}/g, component.name)
+    .replace(/\{COMPONENT=(\d+)\}/g, (match, id) => {
+        const referencedComponent = components.components.find(c => c.id === parseInt(id));
+        return referencedComponent ? referencedComponent.name : match;
+    }));
+}
+
 
 onMounted(() => {
   const vComponents = components.components.map((pComponent) => {
     checkForDuplicates(pComponent as Tab);
-
-    return {
-      ...pComponent,
-      snippets: pComponent?.snippets?.map((pSnippet: Snippet) => {
-        if (pSnippet.code) {
-          pSnippet.code = pSnippet.code.replace(
-            /{COMPONENT}/g,
-            pComponent.name,
-          );
-        }
-        return pSnippet;
-      }),
-    };
+    return RefactorComponent(pComponent as Tab);
   });
-
-  // console.log(vComponents);
   vTabs.value = vComponents as Tab[];
-
-  setSelectedTab(1);
 });
 </script>
 
