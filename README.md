@@ -1,4 +1,4 @@
-<h1>Omega Docs [![Netlify Status](https://api.netlify.com/api/v1/badges/d2c42e80-54e9-4c16-920c-2844a3ca23b7/deploy-status)](https://app.netlify.com/sites/omegadocs/deploys)</h1> 
+<h1>Omega Docs <img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/d2c42e80-54e9-4c16-920c-2844a3ca23b7/deploy-status"></h1> 
 
 This template should help get you started developing with Vue 3 in Vite.
 
