@@ -38,3 +38,37 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+
+<!--https://nvie.com/posts/a-successful-git-branching-model/-->
+
+## New feature
+
+When starting work on a new feature, branch off from the development branch: 
+```sh
+git checkout -b myfeature Development
+# Switched to a new branch "myfeature"
+```
+
+Finished features may be merged into the development branch to definitely add them to the upcoming release:
+```sh
+git checkout Development
+# Switched to branch 'Development'
+```
+
+```sh
+git merge --no-ff myfeature
+#Updating ea1b82a..05e9557
+# (Summary of changes)
+```
+
+
+```sh
+git branch -d myfeature
+# Deleted branch myfeature (was 05e9557).
+```
+
+```sh
+git push origin Development
+```
