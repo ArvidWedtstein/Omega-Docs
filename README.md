@@ -45,16 +45,16 @@ npm run build
 
 ## New feature
 
-When starting work on a new feature, branch off from the development branch: 
+When starting work on a new feature, branch off from the dev branch: 
 ```sh
 git checkout -b myfeature Development
 # Switched to a new branch "myfeature"
 ```
 
-Finished features may be merged into the development branch to definitely add them to the upcoming release:
+Finished features may be merged into the dev branch to definitely add them to the upcoming release:
 ```sh
-git checkout Development
-# Switched to branch 'Development'
+git checkout dev
+# Switched to branch 'dev'
 ```
 
 ```sh
@@ -70,5 +70,5 @@ git branch -d myfeature
 ```
 
 ```sh
-git push origin Development
+git push origin dev
 ```
