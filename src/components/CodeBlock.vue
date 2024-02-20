@@ -24,29 +24,31 @@
       </button>
     </figcaption>
 
-    <button
-      class="btn d-inline-flex justify-content-center align-items-center text-light"
-      style="
-        width: 40px;
-        height: 40px;
-        position: absolute;
-        right: 2px;
-        top: 2px;
-      "
-      type="button"
-      @click="onCopy"
-      v-else
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 448 512"
-        fill="currentColor"
-      >
-        <path
-          d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"
-        />
-      </svg>
-    </button>
+    <div v-else class="toolbar d-flex flex-row gap-2 align-items-center">
+      <span v-if="language" class="d-inline-block badge rounded-pill bg-warning text-dark" style="opacity: 50%;">{{ language }}</span>
+      <div class="d-inline-block">
+        <button
+          class="btn d-inline-flex justify-content-center align-items-center text-light"
+          style="
+            width: 40px;
+            height: 40px;
+          "
+          type="button"
+          @click="onCopy"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            fill="currentColor"
+          >
+            <path
+              d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
 
     <div class="d-flex">
       <div v-if="linenumbers" class="me-2 line-numbers">
@@ -71,10 +73,12 @@ import { ref, computed, withDefaults } from "vue";
 
 export interface Props {
   filename?: string;
+  language?: string;
   linenumbers?: boolean;
 }
 const vProps = withDefaults(defineProps<Props>(), {
   filename: "",
+  language: "javascript",
   linenumbers: false,
 });
 
@@ -105,6 +109,17 @@ figure {
   border: 1px solid #111;
   border-radius: 0.25rem;
   /* background: rgb(55, 55, 55); */
+}
+figure .toolbar  {
+  position: absolute;
+  right: 0.2em;
+  top: 0.3em;
+  opacity: 0;
+  transition: all 100ms ease-in;
+}
+
+figure:hover .toolbar {
+  opacity: 100;
 }
 
 .line-numbers {

@@ -541,7 +541,7 @@
       "exposes": [
         {
           "name": "reshiftItem",
-          "type": "function",
+          "type": "Function",
           "default": "",
           "description": "Reshifts items to new position.",
           "example": "dsWorkflows.reshiftItem(vIndexOfItem, vNewIndex)",
@@ -554,6 +554,74 @@
           "description": "",
           "example": "",
           "required": false
+        },
+        {
+          "name": "selectionControl",
+          "type": "Object",
+          "params": [
+            {
+              "name": "selectedRows",
+              "type": "Array"
+            },
+            {
+              "name": "isCopying",
+              "type": "Boolean"
+            },
+            {
+              "name": "selectAllLoading",
+              "type": "Boolean"
+            },
+            {
+              "name": "allRowsSelected",
+              "type": "Boolean"
+            },
+            {
+              "name": "selectedDataItems",
+              "type": "Set"
+            },
+            {
+              "name": "selection",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "start",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "x",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "y",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "container",
+                      "type": "String"
+                    }
+                  ]
+                },
+                {
+                  "name": "end",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "x",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "y",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "container",
+                      "type": "String"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1090,7 +1158,7 @@
     {
       "id": 5,
       "name": "Column",
-      "description": "Used in DataGrid and DataLookup",
+      "description": "Used in {COMPONENT=4} and {COMPONENT=7}",
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.Column.jsx",
@@ -1423,7 +1491,48 @@
           "required": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "editor",
+          "description": "The cell editor slot to be used when in edit mode",
+          "template": "#editor=\"{row}\""
+        },
+        {
+          "name": "bulkupdateeditor",
+          "description": "The bulk update editor slot",
+          "template": "#bulkupdateeditor=\"{row}\""
+        },
+        {
+          "name": "headertext",
+          "description": "Replaces label text contet of the header cell with this slot",
+          "template": "#headertext"
+        },
+        {
+          "name": "headerMenu",
+          "description": "Add custom menu items to the header menu for this column",
+          "template": "#headerMenu=\"{column, open}\""
+        },
+        {
+          "name": "summary",
+          "description": "The cell summary slot to be used for rendering summary values",
+          "template": "#summary=\"{row}\""
+        },
+        {
+          "name": "contextmenuTop",
+          "description": "Custom context menu items rendered at the top",
+          "template": "#contextmenuTop"
+        },
+        {
+          "name": "contextmenuBottom",
+          "description": "Custom context menu items rendered at the bottom",
+          "template": "#contextmenuBottom"
+        },
+        {
+          "name": "overlay",
+          "description": "Overlay over the entire column",
+          "template": "#overlay"
+        }
+      ],
       "events": [],
       "params": [],
       "snippets": []
@@ -3361,7 +3470,7 @@
         },
         {
           "title": "Tabs with Url",
-          "content": "",
+          "content": "TBA",
           "code": ""
         }
       ]
@@ -3375,8 +3484,8 @@
       "path": "o365.vue.components.Tab.vue",
       "props": [
         {
-          "name": "ID",
-          "type": "Number",
+          "name": "id",
+          "type": "Number | String",
           "default": "null",
           "description": "Will be used as id for the tab-content element",
           "required": false
@@ -3478,6 +3587,7 @@
           "template": "#title"
         }
       ],
+      "exposes": [],
       "events": [],
       "params": [],
       "snippets": [
@@ -3489,7 +3599,7 @@
       "name": "SizerPanel",
       "description": "",
       "type": "Component",
-      "category": "Sider",
+      "category": "Sizer",
       "path": "o365.vue.components.SizerPanel.vue",
       "props": [
         {
@@ -3994,6 +4104,223 @@
     },
     {
       "id": 48,
+      "name": "DatePicker",
+      "description": "Date Picker",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.DatePicker.vue",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "any",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "date",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "column",
+          "type": "DataColumn",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "format",
+          "type": "String | Function",
+          "default": "",
+          "example": "(pDate: Date) => string",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "timepicker",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggles timepicker",
+          "required": false
+        },
+        {
+          "name": "timepickerOnly",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Shows only timepicker",
+          "required": false
+        },
+        {
+          "name": "callback",
+          "type": "Function",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "clearable",
+          "type": "Boolean",
+          "default": "true",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "clearableFromPicker",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "openOnIconClick",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "autoSuggestion",
+          "type": "Boolean",
+          "default": "true",
+          "description": "suggests date?",
+          "required": false
+        },
+        {
+          "name": "showInputIcon",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "teleport",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Throws an ender pearl. Just kidding. When true datepicker will be rendered inside input element.",
+          "required": false
+        },
+        {
+          "name": "containerClass",
+          "type": "String | css classes",
+          "default": "null",
+          "description": "Classes for Input field",
+          "required": false
+        },
+        {
+          "name": "range",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables for 'from'/'to' date selection",
+          "required": false
+        },
+        {
+          "name": "utc",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggles UTC date",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "fires then modelValue has changed.",
+          "syntax": "@update:modelValue=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "open",
+          "type": "Boolean"
+        },
+        {
+          "name": "setDate",
+          "type": "Function"
+        },
+        {
+          "name": "format",
+          "type": "String"
+        },
+        {
+          "name": "uiLocale",
+          "type": "String"
+        },
+        {
+          "name": "datepickerRef",
+          "type": "Ref"
+        },
+        {
+          "name": "textInputOptions",
+          "type": "Object",
+          "params": [
+            {
+              "name": "openMenu",
+              "type": "Boolean"
+            }
+          ]
+        },
+        {
+          "name": "openMenu",
+          "type": "Function"
+        },
+        {
+          "name": "hideInputIcon",
+          "type": "Boolean"
+        },
+        {
+          "name": "activateEditor",
+          "type": "Function"
+        }
+      ],
+      "snippets": [
+        {
+          "title": "",
+          "content": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "name": "MatchMedia",
+      "description": "",
+      "type": "Component",
+      "category": "Other",
+      "path": "o365.vue.components.MatchMedia.vue",
+      "props": [
+        {
+          "name": "query",
+          "type": "String",
+          "default": "MediaQueryProvider",
+          "description": "Media query string to match against.",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "change",
+          "description": "Emitted when the media query status changes",
+          "syntax": "@change=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "",
+          "content": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "id": 50,
       "name": "TEMPLATE",
       "description": "",
       "type": "",

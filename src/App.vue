@@ -289,7 +289,6 @@ import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
 import PropSelector from "./components/PropSelector.vue";
 import Section from "./components/Section.vue";
-
 interface Event {
   name?: string | undefined;
   description?: string | undefined;
@@ -341,7 +340,8 @@ export type Tab = {
   exposes?: Array<Partial<Expose>> | undefined;
 };
 
-function checkForDuplicates(component: Tab): void {
+
+const checkForDuplicates = (component: Tab): void => {
   function findDuplicates(
     array: Partial<{ name: string; title: string }>[],
     prop: string = "name",

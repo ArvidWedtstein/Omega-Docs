@@ -1,12 +1,12 @@
 <template>
   <div class="rounded border">
-    <div class="row h-100">
-      <div class="col-auto pe-0 flex-grow-1 h-100">
+    <div class="row h-100 overflow-hidden" style="height: 300px;">
+      <div class="col-auto pe-0 flex-grow-1 h-100 overflow-y-auto">
         <CodeBlock>
           <template #code>
             <pre
-              class="mb-0 language-html"
-              style="margin-top: 0;"
+              class="mb-0 language-html overflow-y-auto"
+              style="margin-top: 0; height: 300px"
             ><code contenteditable="true" class="language-html" tabindex="0" spellcheck="false">{{ vGeneratedCode }}</code></pre>
           </template>
         </CodeBlock>
@@ -84,6 +84,8 @@ import { watch, ref, computed, onMounted } from "vue";
 import CodeBlock from "./CodeBlock.vue";
 import type { Tab } from "@/App.vue";
 
+
+// TODO: fix code rerendering on tab change
 /**
  * Converts array type to single type
  */
@@ -94,9 +96,7 @@ const { tab } = defineProps<{
   tab: NonNullable<Tab>;
 }>();
 
-watch(tab, (newTab, oldTab) => {
-  console.log(newTab, oldTab)
-})
+
 const vSelectedProps = ref<NonNullable<Tab["props"]>>([]);
 const vGeneratedCode = ref<string>("");
 
@@ -108,10 +108,19 @@ const checkProp = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
   } else {
     vSelectedProps.value?.push(pProp);
   }
+
+  vGeneratedCode.value = `<${tab.name}
+${vSelectedProps.value
+  .map(
+    (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,
+  )
+  .join("\n")}
+/>`;
 };
 
 watch(tab, (newTab, oldTab) => {
-  console.log(newTab, oldTab)
+  vSelectedProps.value = []
+  console.log(tab)
   if (!newTab || !vSelectedProps.value) return "";
 
   vGeneratedCode.value = `<${newTab.name}
