@@ -65,40 +65,33 @@
 
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
               <PropSelector class="mb-3" @search="" />
-<!-- TODO: fix -->
-              <div
-                class="accordion accordion-flush"
-                id="accordionPanelsStayOpenExample"
-              >
-                <div
-                  class="accordion-item"
-                  v-for="(vSnippet, vSnippetIndex) in selectedTab?.snippets"
-                  :key="vSnippetIndex"
-                >
-                  <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                    <button
-                      class="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#panelsStayOpen-collapseOne"
-                      aria-expanded="false"
-                      aria-controls="panelsStayOpen-collapseOne"
+              <div class="d-flex flex-column gy-2">
+                <div class="accordion card" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                  <a class="card-header d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" aria-expanded="false" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
+                    {{ title }}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                      class="chevron"
+                      fill="currentColor"
+                      stroke-width="0"
+                      width="20"
+                      height="20"
                     >
-                      {{ vSnippet.title }}
-                    </button>
-                  </h2>
-                  <div
-                    id="panelsStayOpen-collapseOne"
-                    class="accordion-collapse collapse"
-                    aria-labelledby="panelsStayOpen-headingOne"
-                  >
-                    <div class="" v-if="vSnippet.code">
-                      <CodeBlock>
+                      <path
+                        d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                      />
+                    </svg>
+                  </a>
+                  <div class="collapse" :id="`snippet-collapse-${vSnippetIndex}`">
+                    <div class="card-body">
+                      <p class="card-text">{{ content }}</p>
+                      <CodeBlock v-if="code" language="vue">
                         <template #code>
                           <pre
                             class="language-html mb-0"
                             style="margin-top: 0;"
-                          ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ vSnippet.code }}</code></pre>
+                          ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ code }}</code></pre>
                         </template>
                       </CodeBlock>
                     </div>
@@ -554,10 +547,17 @@ onBeforeMount(() => {
     var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
 }
 
-.btn svg {
+.btn svg,
+.card-header svg.chevron {
   transition: 0.3s transform ease-in-out;
 }
 .btn.collapsed svg {
+  transform: rotate(180deg);
+}
+.card-header[aria-expanded="true"] svg.chevron {
+  transform: rotate(0deg);
+}
+.card-header[aria-expanded="false"] svg.chevron {
   transform: rotate(180deg);
 }
 </style>

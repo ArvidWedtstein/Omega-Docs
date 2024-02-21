@@ -4448,6 +4448,45 @@
     },
     {
       "id": 51,
+      "name": "Footer",
+      "description": "Contain ActionSave and ActionCancel buttons",
+      "type": "Component",
+      "category": "WIN/Form",
+      "path": "WIN365.vue.components.Footer.vue",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "undefined",
+          "description": "Data Object belonging to the form",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "prepend",
+          "description": "Add items before the buttons",
+          "template": "#prepend"
+        },
+        {
+          "name": "default",
+          "description": "Add items after the buttons",
+          "template": "#default"
+        }
+      ],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<Footer :dataObject=\"dsWorkflows\" />"
+        }
+      ]
+    },
+    {
+      "id": 52,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
