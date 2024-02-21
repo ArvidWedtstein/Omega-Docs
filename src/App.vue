@@ -179,13 +179,13 @@
                       >
                         <span class="mb-0">Example:</span>
                         <!-- TODO: fix -->
-                        <CodeBlock linenumbers>
+                        <CodeBlock language="html">
                           <template #code>
                             <pre
                               class="language-html mb-0"
                               style="margin-top: 0;"
                             ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ `<ODataGrid
-  :${vProp.name}="${vProp.default}"
+  :${vProp.name}="${vProp.example}"
 />` }}</code></pre>
                           </template>
                         </CodeBlock>
@@ -233,7 +233,7 @@
                       </h2>
                       <div
                         :id="`collapse-panel-${vPropIndex}`"
-                        class="accordion-collapse collapse show text-start"
+                        class="accordion-collapse collapse text-start"
                         :aria-labelledby="`collapse-panel-heading-${vPropIndex}`"
                       >
                         <div class="d-flex flex-column gap-1 pb-3">
@@ -247,15 +247,12 @@
                             </small>
                           </span>
 
-                          <!-- TODO: fix -->
-                          <CodeBlock linenumbers v-if="vProp.example">
+                          <CodeBlock v-if="vProp.example || vProp.template">
                             <template #code>
                               <pre
-                                class="mb-0"
+                                class="mb-0 language-html"
                                 style="margin-top: 0;"
-                              ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ `<ODataGrid
-  ${vProp.example}
-/>` }}</code></pre>
+                              ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ vProp.example }}</code></pre>
                             </template>
                           </CodeBlock>
                         </div>
@@ -276,7 +273,7 @@
 // TODO: update lookup snippets
 // TODO: make view for snippets, exposes, events, params
 import components from "./assets/Components.json";
-import { ref, watch, onMounted, onBeforeMount, computed } from "vue";
+import { ref, onBeforeMount, onMounted } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
@@ -468,7 +465,10 @@ onBeforeMount(() => {
   });
   vTabs.value = vComponents as Tab[];
 });
+
+
 </script>
+
 
 <style scoped>
 @media (min-width: 992px) {

@@ -296,13 +296,18 @@
           "params": [
             {
               "name": "fieldName",
+              "description": "Name of field that was changed",
               "type": "String"
             },
             {
-              "name": "newValue"
+              "name": "newValue",
+              "description": "New Value of field",
+              "type": "any"
             },
             {
-              "name": "oldValue"
+              "name": "oldValue",
+              "description": "Value of field before it was touched",
+              "type": "any"
             },
             {
               "name": "currentValues"
