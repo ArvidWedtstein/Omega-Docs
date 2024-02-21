@@ -788,7 +788,6 @@
           "type": "Record<String, any>[]",
           "default": "null",
           "description": "An array of custom tab definitions for the grid sidemenu details tab.",
-          "example": ":menuTabs=\"[{ title: 'Custom Tab', id: 'tab1', iconClass: 'bi bi-1-square-fill', component: MyTabComponent]\"",
           "required": false
         },
         {
@@ -1755,13 +1754,6 @@
           "default": "false",
           "description": "When enabled this column will only be visible in grid when there is active group by",
           "required": false
-        },
-        {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
-          "required": false
         }
       ],
       "exposes": [
@@ -2478,7 +2470,101 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.ProjectsLookup.vue",
-      "props": [],
+      "props": [
+        {
+          "name": ":bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "IdPath",
+              "type": "String"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "ProjectName",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            },
+            {
+              "name": "DomainName",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "Customer_ID",
+              "type": "Number"
+            },
+            {
+              "name": "CustomerName",
+              "type": "String"
+            },
+            {
+              "name": "CompletedFinalAccount",
+              "type": "Boolean"
+            },
+            {
+              "name": "SearchColumn",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "modelValue",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "IncludeCompletedFinalAccount",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "UseAlternativeButton",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "Domain_ID",
+          "type": "Number",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "disableContextFilter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "disableInputMask",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disabled Project No input mask",
+          "required": false
+        }
+      ],
       "slots": [],
       "events": [],
       "params": [],
@@ -3088,7 +3174,7 @@
           "name": "includeAllPersons",
           "type": "Boolean",
           "default": "false",
-          "description": "Includes all persons",
+          "description": "Includes all persons, even external persons",
           "required": false
         },
         {
@@ -3117,6 +3203,20 @@
           "type": "String",
           "default": "null",
           "description": "Class names for button. Required prop: showAsButton",
+          "required": false
+        },
+        {
+          "name": "Company_ID",
+          "type": "Number",
+          "default": "null",
+          "description": "Filters on Company ID",
+          "required": false
+        },
+        {
+          "name": "includeCompanyInfo",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes company info",
           "required": false
         }
       ],
@@ -3225,6 +3325,13 @@
           "type": "Boolean",
           "default": "false",
           "description": "Will render button instead of input",
+          "required": false
+        },
+        {
+          "name": "focusInput",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will focus input",
           "required": false
         },
         {
@@ -4321,9 +4428,29 @@
     },
     {
       "id": 50,
+      "name": "Draggable",
+      "description": "",
+      "type": "Directive",
+      "category": "Other",
+      "path": "o365.vue.directive.draggable.ts",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<script setup>\nimport { ref } from 'vue';\nimport vDraggable from 'o365.vue.directive.draggable.ts';\n\nconst draggableOptions = ref({\n\t// handle\n\tonPositionChange: onPositionChange\n\t// onDragEnd\n\t// onDragStart\n\t// resetInitialPos\n\t// initialPosition\n\t// stopDragging\n\t// boundingRect\n\t// boundingElement\n\t// boundingRectMargin\n});\n\nfunction onPositionChange(positionDiff, absolutePosition, event) {\nconsole.log(\"left corner\", absolutePosition.left);\nconsole.log(\"top corner\", absolutePosition.top);\n}\n</script><template><div class=\"modal\" v-draggable=\"draggableOptions\"></div></template>"
+        }
+      ]
+    },
+    {
+      "id": 51,
       "name": "TEMPLATE",
       "description": "",
-      "type": "",
+      "type": "TEMPLATE",
       "category": "",
       "path": "",
       "props": [

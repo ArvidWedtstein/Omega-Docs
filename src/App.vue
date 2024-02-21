@@ -283,7 +283,7 @@
 // TODO: update lookup snippets
 // TODO: make view for snippets, exposes, events, params
 import components from "./assets/Components.json";
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, watch, onMounted, onBeforeMount, computed } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
@@ -442,9 +442,17 @@ const onSearchChange = (pSearchValue: String) => {
 };
 
 const setSelectedTab = (pTab_ID: number) => {
+
   selectedTab_ID.value = pTab_ID;
   const vTab = vTabs.value.find((vTab) => vTab?.id === pTab_ID);
+
   if (vTab) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('tab', vTab.name.toString());
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    window.history.pushState({}, '', newUrl);
+
+
     selectedTab.value = vTab;
     vSearchItems.value = vTab.props || [];
   }
@@ -460,7 +468,7 @@ const RefactorComponent = (component: Tab) => {
 }
 
 
-onMounted(() => {
+onBeforeMount(() => {
   const vComponents = components.components.map((pComponent) => {
     checkForDuplicates(pComponent as Tab);
     return RefactorComponent(pComponent as Tab);
