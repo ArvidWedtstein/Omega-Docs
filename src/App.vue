@@ -84,17 +84,10 @@
                     </svg>
                   </a>
                   <div class="collapse" :id="`snippet-collapse-${vSnippetIndex}`">
-                    <div class="card-body">
+                    <div class="card-body" v-if="content">
                       <p class="card-text">{{ content }}</p>
-                      <CodeBlock v-if="code" language="vue">
-                        <template #code>
-                          <pre
-                            class="language-html mb-0"
-                            style="margin-top: 0;"
-                          ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ code }}</code></pre>
-                        </template>
-                      </CodeBlock>
                     </div>
+                    <CodeBlock v-if="code" language="html" :code="code" />
                   </div>
                 </div>
               </div>
@@ -107,7 +100,7 @@
               />
 
               <div
-                class="mt-3 container"
+                class="mt-3 container-fluid"
                 :id="`${selectedTab?.name}-prop-options`"
               >
                 <div class="props-table" v-if="vSelectedPropView === 'table'">
@@ -262,6 +255,7 @@
                 </div>
               </div>
             </Section>
+            
           </div>
         </div>
       </div>
@@ -269,7 +263,9 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
+// TODO: adjust import for functions with import {}
 // TODO: update lookup snippets
 // TODO: make view for snippets, exposes, events, params
 import components from "./assets/Components.json";
@@ -414,6 +410,8 @@ const checkForDuplicates = (component: Tab): void => {
     );
   }
 }
+
+
 
 const selectedTab_ID = ref(0);
 const selectedTab = ref<Tab>();

@@ -63,6 +63,13 @@
       </div>
       <div class="text-start flex-grow-1" ref="vCodeRef">
         <slot name="code"></slot>
+       
+        <pre
+          v-if="code"
+          class="mb-0"
+          :class=" [language ? `language-${language}` : 'language-html']"
+          style="margin-top: 0;"
+        ><code contenteditable="false" :class=" [language ? `language-${language}` : 'language-html']" tabindex="0" spellcheck="false">{{ formatSnippet(code) }}</code></pre>
       </div>
     </div>
   </figure>
@@ -75,10 +82,10 @@ export interface Props {
   filename?: string;
   language?: string;
   linenumbers?: boolean;
+  code?: string;
 }
 const vProps = withDefaults(defineProps<Props>(), {
   filename: "",
-  language: "javascript",
   linenumbers: false,
 });
 
@@ -97,6 +104,57 @@ const onCopy = () => {
 
   alert("Copied!");
 };
+
+
+function formatSnippet(snippet: string) {
+  // Use a simple approach for formatting, you can use libraries like prettier for more advanced formatting
+  let formattedSnippet = '';
+  let indentationLevel = 0;
+  
+
+  // Iterate through each match of opening tags
+  const tagRegex = /<(\/?)([a-zA-Z0-9\-_]+)([^>]*)>([^<]*)/g;
+
+
+
+  // Iterate through each match of tags
+  let match;
+  while ((match = tagRegex.exec(snippet)) !== null) {
+      const [, isClosingTag, tagName, attributes, content] = match;
+
+      // Add proper indentation
+    if (!isClosingTag) {
+          formattedSnippet += '  '.repeat(indentationLevel);
+      }
+
+      if (!isClosingTag && content.trim() !== '') {
+          // Add indentation for content
+          formattedSnippet += match[0].replace(content, '\n' + '  '.repeat(indentationLevel + 1) + content.trim());
+          indentationLevel++;
+      } else {
+          // Check if it's a self-closing tag
+          const isSelfClosingTag = attributes.trim().endsWith('/');
+          if (isSelfClosingTag) {
+              formattedSnippet += match[0];
+          } else {
+              formattedSnippet += (!isClosingTag ? '' : '  '.repeat(Math.max(0,indentationLevel -1))) + match[0];
+              if (!isClosingTag) indentationLevel++;
+          }
+
+      }
+
+      if (isClosingTag) {
+          indentationLevel = Math.max(0, indentationLevel - 1);
+      }
+
+
+
+      // Append newline character after each tag
+      formattedSnippet += '\n';
+  }
+
+  return formattedSnippet //.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 </script>
 
 <style scoped>
