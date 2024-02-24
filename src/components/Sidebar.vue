@@ -29,7 +29,7 @@
 import type { Tab } from "@/App.vue";
 import { components } from "./../assets/Components.json";
 import TreeList from "./TreeList.vue";
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch, onBeforeMount } from "vue";
 
 
 export interface Category {
@@ -89,7 +89,7 @@ const selectTab = (pTab_ID: Tab["id"]) => {
 
 
 
-onMounted(() => {
+onBeforeMount(() => {
   const urlParams = new URLSearchParams(window.location.search);
   const selectedTabParam = urlParams.get('tab');
 

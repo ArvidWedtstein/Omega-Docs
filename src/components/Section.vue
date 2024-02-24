@@ -1,13 +1,13 @@
 <template>
   <section class="border-bottom py-4 border-dark">
-    <p class="h5">{{ vProps.title }}</p>
+    <slot name="title"></slot>
+    <p class="h5" v-if="!$slots.title">{{ vProps.title }}</p>
 
     <slot></slot>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
 
 export interface Props {
   title: string;
