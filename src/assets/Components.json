@@ -1141,7 +1141,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT}\n  multilineHeader\n  :dataObject=\"\"\n>\n  <{COMPONENT=5} field=\"\" />\n</{COMPONENT}>"
+          "code": "<{COMPONENT} multilineHeader :dataObject=\"\"><{COMPONENT=5} field=\"\" /></{COMPONENT}>"
         }
       ],
       "exposes": [
@@ -2124,6 +2124,14 @@
           "type": "Boolean",
           "default": "false",
           "description": "Will always render modal. If false it will render when modal opens.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "dataBsFocus",
+          "type": "String",
+          "default": "null",
+          "description": "",
           "example": "",
           "required": false
         }

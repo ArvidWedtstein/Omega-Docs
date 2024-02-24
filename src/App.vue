@@ -64,130 +64,58 @@
             </Section>
 
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
-              <PropSelector class="mb-3" @search="" />
-              <div class="d-flex flex-column gy-2">
-                <div class="accordion card" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
-                  <a class="card-header d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" aria-expanded="false" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
-                    {{ title }}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      class="chevron"
-                      fill="currentColor"
-                      stroke-width="0"
-                      width="20"
-                      height="20"
-                    >
-                      <path
-                        d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
-                      />
-                    </svg>
-                  </a>
-                  <div class="collapse" :id="`snippet-collapse-${vSnippetIndex}`">
-                    <div class="card-body" v-if="content">
-                      <p class="card-text">{{ content }}</p>
+              <PropSelector class="mb-3" @search="" id="snippets">
+                <template #list>
+                  <div class="d-flex flex-column gy-2">
+                    <div class="accordion card" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                      <a class="card-header d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" aria-expanded="false" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
+                        {{ title }}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          class="chevron"
+                          fill="currentColor"
+                          stroke-width="0"
+                          width="20"
+                          height="20"
+                        >
+                          <path
+                            d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                          />
+                        </svg>
+                      </a>
+                      <div class="collapse" :id="`snippet-collapse-${vSnippetIndex}`">
+                        <div class="card-body" v-if="content">
+                          <p class="card-text">{{ content }}</p>
+                        </div>
+                        <CodeBlock v-if="code" language="html" :code="code" />
+                      </div>
                     </div>
-                    <CodeBlock v-if="code" language="html" :code="code" />
                   </div>
-                </div>
-              </div>
+                </template>
+
+                <template #table>
+                  <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 g-3">
+                    <div class="col" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                      <div class="card shadow-sm">
+                        <CodeBlock class="card-img-top" v-if="code" language="html" :code="code" />
+                        <div class="card-body">
+                          <h5 class="card-title">{{ title }}</h5>
+                          <p class="card-text">{{ content }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </PropSelector>
             </Section>
 
             <Section v-if="selectedTab?.props?.length" title="Props">
               <PropSelector
+              id="props"
                 @search="onSearchChange"
-                @view-change="(view) => (vSelectedPropView = view)"
-              />
-
-              <div
-                class="mt-3 container-fluid"
-                :id="`${selectedTab?.name}-prop-options`"
               >
-                <div class="props-table" v-if="vSelectedPropView === 'table'">
-                  <div class="" role="rowheader">
-                    <div class="row fw-bold">
-                      <div class="col">Name</div>
-                      <div class="col">Type</div>
-                      <div class="col">Default</div>
-                      <div class="col">Description</div>
-                      <div class="col-1"></div>
-                    </div>
-                  </div>
-                  <div class="" role="rowgroup">
-                    <div
-                      class="row"
-                      role="row"
-                      v-for="(vProp, vPropIndex) in vSearchItems"
-                      :key="vPropIndex"
-                    >
-                      <div class="col">
-                        <span class="text-start"
-                          >{{ vProp.name }}{{ vProp.required ? "*" : "" }}</span
-                        >
-                      </div>
-                      <div class="col">
-                        <small
-                          v-if="vProp.type"
-                          class="d-inline-flex px-1 py-0.5 fw-semibold text-secondary bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2"
-                        >
-                          {{ vProp.type }}
-                        </small>
-                      </div>
-                      <div class="col">
-                        <span>
-                          {{ vProp.default }}
-                        </span>
-                      </div>
-                      <div class="col">
-                        <p class="prop-table-description">
-                          {{ vProp.description }}
-                        </p>
-                      </div>
-                      <div class="col-1 d-flex justify-content-center">
-                        <button
-                          class="btn d-inline-flex justify-content-center align-items-center"
-                          style="width: 36px; height: 36px"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          :data-bs-target="`#prop-${vPropIndex}-collapse`"
-                          aria-expanded="false"
-                          :aria-controls="`prop-${vPropIndex}-collapse`"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 512 512"
-                            fill="currentColor"
-                            width="30"
-                            height="30"
-                          >
-                            <path
-                              d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <div
-                        class="collapse text-start"
-                        :id="`prop-${vPropIndex}-collapse`"
-                      >
-                        <span class="mb-0">Example:</span>
-                        <!-- TODO: fix -->
-                        <CodeBlock language="html">
-                          <template #code>
-                            <pre
-                              class="language-html mb-0"
-                              style="margin-top: 0;"
-                            ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ `<ODataGrid
-  :${vProp.name}="${vProp.example}"
-/>` }}</code></pre>
-                          </template>
-                        </CodeBlock>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-else-if="vSelectedPropView === 'list'">
+                <template #list>
                   <div class="accordion accordion-flush">
                     <div
                       class="accordion-item"
@@ -226,7 +154,7 @@
                       </h2>
                       <div
                         :id="`collapse-panel-${vPropIndex}`"
-                        class="accordion-collapse collapse text-start"
+                        class="accordion-collapse collapse text-start show"
                         :aria-labelledby="`collapse-panel-heading-${vPropIndex}`"
                       >
                         <div class="d-flex flex-column gap-1 pb-3">
@@ -239,21 +167,95 @@
                               {{ vProp.type }}
                             </small>
                           </span>
-
-                          <CodeBlock v-if="vProp.example || vProp.template">
-                            <template #code>
-                              <pre
-                                class="mb-0 language-html"
-                                style="margin-top: 0;"
-                              ><code contenteditable="false" class="language-html" tabindex="0" spellcheck="false">{{ vProp.example }}</code></pre>
-                            </template>
-                          </CodeBlock>
+                          
+                          <div class="mt-3" v-if="vProp.example || vProp.template">
+                            <span>Example:</span>
+                            <CodeBlock :code="vProp.example || vProp.template" />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </template>
+
+                <template #table>
+                  <div class="props-table">
+                    <div class="" role="rowheader">
+                      <div class="row fw-bold">
+                        <div class="col">Name</div>
+                        <div class="col">Type</div>
+                        <div class="col">Default</div>
+                        <div class="col">Description</div>
+                        <div class="col-1"></div>
+                      </div>
+                    </div>
+                    <div class="" role="rowgroup">
+                      <div
+                        class="row"
+                        role="row"
+                        v-for="(vProp, vPropIndex) in vSearchItems"
+                        :key="vPropIndex"
+                      >
+                        <div class="col">
+                          <span class="text-start"
+                            >{{ vProp.name }}{{ vProp.required ? "*" : "" }}</span
+                          >
+                        </div>
+                        <div class="col">
+                          <small
+                            v-if="vProp.type"
+                            class="d-inline-flex px-1 py-0.5 fw-semibold text-secondary bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2"
+                          >
+                            {{ vProp.type }}
+                          </small>
+                        </div>
+                        <div class="col">
+                          <span>
+                            {{ vProp.default }}
+                          </span>
+                        </div>
+                        <div class="col">
+                          <p class="prop-table-description">
+                            {{ vProp.description }}
+                          </p>
+                        </div>
+                        <div class="col-1 d-flex justify-content-center">
+                          <button
+                            class="btn d-inline-flex justify-content-center align-items-center collapsed"
+                            v-if="vProp.example || vProp.template"
+                            style="width: 36px; height: 36px"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            :data-bs-target="`#prop-${vPropIndex}-collapse`"
+                            aria-expanded="false"
+                            :aria-controls="`prop-${vPropIndex}-collapse`"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
+                              fill="currentColor"
+                              width="30"
+                              height="30"
+                            >
+                              <path
+                                d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <div
+                          v-if="vProp.example || vProp.template"
+                          class="collapse text-start"
+                          :id="`prop-${vPropIndex}-collapse`"
+                        >
+                          <span class="mb-0">Example:</span>
+                          <CodeBlock :code="vProp.example || vProp.template" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </PropSelector>
             </Section>
             
           </div>
@@ -415,7 +417,6 @@ const checkForDuplicates = (component: Tab): void => {
 
 const selectedTab_ID = ref(0);
 const selectedTab = ref<Tab>();
-const vSelectedPropView = ref("list");
 const vSearchItems = ref<Tab["props"]>([]);
 
 const vTabs = ref<Partial<Tab[]>>([]);
@@ -469,14 +470,14 @@ onBeforeMount(() => {
 
 
 <style scoped>
-@media (min-width: 992px) {
-  .docs-layout {
-    display: grid;
-    grid-template-areas: "sidebar main";
-    grid-template-columns: 1fr 5fr;
-    gap: 1.5rem;
-  }
+
+.docs-layout {
+  display: grid;
+  grid-template-areas: "sidebar main";
+  grid-template-columns: 1fr 5fr;
+  gap: 1rem;
 }
+
 @media (min-width: 992px) {
   .docs-main {
     grid-template-areas:

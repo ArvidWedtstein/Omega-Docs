@@ -61,22 +61,22 @@
           {{ vIndex + 1 }}
         </div>
       </div>
-      <div class="text-start flex-grow-1" ref="vCodeRef">
-        <slot name="code"></slot>
-       
+      <div class="text-start flex-grow-1 w-100 overflow-auto" ref="vCodeRef">
         <pre
           v-if="code"
           class="mb-0"
           :class=" [language ? `language-${language}` : 'language-html']"
-          style="margin-top: 0;"
-        ><code contenteditable="false" :class=" [language ? `language-${language}` : 'language-html']" tabindex="0" spellcheck="false">{{ formatSnippet(code) }}</code></pre>
+          style="margin-top: 0; overflow-x: hidden; max-width: 100%;"
+        ><code contenteditable="false" style="overflow-x: hidden" :class=" [language ? `language-${language}` : 'language-html']" tabindex="0" spellcheck="false">{{ jsonToFormattedText(convertHTMLToAST(code) || []) }}</code></pre>
+        <slot v-else name="code"></slot>
+       
       </div>
     </div>
   </figure>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, withDefaults } from "vue";
+import { ref, computed, withDefaults, onMounted } from "vue";
 
 export interface Props {
   filename?: string;
@@ -105,6 +105,54 @@ const onCopy = () => {
   alert("Copied!");
 };
 
+interface Node {
+  item: {
+    name: string;
+    slots: {
+      example?: string
+    }[];
+    props: any[]
+  }
+  children: Node[]
+}
+
+const generateHTML = (pNode: Node) => {
+  const vNode = pNode.item;
+  let vHtml = "";
+  const vSlots: any[] = vNode ? vNode.slots : [];
+  if(vNode){
+      vHtml += `<${vNode.name}`
+      vHtml += JSON.stringify(vNode.props);
+      if(vSlots.length > 0 ||  pNode.children.length > 0){
+          vHtml += `>`
+      }else{
+            vHtml += `/>`
+      }
+  }
+  
+  if(pNode.children.length > 0){
+
+      pNode.children.forEach((child: any)=>{
+          vHtml += `\r\n  `;
+          vHtml += generateHTML(child)
+      })
+      vHtml += `\r\n  `;
+      
+  }
+
+  if(vNode){
+      vSlots.forEach((slot:any)=>{
+          vHtml += `\r\n  `;
+          vHtml += slot.example;
+      })
+  }
+
+  if(vNode && (vSlots.length > 0 ||  pNode.children.length > 0))
+  vHtml += `\r\n</${vNode.name}>`
+
+
+  return vHtml;
+}
 
 function formatSnippet(snippet: string) {
   // Use a simple approach for formatting, you can use libraries like prettier for more advanced formatting
@@ -114,8 +162,6 @@ function formatSnippet(snippet: string) {
 
   // Iterate through each match of opening tags
   const tagRegex = /<(\/?)([a-zA-Z0-9\-_]+)([^>]*)>([^<]*)/g;
-
-
 
   // Iterate through each match of tags
   let match;
@@ -155,6 +201,150 @@ function formatSnippet(snippet: string) {
 
   return formattedSnippet //.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
+
+type ASTNode = {
+  tagName: string;
+  attributes: Record<string, string | null>;
+  children: ASTNode[];
+  isSelfClosing: boolean;
+  content: string | null;
+}
+function convertHTMLToAST(pHTML: string, pTestMode: boolean = false) {
+    // Regular expression to match tags and attributes
+    const tagRegex = /<([a-zA-Z0-9\-]+)([^>]*)>(.*?)<\/\1>|<([a-zA-Z0-9\-]+)([^>]*)\/?>|([^<>]+)/g;
+    
+    
+    const attrRegex = /([^\s=]+)(?:\s*=\s*(['"])(.*?)\2)?/g;
+
+    const fixCase = (pText: string, pHTMLString: string = pHTML) => {
+        const vRegex = new RegExp(pText, 'i');
+        const vMatch = pHTMLString.match(vRegex);
+        return vMatch ? vMatch[0] : pText;
+    }
+    
+    // Function to parse attributes
+    function parseAttributes(attrString: string) {
+        const attributes: any = {};
+        let match;
+        while ((match = attrRegex.exec(attrString)) !== null) {
+          const [, attributeName, _, attributeValue] = match;
+          if (attributeName !== "/") {
+            attributes[attributeName] = attributeValue === undefined ? null : attributeValue;
+          }
+        }
+        return attributes;
+    }
+
+
+
+    // Recursive function to parse nodes
+    let loops = 0
+    function parseNodes(pHTML: string): ASTNode[] | null {
+        if (loops > 50) return null
+
+        let json: ASTNode[] = [];
+        let match;
+
+        while ((match = tagRegex.exec(pHTML)) !== null) {
+          const tag = match[1] || match[4]; // Check which capture group matched
+          const attributes = match[2] || match[5] ? parseAttributes(match[2] || match[5]) : {};
+          const content = match[3] || ''; // Inner content if available
+          const isTextNode = (!!match[6] || !content.startsWith('<')) && !tag;
+          const isSelfClosing = !!match[5]
+          
+          if (pTestMode) console.log(tag, content, isTextNode)
+
+          if (tag) {
+              let node: ASTNode = {
+                  tagName: fixCase(tag.toLowerCase(), match[0]),
+                  attributes: attributes,
+                  children: [],
+                  isSelfClosing: isSelfClosing,
+                  content: null
+              };
+
+              if (content && content !== "") {
+                
+                if (!content.startsWith('<') && !content.includes('<') ) {
+                  node.children = [{
+                    tagName: 'TextNode',
+                    attributes: {},
+                    children: [],
+                    isSelfClosing: isSelfClosing,
+                    content: content.trim()
+                  }]
+                } else {
+                  if (pTestMode) console.log(content.split(/(?=<[^/])/).flatMap(parseNodes))
+
+                  node.children = (content.split(/(?=<[^/])/).flatMap(parseNodes).filter(vNode => vNode !== null) as ASTNode[]);
+                  node.children = (content.split(/(?=<[^/])/).flatMap(parseNodes).filter(vNode => vNode !== null) as ASTNode[]);
+                }
+              }
+
+              json.push(node);
+          } else if (isTextNode) { // Text node
+              // Trim whitespace from text nodes
+              const textNode = match[6].trim();
+              if (textNode) {
+                json.push({
+                  tagName: 'TextNode',
+                  attributes: {},
+                  children: [],
+                  isSelfClosing: isSelfClosing,
+                  content: textNode
+                });
+              }
+          }
+        } 
+        loops++;
+
+        return json.length > 0 ? json.slice(0, json.some((vNode) => vNode.content !== null) ? 2 : 1) : null
+    }
+
+    
+    return parseNodes(pHTML);
+}
+
+function jsonToFormattedText(json: ASTNode[], pIndentLevel = 0) {
+    const indent = ' '.repeat(2); // 2 spaces for each indent level
+    let text = '';
+
+    const addIndentation = (pIndentLevel: number) => indent.repeat(pIndentLevel);
+
+    function processNode(pNode: ASTNode, depth: number) {
+      if (pNode.tagName === "TextNode") {
+          text += addIndentation(depth) + pNode.content + '\n';
+      } else {
+          text += addIndentation(depth) + `<${pNode.tagName}`;
+          if (pNode.attributes) {
+              Object.keys(pNode.attributes).forEach(attr => {
+                  text += ` ${attr}${pNode.attributes[attr] !== null ? `="${pNode.attributes[attr]}"` : ''}`;
+              });
+          }
+
+          if (pNode.isSelfClosing) {
+            text += ' />\n';
+          } else {
+            text += '>\n';
+            if (pNode.children) {
+                pNode.children.forEach((child) => {
+                    processNode(child, depth + 1);
+                });
+            }
+
+            text += addIndentation(depth) + `</${pNode.tagName}>\n`; 
+          }
+      }
+    }
+
+    json.forEach(vNode => processNode(vNode, pIndentLevel));
+    return text;
+}
+
+onMounted(() => {
+ 
+})
 </script>
 
 <style scoped>

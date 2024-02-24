@@ -2,7 +2,7 @@
   <div class="row align-items-center g-3">
     <div class="col-auto flex-grow-1">
       <div class="input-group">
-        <label for="search" class="input-group-text">
+        <label :for="`search-${id}`" class="input-group-text">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -16,7 +16,7 @@
         </label>
         <input
           class="form-control"
-          id="search"
+          :id="`search-${id}`"
           type="text"
           v-model="vSearch"
           @input="onSearchChange"
@@ -67,13 +67,38 @@
       </button>
     </div>
   </div>
+
+    <div class="mt-3">
+      <template v-for="(vView, vViewIndex) in views">
+        <Transition
+          name="fade"
+          mode="out-in"
+          appear
+          :duration="500"
+        >
+          <slot :name="vView" :key="vViewIndex" v-if="vSelectedView === vView"></slot>
+        </Transition>
+      </template>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 
-const vSelectedView = ref("list");
+const vSelectedView = ref<string>('');
 const vSearch = ref("");
+
+export interface Props {
+  initialView?: string;
+  views?: Array<string>;
+  id: string | number;
+}
+
+const vProps = withDefaults(defineProps<Props>(), {
+  views: () => ["list", "table"],
+  initialView: "list",
+  id: '0'
+});
 
 const emit = defineEmits<{
   "view-change": [new_view: string, old_view: string];
@@ -84,17 +109,40 @@ watch(vSelectedView, async (newView, oldView) => {
   emit("view-change", newView, oldView);
 });
 
-const vProps = defineProps({
-  initialView: { type: String, required: false, default: "list" },
-});
-
 const onSearchChange = (pSearchEvent: Event) => {
   emit("search", vSearch.value);
 };
 
+
 onMounted(() => {
   vSelectedView.value = vProps.initialView;
+
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 200ms;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(.6,.15,.35,.8);
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(40px);
+}
+.fade-enter-active:nth-child(2) {
+  transition-delay: 100ms;
+}
+.fade-enter-active:nth-child(3) {
+  transition-delay: 200ms;
+}
+.fade-leave-active:nth-child(1) {
+  transition-delay: 200ms;
+}
+.fade-leave-active:nth-child(2) {
+  transition-delay: 100ms;
+} 
+</style>
