@@ -732,6 +732,34 @@
               "name": "initialTextInputValue",
               "type": "String",
               "required": false
+            },
+            {
+              "name": "backdrop",
+              "type": "Boolean",
+              "required": false
+            },
+            {
+              "name": "buttons",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "class",
+                  "type": "String | CSS classes",
+                  "required": false
+                },
+                {
+                  "name": "text",
+                  "type": "String",
+                  "required": false
+                },
+                {
+                  "name": "action",
+                  "type": "Function",
+                  "template": "(pConfirm: () => any, pCancel: () => any) => void",
+                  "required": false
+                }
+              ],
+              "required": false
             }
           ]
         }
