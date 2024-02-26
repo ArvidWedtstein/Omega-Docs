@@ -13,7 +13,7 @@
       </template>
 
       <template v-else-if="itemOrCategory.items.length > 0">
-        <a class="nav-link link-secondary collapsed text-truncate fw-semibold" data-bs-toggle="collapse" :href="`#collapse-${itemOrCategory.treeId}`" role="button" aria-expanded="false" :aria-controls="`collapse-${itemOrCategory.treeId}`">
+        <a class="nav-link link-secondary text-truncate fw-semibold" :class="{'collapsed': !itemOrCategory.items.some((vItem) => isItem(vItem) && vItem.id === selectedTab)}" data-bs-toggle="collapse" :href="`#collapse-${itemOrCategory.treeId}`" role="button" aria-expanded="false" :aria-controls="`collapse-${itemOrCategory.treeId}`">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="none" stroke="rgba(0,0,0,.5)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 14l6-6-6-6"/></svg>
           <span class="">{{ itemOrCategory.name }}</span>
         </a>

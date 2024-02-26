@@ -13,18 +13,18 @@
         <span class="d-none fs-6 pe-1">Browse</span>
       </button>
 
-      <div class="" v-if="selectedTab_ID > 0">
+      <div v-if="selectedTab">
         <div class="py-5 text-center">
           <h1 class="display-5 fw-bold">{{ selectedTab?.name }}</h1>
           <CodeBuilder
-            v-if="selectedTab && selectedTab?.props?.length && selectedTab?.type !== 'Function' && selectedTab?.type !== 'Class'"
-            :tab.sync="selectedTab" class="h-100" />
+            v-if="(selectedTab?.props?.length || selectedTab?.params?.length) && selectedTab?.type !== 'Function' && selectedTab?.type !== 'Class'"
+            :tab="selectedTab" class="h-100 mb-2" />
 
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
             <Section v-if="selectedTab?.path" title="Import">
-              <CodeBlock language="javascript" :code="`Import ${selectedTab.pathtype === 'Object' ? `{ ${selectedTab.name} }` : selectedTab?.name} from '${selectedTab?.path}'`" />
+              <CodeBlock disable-code-formatting language="javascript" :code="`import ${selectedTab.pathtype === 'Object' ? `{ ${selectedTab.name} }` : selectedTab?.name} from '${selectedTab?.path}';`" />
             </Section>
             
             <Section v-if="selectedTab?.params?.length" title="Syntax">
@@ -271,8 +271,21 @@
 
             <Section v-if="selectedTab?.events?.length" title="Events">
               <template #title>
-                <a class="h5" data-bs-toggle="collapse" href="#events" role="button" aria-expanded="false" aria-controls="events">
+                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#events" role="button" aria-expanded="false" aria-controls="events">
                   Events
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    class="chevron"
+                    fill="currentColor"
+                    stroke-width="0"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                    />
+                  </svg>
                 </a>
               </template>
 
@@ -406,8 +419,21 @@
 
             <Section v-if="selectedTab?.exposes?.length" title="Exposes">
               <template #title>
-                <a class="h5" data-bs-toggle="collapse" href="#exposes" role="button" aria-expanded="false" aria-controls="exposes">
+                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#exposes" role="button" aria-expanded="false" aria-controls="exposes">
                   Exposes
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    class="chevron"
+                    fill="currentColor"
+                    stroke-width="0"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                    />
+                  </svg>
                 </a>
               </template>
 
@@ -472,8 +498,6 @@
                     <div class="" role="rowheader">
                       <div class="row fw-bold">
                         <div class="col">Name</div>
-                        <div class="col">Type</div>
-                        <div class="col">Default</div>
                         <div class="col">Description</div>
                         <div class="col-1"></div>
                       </div>
@@ -482,29 +506,145 @@
                       <div
                         class="row"
                         role="row"
-                        v-for="(vEvent, vEventIndex) in vSearchEvents"
-                        :key="vEventIndex"
+                        v-for="(vExpose, vExposeIndex) in vSearchExposes"
+                        :key="vExposeIndex"
                       >
                         <div class="col">
                           <span class="text-start"
-                            >{{ vEvent.name }}</span>
+                            >{{ vExpose.name }}</span>
                         </div>
 
                         <div class="col">
                           <p class="prop-table-description">
-                            {{ vEvent.description }}
+                            {{ vExpose.description }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </PropSelector>
+            </Section>
+
+            <Section v-if="selectedTab?.slots?.length" title="Slots">
+              <template #title>
+                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#slots" role="button" aria-expanded="false" aria-controls="slots">
+                  Slots
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    class="chevron"
+                    fill="currentColor"
+                    stroke-width="0"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                    />
+                  </svg>
+                </a>
+              </template>
+
+              <PropSelector
+                input-id="slots-input"
+                class="my-3 collapse"
+                id="slots"
+                @search="searchValue => onSearchChange(searchValue, 'slots')"
+              >
+                <template #list>
+                  <div class="accordion accordion-flush">
+                    <div
+                      class="accordion-item"
+                      v-for="(vSlot, vSlotIndex) in vSearchSlots"
+                      :key="vSlotIndex"
+                    >
+                      <h2
+                        class="accordion-header d-inline-flex w-100 justify-content-between align-items-center py-1"
+                        :id="`collapse-panel-heading-${vSlotIndex}`"
+                      >
+                        <span class="text-primary h6 mb-0">
+                          {{ vSlot.name }}
+                        </span>
+
+                        <button
+                          class="btn d-inline-flex justify-content-center align-items-center"
+                          style="width: 36px; height: 36px"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          :data-bs-target="`#slot-collapse-panel-${vSlotIndex}`"
+                          aria-expanded="true"
+                          :aria-controls="`slot-collapse-panel-${vSlotIndex}`"
+                          v-if="vSlot.template || vSlot.description"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            fill="currentColor"
+                            width="30"
+                            height="30"
+                          >
+                            <path
+                              d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                            />
+                          </svg>
+                        </button>
+                      </h2>
+                      <div
+                        :id="`slot-collapse-panel-${vSlotIndex}`"
+                        class="accordion-collapse collapse text-start show"
+                        :aria-labelledby="`slot-collapse-panel-heading-${vSlotIndex}`"
+                        v-if="vSlot.template || vSlot.description"
+                      >
+                        <div class="d-flex flex-column gap-1 pb-3">
+                          <span>{{ vSlot.description }}</span>
+
+                          <div class="mt-3" v-if="vSlot.template">
+                            <span>Example:</span>
+                            <CodeBlock :code="`<template ${vSlot.template}></template>`" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <template #table>
+                  <div class="props-table">
+                    <div class="" role="rowheader">
+                      <div class="row fw-bold">
+                        <div class="col">Name</div>
+                        <div class="col">Description</div>
+                        <div class="col-1"></div>
+                      </div>
+                    </div>
+                    <div class="" role="rowgroup">
+                      <div
+                        class="row"
+                        role="row"
+                        v-for="(vSlot, vSlotIndex) in vSearchSlots"
+                        :key="vSlotIndex"
+                      >
+                        <div class="col">
+                          <span class="text-start"
+                            >{{ vSlot.name }}</span>
+                        </div>
+
+                        <div class="col">
+                          <p class="prop-table-description">
+                            {{ vSlot.description }}
                           </p>
                         </div>
                         <div class="col-1 d-flex justify-content-center">
                           <button
                             class="btn d-inline-flex justify-content-center align-items-center collapsed"
-                            v-if="vEvent.syntax"
+                            v-if="vSlot.template"
                             style="width: 36px; height: 36px"
                             type="button"
                             data-bs-toggle="collapse"
-                            :data-bs-target="`#prop-${vEventIndex}-collapse`"
+                            :data-bs-target="`#slot-${vSlotIndex}-collapse`"
                             aria-expanded="false"
-                            :aria-controls="`prop-${vEventIndex}-collapse`"
+                            :aria-controls="`slot-${vSlotIndex}-collapse`"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -520,12 +660,12 @@
                           </button>
                         </div>
                         <div
-                          v-if="vEvent.syntax"
+                          v-if="vSlot.template"
                           class="collapse text-start"
-                          :id="`prop-${vEventIndex}-collapse`"
+                          :id="`slot-${vSlotIndex}-collapse`"
                         >
                           <span class="mb-0">Example:</span>
-                          <CodeBlock :code="vEvent.syntax" />
+                          <CodeBlock :code="`<template ${vSlot.template}></template>`" />
                         </div>
                       </div>
                     </div>
@@ -545,7 +685,7 @@
 <script setup lang="ts">
 // TODO: adjust import for functions with import {}
 // TODO: update lookup snippets
-// TODO: make view for exposes, params
+// TODO: make view for exposes, params, slots, props params
 import components from "./assets/Components.json";
 import { ref, onBeforeMount } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
@@ -599,7 +739,7 @@ export type Tab = {
   category: string;
   path: string;
   pathtype?: string;
-  params?: Array<Partial<Param>> | undefined;
+  params?: Array<Partial<Param>>;
   slots?: Array<Partial<Slot>> | undefined;
   events?: Array<Partial<Event>> | undefined;
   props: Array<Partial<Property>>;

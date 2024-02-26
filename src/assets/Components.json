@@ -2091,7 +2091,7 @@
         {
           "name": "reports",
           "description": "Items will be added into \"Reports\" dropdown. displayReports prop is required for this to show.",
-          "template": "#filters"
+          "template": "#reports"
         },
         {
           "name": "append",
@@ -2105,7 +2105,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<ButtonGroup displayCommonTasks displayFilters>\n  <template #commonTasks>\n</template>\n  <template #filters>\n</template>\n</ButtonGroup>"
+          "code": "<{COMPONENT} displayCommonTasks displayFilters>\n  <template #commonTasks>\n</template>\n  <template #filters>\n</template>\n</{COMPONENT}>"
         }
       ]
     },
@@ -2220,7 +2220,13 @@
         }
       ],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Use classes like modal-(sm, md, lg, xl, xxl) to adjust modal size",
+          "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">Close</button><button type=\"button\" class=\"btn btn-primary\">Save</button></div></div></div></{COMPONENT}>"
+        }
+      ]
     },
     {
       "id": 10,
@@ -2229,11 +2235,18 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.Form.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT}>\n</{COMPONENT}>"
+        }
+      ]
     },
     {
       "id": 11,
@@ -2290,7 +2303,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<FormControl :title=\"$t('Example')\" for=\"exampleInput\">\n  <input type=\"text\" id=\"exampleInput\" v-model=\"vExampleValue\">\n</FormControl>"
+          "code": "<{COMPONENT} :title=\"$t('Example')\" for=\"exampleInput\"><input type=\"text\" id=\"exampleInput\" v-model=\"vExampleValue\"></{COMPONENT}>"
         }
       ]
     },
@@ -2540,7 +2553,7 @@
         {
           "title": "Orders Lookup Example",
           "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\"><OFormControl class=\"col\" :title=\"$t('Order:')\"><WInputGroup validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" /></WInputGroup></OFormControl></div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Order:')\"><{COMPONENT=40} validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>"
         }
       ]
     },
@@ -3464,7 +3477,7 @@
         {
           "title": "Example",
           "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\">\n  <OFormControl class=\"col\">\n    <WInputGroup validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <SubProjectsLookup class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT=40} validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>"
         }
       ]
     },
@@ -3508,7 +3521,7 @@
         {
           "name": "invalidFeedback",
           "type": "String",
-          "default": "\"Please fill inn\"",
+          "default": "Please fill inn",
           "description": "Message that is displayed if input fails validation",
           "required": false
         }
@@ -3520,7 +3533,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div class=\"row\">\n  <FormControl class=\"col\">\n    <InputGroup validate :title=\"vSomeNo\" invalidFeedback=\"You forgot to fill you this field!\"></InputGroup>\n  </FormControl>\n</div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT} validate :title=\"vSomeNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"></{COMPONENT}></{COMPONENT=11}></div>"
         }
       ]
     },
@@ -3778,9 +3791,7 @@
       "exposes": [],
       "events": [],
       "params": [],
-      "snippets": [
-        
-      ]
+      "snippets": []
     },
     {
       "id": 43,
@@ -3902,12 +3913,12 @@
         {
           "title": "Horizontal Example",
           "content": "",
-          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <SizerPanel width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </SizerPanel>\n</OColContainer>"
+          "code": "<{COMPONENT=45} appContainer>\n  <{COMPONENT=44}>\n\n  </{COMPONENT=44}>\n  <{COMPONENT} width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=45}>"
         },
         {
           "title": "Vertical Example",
           "content": "",
-          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <SizerPanel height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </SizerPanel>\n</OColContainer>"
+          "code": "<{COMPONENT=44} appContainer>\n  <{COMPONENT=45}>\n\n  </{COMPONENT=45}>\n  <{COMPONENT} height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=44}>"
         }
       ],
       "exposes": [
@@ -4499,13 +4510,7 @@
       ],
       "params": [],
       "exposes": [],
-      "snippets": [
-        {
-          "title": "",
-          "content": "",
-          "code": ""
-        }
-      ]
+      "snippets": []
     },
     {
       "id": 50,
@@ -4514,6 +4519,7 @@
       "type": "Directive",
       "category": "Directive",
       "path": "o365.vue.directive.draggable.ts",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -4523,7 +4529,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<script setup>\nimport { ref } from 'vue';\nimport vDraggable from 'o365.vue.directive.draggable.ts';\n\nconst draggableOptions = ref({\n\t// handle\n\tonPositionChange: onPositionChange\n\t// onDragEnd\n\t// onDragStart\n\t// resetInitialPos\n\t// initialPosition\n\t// stopDragging\n\t// boundingRect\n\t// boundingElement\n\t// boundingRectMargin\n});\n\nfunction onPositionChange(positionDiff, absolutePosition, event) {\nconsole.log(\"left corner\", absolutePosition.left);\nconsole.log(\"top corner\", absolutePosition.top);\n}\n</script><template><div class=\"modal\" v-draggable=\"draggableOptions\"></div></template>"
+          "code": "<script setup>\nimport { ref } from 'vue';\nimport {COMPONENT} from 'o365.vue.directive.draggable.ts';\n\nconst draggableOptions = ref({\n\t// handle\n\tonPositionChange: onPositionChange\n\t// onDragEnd\n\t// onDragStart\n\t// resetInitialPos\n\t// initialPosition\n\t// stopDragging\n\t// boundingRect\n\t// boundingElement\n\t// boundingRectMargin\n});\n\nfunction onPositionChange(positionDiff, absolutePosition, event) {\nconsole.log(\"left corner\", absolutePosition.left);\nconsole.log(\"top corner\", absolutePosition.top);\n}\n</script><template><div class=\"modal\" v-draggable=\"draggableOptions\"></div></template>"
         }
       ]
     },
@@ -4562,7 +4568,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<Footer :dataObject=\"dsWorkflows\" />"
+          "code": "<{COMPONENT} :dataObject=\"dsWorkflows\" />"
         }
       ]
     },
@@ -4760,7 +4766,7 @@
         {
           "name": "noRowsFound",
           "type": "String | Boolean",
-          "default": "'No rows found...'",
+          "default": "No rows found...",
           "description": "Then set to true, will show default message and enable for custom overriding via 'noRowsFound' slot. Can also be used to override default message.",
           "required": false
         },
@@ -5374,9 +5380,9 @@
       "exposes": [],
       "snippets": [
         {
-          "title": "",
+          "title": "Example",
           "content": "",
-          "code": ""
+          "code": "<{COMPONENT} :fileName=\"excel.pdf\" />"
         }
       ]
     },
@@ -5429,7 +5435,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<SearchInput class=\"form-control\" @onSearch=\"search\" />"
+          "code": "<{COMPONENT} class=\"form-control\" @onSearch=\"search\" />"
         }
       ]
     },

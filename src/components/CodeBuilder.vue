@@ -1,7 +1,7 @@
 <template>
-  <div class="rounded border" :title="tab.name">
+  <div class="rounded border">
     <div class="row h-100 overflow-hidden" style="height: 300px;">
-      <div class="col-auto pe-0 flex-grow-1 h-100 overflow-y-auto">
+      <div class="col pe-0 flex-grow-1 h-100 overflow-y-auto">
         <CodeBlock style="height: 300px" language="html" :code="vGeneratedCode" />
       </div>
       <div class="col-4 ps-0">
@@ -26,7 +26,7 @@
                 ...other
               },
               vIndex
-            ) in tab.props || []"
+            ) in vSelectableElements"
             :key="vIndex"
           >
             <input
@@ -34,7 +34,7 @@
               type="checkbox"
               :value="name"
               @change="
-                checkProp({
+                togglePropSelection({
                   name,
                   description,
                   type,
@@ -85,65 +85,45 @@ import type { Tab } from "@/App.vue";
 export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-const { tab } = defineProps<{
+const vProps = defineProps<{
   tab: NonNullable<Tab>;
 }>();
 
-const vEmits = defineEmits<{
-  "update:tab": [pTab: Tab]
-}>()
-
-
-const vSelectedProps = ref<NonNullable<Tab["props"]>>([]);
+const vSelectableElements = ref<Tab["props"]>([]);
+const vSelectedElements = ref<NonNullable<Tab["props"]>>([]);
 const vGeneratedCode = ref<string>("");
 
-const checkProp = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
-  if (vSelectedProps.value?.some(({ name }) => name === pProp.name)) {
-    vSelectedProps.value = vSelectedProps.value.filter(
-      ({ name }) => name !== pProp.name,
-    );
+const togglePropSelection = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
+  const propIndex = vSelectedElements.value.findIndex(selectedProp => selectedProp.name === pProp.name);
+  if (propIndex !== -1) {
+    vSelectedElements.value.splice(propIndex, 1); // Remove prop if already selected
   } else {
-    vSelectedProps.value?.push(pProp);
+    vSelectedElements.value.push(pProp); // Add prop if not selected
   }
-
-  vGeneratedCode.value = `<${tab.name}
-${vSelectedProps.value
-  .map(
-    (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,
-  )
-  .join("\n")}
-/>`;
 };
 
-const vComputedTab = computed(() => {
-  return tab
-})
-watch(tab, (newTab, oldTab) => {
-  vSelectedProps.value = []
-  console.log("TAB CHANGE", tab)
-  if (!newTab || !vSelectedProps.value) return "";
+watch(() => vProps.tab.id, () => {
+  vSelectedElements.value = [];
 
-  vGeneratedCode.value = `<${tab.name}
-${vSelectedProps.value
-  .map(
-    (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,
-  )
-  .join("\n")}
-/>`;
+  const vIsComponent = vProps.tab.type === 'Component';
+  
+  vSelectableElements.value = vIsComponent
+                    ? vProps.tab.props 
+                    : vProps.tab.params || []
+}, { deep: true });
 
-  vEmits('update:tab', newTab);  
+watch(() => vSelectedElements, () => {
+  vGeneratedCode.value = `<${vProps.tab.name}\n${vSelectedElements.value.map((prop) => ` ${prop.type === 'Boolean' && (prop.default?.toLowerCase() === 'true' || prop.default?.toLowerCase() === 'false') ? ':' : ''}${prop.name}="${prop.default !== "null" ? prop.default : ""}"`).join("\n")} />`;
 }, { deep: true });
 
 onMounted(() => {
-  vSelectedProps.value = [];
+  vSelectedElements.value = [];
 
-  vGeneratedCode.value = `<${tab.name}
-${vSelectedProps.value
-  .map(
-    (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,
-  )
-  .join("\n")}
-/>`;
+  vSelectableElements.value = vProps.tab.type === 'Component' 
+                    ? vProps.tab.props 
+                    : []
+
+  vGeneratedCode.value = `<${vProps.tab.name}\n${vSelectedElements.value.map((prop) => ` ${prop.type === 'Boolean' ? ':' : ''}${prop.name}="${prop.default !== "null" ? prop.default : ""}"`).join("\n")} />`;
 });
 </script>
 

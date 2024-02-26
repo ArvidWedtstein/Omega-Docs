@@ -50,7 +50,7 @@
     </div>
 
 
-    <div class="d-flex">
+    <div class="d-flex h-100">
       <div v-if="linenumbers" class="me-2 line-numbers">
         <div
           v-for="(vLine, vIndex) in vLines"
@@ -61,13 +61,13 @@
           {{ vIndex + 1 }}
         </div>
       </div>
-      <div class="text-start flex-grow-1 w-100 overflow-auto" ref="vCodeRef">
+      <div class="text-start flex-grow-1 overflow-auto" ref="vCodeRef">
         <pre
           v-if="code"
-          class="mb-0"
+          class="mb-0 h-100"
           :class=" [`language-${language}`]"
           style="margin-top: 0; overflow-x: hidden; max-width: 100%;"
-        ><code contenteditable="false" style="overflow-x: hidden" :class=" [language ? `language-${language}` : 'language-html']" tabindex="0" spellcheck="false">{{ jsonToFormattedText(convertHTMLToAST(code) || []) }}</code></pre>
+        ><code contenteditable="false" style="overflow-x: hidden; height: 100%" :class=" [language ? `language-${language}` : 'language-html']" tabindex="0" spellcheck="false">{{ disableCodeFormatting ? code : jsonToFormattedText(parseHTML(code) || []) }}</code></pre>
 
         <slot v-else name="code"></slot>
       </div>
@@ -76,20 +76,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, withDefaults } from "vue";
+import { ref, computed, withDefaults, onMounted } from "vue";
 
 export interface Props {
   filename?: string;
   language?: string;
   linenumbers?: boolean;
   code?: string;
-  disableCopy?: boolean
+  disableCopy?: boolean;
+  disableCodeFormatting?: boolean;
 }
 const vProps = withDefaults(defineProps<Props>(), {
   filename: "",
   linenumbers: false,
   language: "html",
-  disableCopy: false
+  disableCopy: false,
+  disableCodeFormatting: false,
 });
 
 
@@ -116,6 +118,85 @@ type ASTNode = {
   isSelfClosing: boolean;
   content: string | null;
 }
+
+function parseHTML(htmlString: string) {
+    const root = { tagName: 'root', attributes: {}, children: [], isSelfClosing: false, content: '' };
+    const stack = [root];
+    let currentNode: any = root;
+
+    for (let i = 0; i < htmlString.length; i++) {
+        const char = htmlString[i];
+
+        if (char === '<') {
+            const tagStart = i;
+            let tagEnd = htmlString.indexOf('>', tagStart);
+            
+            if (tagEnd === -1) {
+                // Invalid HTML, tag not closed properly
+                continue;
+            }
+
+            const tagContent = htmlString.substring(tagStart + 1, tagEnd);
+            const isClosingTag = tagContent.startsWith('/');
+
+            if (isClosingTag) {
+                stack.pop();
+                currentNode = stack[stack.length - 1];
+            } else {
+                const [tagName, rawAttributes] = tagContent.split(/\s(.+)?/);
+                const attributes = parseAttributes(rawAttributes);
+                const newElement: any = { tagName, attributes, children: [], isSelfClosing: false, content: null };
+
+                currentNode.children.push(newElement);
+
+                if (!isSelfClosingTag(tagName, htmlString, tagEnd)) {
+                    stack.push(newElement);
+                    currentNode = newElement;
+                }
+            }
+
+            i = tagEnd; // Move index to the end of the tag
+        } else {
+          if (currentNode.content === null) {
+            currentNode.content = char;
+          } else {
+            currentNode.content += char;
+          }
+        }
+    }
+
+    return root.children;
+}
+
+function parseAttributes(rawAttributes: any) {
+    const attributes: any = {};
+    if (!rawAttributes) {
+        return attributes;
+    }
+
+    const attributeRegex = /([\w-]+)\s*=\s*["']([^"']*)["']/g;
+    let match;
+
+    while ((match = attributeRegex.exec(rawAttributes)) !== null) {
+        const [, key, value] = match;
+        attributes[key] = value;
+    }
+
+    return attributes;
+}
+
+function isSelfClosingTag(tagName: string, htmlString: string, tagEnd: any) {
+    const selfClosingTags = ['br', 'img', 'input', 'hr', 'meta'];
+    const tagContent = htmlString.substring(tagEnd - tagName.length - 1, tagEnd).trim();
+    return tagContent.endsWith('/');
+}
+
+
+onMounted(() => {
+  if (vProps.code) {
+    console.log(parseHTML(vProps.code))
+  }
+});
 const convertHTMLToAST = (pHTML: string, pTestMode: boolean = false) => {
     // Regular expression to match tags and attributes
     const tagRegex = /<([a-zA-Z0-9\-]+)([^>]*)>(.*?)<\/\1>|<([a-zA-Z0-9\-]+)([^>]*)\/?>|([^<>]+)/g;
@@ -147,21 +228,21 @@ const convertHTMLToAST = (pHTML: string, pTestMode: boolean = false) => {
     const parseNodes = (pHTML: string): ASTNode[] | null => {
         if (loops > 50) return null
 
-        let json: ASTNode[] = [];
-        let match;
+        let vJSON: ASTNode[] = [];
+        let vMatch;
 
-        while ((match = tagRegex.exec(pHTML)) !== null) {
-          const vTag = match[1] || match[4]; // Check which capture group matched
-          const attributes = match[2] || match[5] ? parseAttributes(match[2] || match[5]) : {};
-          const content = match[3] || ''; // Inner content if available
-          const isTextNode = (!!match[6] || !content.startsWith('<')) && !vTag;
-          const isSelfClosing = !!match[5]
+        while ((vMatch = tagRegex.exec(pHTML)) !== null) {
+          const vTag = vMatch[1] || vMatch[4]; // Check which capture group matched
+          const attributes = vMatch[2] || vMatch[5] ? parseAttributes(vMatch[2] || vMatch[5]) : {};
+          const content = vMatch[3] || ''; // Inner content if available
+          const isTextNode = (!!vMatch[6] || !content.startsWith('<')) && !vTag;
+          const isSelfClosing = !!vMatch[5]
           
           if (pTestMode) console.log(vTag, content, isTextNode)
 
           if (vTag) {
               let node: ASTNode = {
-                  tagName: fixCase(vTag.toLowerCase(), match[0]),
+                  tagName: fixCase(vTag.toLowerCase(), vMatch[0]),
                   attributes: attributes,
                   children: [],
                   isSelfClosing: isSelfClosing,
@@ -186,12 +267,12 @@ const convertHTMLToAST = (pHTML: string, pTestMode: boolean = false) => {
                 }
               }
 
-              json.push(node);
+              vJSON.push(node);
           } else if (isTextNode) { // Text node
               // Trim whitespace from text nodes
-              const textNode = match[6].trim();
+              const textNode = vMatch[6].trim();
               if (textNode) {
-                json.push({
+                vJSON.push({
                   tagName: 'TextNode',
                   attributes: {},
                   children: [],
@@ -203,46 +284,55 @@ const convertHTMLToAST = (pHTML: string, pTestMode: boolean = false) => {
         } 
         loops++;
 
-        return json.length > 0 ? json.slice(0, json.some((vNode) => vNode.content !== null) ? 2 : 1) : null
+        return vJSON.length > 0 ? vJSON.slice(0, vJSON.some((vNode) => vNode.content !== null) ? 2 : 1) : null
     }
 
     return parseNodes(pHTML);
 }
 
-const jsonToFormattedText = (json: ASTNode[], pIndentLevel = 0) => {
+const jsonToFormattedText = (pJSON: ASTNode[], pIndentLevel = 0) => {
     const indent = ' '.repeat(2); // 2 spaces for each indent level
-    let text = '';
+    let vText = '';
 
     const addIndentation = (pIndentLevel: number) => indent.repeat(pIndentLevel);
 
-    function processNode(pNode: ASTNode, depth: number) {
+    const processNode = (pNode: ASTNode, depth: number) => {
       if (pNode.tagName === "TextNode") {
-          text += addIndentation(depth) + pNode.content + '\n';
+        vText += addIndentation(depth) + pNode.content + '\n';
       } else {
-          text += addIndentation(depth) + `<${pNode.tagName}`;
+        vText += addIndentation(depth) + `<${pNode.tagName}`;
           if (pNode.attributes) {
               Object.keys(pNode.attributes).forEach(attr => {
-                  text += ` ${attr}${pNode.attributes[attr] !== null ? `="${pNode.attributes[attr]}"` : ''}`;
+                vText += `${Object.keys(pNode.attributes).length > 3 ? `\n${addIndentation(depth +1)}` : ' '}${attr}${pNode.attributes[attr] !== null ? `="${pNode.attributes[attr]}"` : ''}`;
               });
+              if (Object.keys(pNode.attributes).length > 3) {
+                vText += `\n${addIndentation(depth)}`
+              }
           }
 
+
           if (pNode.isSelfClosing) {
-            text += ' />\n';
+            vText += '/>\n';
           } else {
-            text += '>\n';
+            vText += '>\n';
             if (pNode.children) {
                 pNode.children.forEach((child) => {
                     processNode(child, depth + 1);
                 });
+
+                // Only for parseHTML function
+                if (pNode.content !== null) {
+                  vText += addIndentation(depth +1) + pNode.content + '\n';
+                }
             }
 
-            text += addIndentation(depth) + `</${pNode.tagName}>\n`; 
+            vText += addIndentation(depth) + `</${pNode.tagName}>\n`; 
           }
       }
     }
 
-    json.forEach(vNode => processNode(vNode, pIndentLevel));
-    return text;
+    pJSON.forEach(vNode => processNode(vNode, pIndentLevel));
+    return vText;
 }
 
 </script>
