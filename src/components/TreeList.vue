@@ -26,7 +26,6 @@
   
 
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue';
 import type { PropType } from 'vue';
 import TreeList from './TreeList.vue'
 import type { Category } from './Sidebar.vue';

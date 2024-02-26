@@ -26,7 +26,7 @@
 
     <div v-else class="toolbar d-flex flex-row gap-2 align-items-center">
       <span v-if="language" class="d-inline-block badge rounded-pill bg-warning text-dark" style="opacity: 50%;">{{ language }}</span>
-      <div class="d-inline-block">
+      <div class="d-inline-block" v-if="!disableCopy">
         <button
           class="btn d-inline-flex justify-content-center align-items-center text-light"
           style="
@@ -65,28 +65,31 @@
         <pre
           v-if="code"
           class="mb-0"
-          :class=" [language ? `language-${language}` : 'language-html']"
+          :class=" [`language-${language}`]"
           style="margin-top: 0; overflow-x: hidden; max-width: 100%;"
         ><code contenteditable="false" style="overflow-x: hidden" :class=" [language ? `language-${language}` : 'language-html']" tabindex="0" spellcheck="false">{{ jsonToFormattedText(convertHTMLToAST(code) || []) }}</code></pre>
+
         <slot v-else name="code"></slot>
-       
       </div>
     </div>
   </figure>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, withDefaults, onMounted } from "vue";
+import { ref, computed, withDefaults } from "vue";
 
 export interface Props {
   filename?: string;
   language?: string;
   linenumbers?: boolean;
   code?: string;
+  disableCopy?: boolean
 }
 const vProps = withDefaults(defineProps<Props>(), {
   filename: "",
   linenumbers: false,
+  language: "html",
+  disableCopy: false
 });
 
 
@@ -105,103 +108,6 @@ const onCopy = () => {
   alert("Copied!");
 };
 
-interface Node {
-  item: {
-    name: string;
-    slots: {
-      example?: string
-    }[];
-    props: any[]
-  }
-  children: Node[]
-}
-
-const generateHTML = (pNode: Node) => {
-  const vNode = pNode.item;
-  let vHtml = "";
-  const vSlots: any[] = vNode ? vNode.slots : [];
-  if(vNode){
-      vHtml += `<${vNode.name}`
-      vHtml += JSON.stringify(vNode.props);
-      if(vSlots.length > 0 ||  pNode.children.length > 0){
-          vHtml += `>`
-      }else{
-            vHtml += `/>`
-      }
-  }
-  
-  if(pNode.children.length > 0){
-
-      pNode.children.forEach((child: any)=>{
-          vHtml += `\r\n  `;
-          vHtml += generateHTML(child)
-      })
-      vHtml += `\r\n  `;
-      
-  }
-
-  if(vNode){
-      vSlots.forEach((slot:any)=>{
-          vHtml += `\r\n  `;
-          vHtml += slot.example;
-      })
-  }
-
-  if(vNode && (vSlots.length > 0 ||  pNode.children.length > 0))
-  vHtml += `\r\n</${vNode.name}>`
-
-
-  return vHtml;
-}
-
-function formatSnippet(snippet: string) {
-  // Use a simple approach for formatting, you can use libraries like prettier for more advanced formatting
-  let formattedSnippet = '';
-  let indentationLevel = 0;
-  
-
-  // Iterate through each match of opening tags
-  const tagRegex = /<(\/?)([a-zA-Z0-9\-_]+)([^>]*)>([^<]*)/g;
-
-  // Iterate through each match of tags
-  let match;
-  while ((match = tagRegex.exec(snippet)) !== null) {
-      const [, isClosingTag, tagName, attributes, content] = match;
-
-      // Add proper indentation
-    if (!isClosingTag) {
-          formattedSnippet += '  '.repeat(indentationLevel);
-      }
-
-      if (!isClosingTag && content.trim() !== '') {
-          // Add indentation for content
-          formattedSnippet += match[0].replace(content, '\n' + '  '.repeat(indentationLevel + 1) + content.trim());
-          indentationLevel++;
-      } else {
-          // Check if it's a self-closing tag
-          const isSelfClosingTag = attributes.trim().endsWith('/');
-          if (isSelfClosingTag) {
-              formattedSnippet += match[0];
-          } else {
-              formattedSnippet += (!isClosingTag ? '' : '  '.repeat(Math.max(0,indentationLevel -1))) + match[0];
-              if (!isClosingTag) indentationLevel++;
-          }
-
-      }
-
-      if (isClosingTag) {
-          indentationLevel = Math.max(0, indentationLevel - 1);
-      }
-
-
-
-      // Append newline character after each tag
-      formattedSnippet += '\n';
-  }
-
-  return formattedSnippet //.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
 
 type ASTNode = {
   tagName: string;
@@ -210,11 +116,9 @@ type ASTNode = {
   isSelfClosing: boolean;
   content: string | null;
 }
-function convertHTMLToAST(pHTML: string, pTestMode: boolean = false) {
+const convertHTMLToAST = (pHTML: string, pTestMode: boolean = false) => {
     // Regular expression to match tags and attributes
     const tagRegex = /<([a-zA-Z0-9\-]+)([^>]*)>(.*?)<\/\1>|<([a-zA-Z0-9\-]+)([^>]*)\/?>|([^<>]+)/g;
-    
-    
     const attrRegex = /([^\s=]+)(?:\s*=\s*(['"])(.*?)\2)?/g;
 
     const fixCase = (pText: string, pHTMLString: string = pHTML) => {
@@ -224,10 +128,10 @@ function convertHTMLToAST(pHTML: string, pTestMode: boolean = false) {
     }
     
     // Function to parse attributes
-    function parseAttributes(attrString: string) {
+    const parseAttributes = (pAttributeString: string) => {
         const attributes: any = {};
         let match;
-        while ((match = attrRegex.exec(attrString)) !== null) {
+        while ((match = attrRegex.exec(pAttributeString)) !== null) {
           const [, attributeName, _, attributeValue] = match;
           if (attributeName !== "/") {
             attributes[attributeName] = attributeValue === undefined ? null : attributeValue;
@@ -240,24 +144,24 @@ function convertHTMLToAST(pHTML: string, pTestMode: boolean = false) {
 
     // Recursive function to parse nodes
     let loops = 0
-    function parseNodes(pHTML: string): ASTNode[] | null {
+    const parseNodes = (pHTML: string): ASTNode[] | null => {
         if (loops > 50) return null
 
         let json: ASTNode[] = [];
         let match;
 
         while ((match = tagRegex.exec(pHTML)) !== null) {
-          const tag = match[1] || match[4]; // Check which capture group matched
+          const vTag = match[1] || match[4]; // Check which capture group matched
           const attributes = match[2] || match[5] ? parseAttributes(match[2] || match[5]) : {};
           const content = match[3] || ''; // Inner content if available
-          const isTextNode = (!!match[6] || !content.startsWith('<')) && !tag;
+          const isTextNode = (!!match[6] || !content.startsWith('<')) && !vTag;
           const isSelfClosing = !!match[5]
           
-          if (pTestMode) console.log(tag, content, isTextNode)
+          if (pTestMode) console.log(vTag, content, isTextNode)
 
-          if (tag) {
+          if (vTag) {
               let node: ASTNode = {
-                  tagName: fixCase(tag.toLowerCase(), match[0]),
+                  tagName: fixCase(vTag.toLowerCase(), match[0]),
                   attributes: attributes,
                   children: [],
                   isSelfClosing: isSelfClosing,
@@ -302,11 +206,10 @@ function convertHTMLToAST(pHTML: string, pTestMode: boolean = false) {
         return json.length > 0 ? json.slice(0, json.some((vNode) => vNode.content !== null) ? 2 : 1) : null
     }
 
-    
     return parseNodes(pHTML);
 }
 
-function jsonToFormattedText(json: ASTNode[], pIndentLevel = 0) {
+const jsonToFormattedText = (json: ASTNode[], pIndentLevel = 0) => {
     const indent = ' '.repeat(2); // 2 spaces for each indent level
     let text = '';
 
@@ -342,9 +245,6 @@ function jsonToFormattedText(json: ASTNode[], pIndentLevel = 0) {
     return text;
 }
 
-onMounted(() => {
- 
-})
 </script>
 
 <style scoped>

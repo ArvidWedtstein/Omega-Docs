@@ -18,59 +18,69 @@
           <h1 class="display-5 fw-bold">{{ selectedTab?.name }}</h1>
           <CodeBuilder
             v-if="selectedTab && selectedTab?.props?.length && selectedTab?.type !== 'Function' && selectedTab?.type !== 'Class'"
-            :tab="selectedTab" class="h-100" />
+            :tab.sync="selectedTab" class="h-100" />
 
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
-            <Section v-if="selectedTab?.params?.length" title="Syntax">
-              <CodeBlock class="h-100">
-                <template #code>
-                  <pre class="mb-0 language-js"
-                    style="margin-top: 0;"><code contenteditable="false" tabindex="0" class="language-js" spellcheck="false">{{ `${selectedTab?.name}(\n${selectedTab?.params.map((pParam) => `  ${pParam?.name}: ${pParam?.type}`).join(',\n')}\n)` }}</code></pre>
-                </template>
-              </CodeBlock>
-            </Section>
-
             <Section v-if="selectedTab?.path" title="Import">
-              <CodeBlock language="javascript" :code="`Import ${selectedTab?.name} from '${selectedTab?.path}'`" />
+              <CodeBlock language="javascript" :code="`Import ${selectedTab.pathtype === 'Object' ? `{ ${selectedTab.name} }` : selectedTab?.name} from '${selectedTab?.path}'`" />
             </Section>
-
+            
+            <Section v-if="selectedTab?.params?.length" title="Syntax">
+              <CodeBlock class="h-100" disable-copy language="javascript" :code="formatParams()" />
+            </Section>
+            
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
               <template #title>
-                <a class="h5" data-bs-toggle="collapse" href="#snippets" type="button" role="button" aria-expanded="false" aria-controls="snippets">
+                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#snippets" type="button" role="button" aria-expanded="false" aria-controls="snippets">
                   Snippets
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    class="chevron"
+                    fill="currentColor"
+                    stroke-width="0"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                    />
+                  </svg>
                 </a>
               </template>
 
               <PropSelector class="my-3 collapse" @search="" id="snippets" input-id="snippetsinput">
                 <template #list>
-                  <div class="d-flex flex-column gy-2">
-                    <div class="accordion card" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
-                      <a class="card-header d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" aria-expanded="false" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
-                        {{ title }}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                          class="chevron"
-                          fill="currentColor"
-                          stroke-width="0"
-                          width="20"
-                          height="20"
-                        >
-                          <path
-                            d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
-                          />
-                        </svg>
-                      </a>
-                      <div class="collapse" :id="`snippet-collapse-${vSnippetIndex}`">
-                        <div class="card-body" v-if="content">
-                          <p class="card-text">{{ content }}</p>
+                  <ul class="list-group">
+                    <li class="list-group-item" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                      <div class="card bg-transparent border-0">
+                        <a class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" :aria-expanded="selectedTab?.snippets.length < 2" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
+                          {{ title }}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            class="chevron"
+                            fill="currentColor"
+                            stroke-width="0"
+                            width="20"
+                            height="20"
+                          >
+                            <path
+                              d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                            />
+                          </svg>
+                        </a>
+                        <div class="collapse border-top" :id="`snippet-collapse-${vSnippetIndex}`" :class="{ 'show': selectedTab?.snippets.length < 2}">
+                          <div class="card-body" v-if="content">
+                            <p class="card-text">{{ content }}</p>
+                          </div>
+                          <CodeBlock v-if="code" language="html" :code="code" />
                         </div>
-                        <CodeBlock v-if="code" language="html" :code="code" />
                       </div>
-                    </div>
-                  </div>
+                    </li>
+                  </ul>
                 </template>
 
                 <template #table>
@@ -92,8 +102,21 @@
 
             <Section v-if="selectedTab?.props?.length" title="Props">
               <template #title>
-                <a class="h5" data-bs-toggle="collapse" href="#props" role="button" aria-expanded="false" aria-controls="props">
+                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#props" role="button" aria-expanded="false" aria-controls="props">
                   Props
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    class="chevron"
+                    fill="currentColor"
+                    stroke-width="0"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                    />
+                  </svg>
                 </a>
               </template>
               
@@ -381,6 +404,136 @@
               </PropSelector>
             </Section>
 
+            <Section v-if="selectedTab?.exposes?.length" title="Exposes">
+              <template #title>
+                <a class="h5" data-bs-toggle="collapse" href="#exposes" role="button" aria-expanded="false" aria-controls="exposes">
+                  Exposes
+                </a>
+              </template>
+
+              <PropSelector
+                input-id="exposes-input"
+                class="my-3 collapse"
+                id="exposes"
+                @search="searchValue => onSearchChange(searchValue, 'exposes')"
+              >
+                <template #list>
+                  <div class="accordion accordion-flush">
+                    <div
+                      class="accordion-item"
+                      v-for="(vExpose, vExposeIndex) in vSearchExposes"
+                      :key="vExposeIndex"
+                    >
+                      <h2
+                        class="accordion-header d-inline-flex w-100 justify-content-between align-items-center py-1"
+                        :id="`collapse-panel-heading-${vExposeIndex}`"
+                      >
+                        <span class="text-primary h6 mb-0">
+                          {{ vExpose.name }}
+                        </span>
+
+                        <button
+                          class="btn d-inline-flex justify-content-center align-items-center"
+                          style="width: 36px; height: 36px"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          :data-bs-target="`#expose-collapse-panel-${vExposeIndex}`"
+                          aria-expanded="true"
+                          :aria-controls="`expose-collapse-panel-${vExposeIndex}`"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            fill="currentColor"
+                            width="30"
+                            height="30"
+                          >
+                            <path
+                              d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                            />
+                          </svg>
+                        </button>
+                      </h2>
+                      <div
+                        :id="`expose-collapse-panel-${vExposeIndex}`"
+                        class="accordion-collapse collapse text-start show"
+                        :aria-labelledby="`expose-collapse-panel-heading-${vExposeIndex}`"
+                      >
+                        <div class="d-flex flex-column gap-1 pb-3">
+                          <span>{{ vExpose.description }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <template #table>
+                  <div class="props-table">
+                    <div class="" role="rowheader">
+                      <div class="row fw-bold">
+                        <div class="col">Name</div>
+                        <div class="col">Type</div>
+                        <div class="col">Default</div>
+                        <div class="col">Description</div>
+                        <div class="col-1"></div>
+                      </div>
+                    </div>
+                    <div class="" role="rowgroup">
+                      <div
+                        class="row"
+                        role="row"
+                        v-for="(vEvent, vEventIndex) in vSearchEvents"
+                        :key="vEventIndex"
+                      >
+                        <div class="col">
+                          <span class="text-start"
+                            >{{ vEvent.name }}</span>
+                        </div>
+
+                        <div class="col">
+                          <p class="prop-table-description">
+                            {{ vEvent.description }}
+                          </p>
+                        </div>
+                        <div class="col-1 d-flex justify-content-center">
+                          <button
+                            class="btn d-inline-flex justify-content-center align-items-center collapsed"
+                            v-if="vEvent.syntax"
+                            style="width: 36px; height: 36px"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            :data-bs-target="`#prop-${vEventIndex}-collapse`"
+                            aria-expanded="false"
+                            :aria-controls="`prop-${vEventIndex}-collapse`"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
+                              fill="currentColor"
+                              width="30"
+                              height="30"
+                            >
+                              <path
+                                d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <div
+                          v-if="vEvent.syntax"
+                          class="collapse text-start"
+                          :id="`prop-${vEventIndex}-collapse`"
+                        >
+                          <span class="mb-0">Example:</span>
+                          <CodeBlock :code="vEvent.syntax" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </PropSelector>
+            </Section>
+
           </div>
         </div>
       </div>
@@ -392,7 +545,7 @@
 <script setup lang="ts">
 // TODO: adjust import for functions with import {}
 // TODO: update lookup snippets
-// TODO: make view for snippets, exposes, events, params
+// TODO: make view for exposes, params
 import components from "./assets/Components.json";
 import { ref, onBeforeMount } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
@@ -424,6 +577,7 @@ interface Param {
   name?: string | undefined;
   type?: string | undefined;
   default?: string | undefined;
+  params?: Param[] | undefined;
 }
 interface Property {
   name: string;
@@ -441,9 +595,10 @@ export type Tab = {
   description?: string;
   template?: string | undefined;
   example?: string | undefined;
-  type?: string;
+  type: string;
   category: string;
-  path?: string;
+  path: string;
+  pathtype?: string;
   params?: Array<Partial<Param>> | undefined;
   slots?: Array<Partial<Slot>> | undefined;
   events?: Array<Partial<Event>> | undefined;
@@ -530,8 +685,6 @@ const checkForDuplicates = (component: Tab): void => {
     );
   }
 }
-
-
 
 const selectedTab_ID = ref(0);
 const selectedTab = ref<Tab>();
@@ -622,6 +775,23 @@ onBeforeMount(() => {
   vTabs.value = vComponents as Tab[];
 });
 
+const formatParams = (indentation: string = '\t'): string => {
+    if (!selectedTab.value || !selectedTab.value.name || !selectedTab.value.params) return '';
+
+    const indent = (level: number) => indentation.repeat(level);
+
+    const formattedParams = selectedTab.value.params.map(pParam => {
+        if (!pParam.params || pParam.params.length === 0) {
+            return `${pParam.name}: ${pParam.type}`;
+        } else {
+            const nestedParams = pParam.params.map(ppParam => `${ppParam.name}: ${ppParam.type}`).join(',\n' + indent(2));
+            return `${pParam.name}: ${pParam.type === 'Object' ? '{' : '['}\n${indent(2)}${nestedParams}\n${indent(1)}${pParam.type === 'Object' ? '}' : ']'}`;
+        }
+    }).join(',\n' + indent(1));
+
+    return `${selectedTab.value.name}(\n${indent(1)}${formattedParams}\n)`;
+}
+
 
 </script>
 
@@ -704,7 +874,7 @@ onBeforeMount(() => {
 }
 
 .btn svg,
-.card-header svg.chevron {
+svg.chevron {
   transition: 0.3s transform ease-in-out;
 }
 
@@ -712,11 +882,11 @@ onBeforeMount(() => {
   transform: rotate(180deg);
 }
 
-.card-header[aria-expanded="true"] svg.chevron {
+[data-bs-toggle="collapse"][aria-expanded="true"] svg.chevron {
   transform: rotate(0deg);
 }
-
-.card-header[aria-expanded="false"] svg.chevron {
+[data-bs-toggle="collapse"][aria-expanded="false"] svg.chevron {
   transform: rotate(180deg);
 }
+
 </style>

@@ -1,15 +1,8 @@
 <template>
-  <div class="rounded border">
+  <div class="rounded border" :title="tab.name">
     <div class="row h-100 overflow-hidden" style="height: 300px;">
       <div class="col-auto pe-0 flex-grow-1 h-100 overflow-y-auto">
-        <CodeBlock>
-          <template #code>
-            <pre
-              class="mb-0 language-html overflow-y-auto"
-              style="margin-top: 0; height: 300px"
-            ><code contenteditable="true" class="language-html" tabindex="0" spellcheck="false">{{ vGeneratedCode }}</code></pre>
-          </template>
-        </CodeBlock>
+        <CodeBlock style="height: 300px" language="html" :code="vGeneratedCode" />
       </div>
       <div class="col-4 ps-0">
         <ul
@@ -96,6 +89,10 @@ const { tab } = defineProps<{
   tab: NonNullable<Tab>;
 }>();
 
+const vEmits = defineEmits<{
+  "update:tab": [pTab: Tab]
+}>()
+
 
 const vSelectedProps = ref<NonNullable<Tab["props"]>>([]);
 const vGeneratedCode = ref<string>("");
@@ -118,21 +115,28 @@ ${vSelectedProps.value
 />`;
 };
 
+const vComputedTab = computed(() => {
+  return tab
+})
 watch(tab, (newTab, oldTab) => {
   vSelectedProps.value = []
-  console.log(tab)
+  console.log("TAB CHANGE", tab)
   if (!newTab || !vSelectedProps.value) return "";
 
-  vGeneratedCode.value = `<${newTab.name}
+  vGeneratedCode.value = `<${tab.name}
 ${vSelectedProps.value
   .map(
     (prop) => `  ${prop.name}="${prop.default !== "null" ? prop.default : ""}"`,
   )
   .join("\n")}
 />`;
-});
+
+  vEmits('update:tab', newTab);  
+}, { deep: true });
 
 onMounted(() => {
+  vSelectedProps.value = [];
+
   vGeneratedCode.value = `<${tab.name}
 ${vSelectedProps.value
   .map(

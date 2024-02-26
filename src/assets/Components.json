@@ -645,6 +645,7 @@
       "type": "Function",
       "category": "Utilities",
       "path": "o365.controls.alert.ts",
+      "pathtype": "Direct",
       "props": [],
       "params": [
         {
@@ -655,12 +656,37 @@
         {
           "name": "pType",
           "default": "danger",
-          "type": "danger | success | info"
+          "type": "danger | info | success | warning | primary"
         },
         {
           "name": "pOptions",
           "type": "Object",
-          "default": "{ autohide: false, delay: 5000, slimVersion: false }"
+          "params": [
+            {
+              "name": "autohide",
+              "type": "Boolean",
+              "default": "false",
+              "required": false
+            },
+            {
+              "name": "delay",
+              "type": "Number",
+              "default": "5000",
+              "required": false
+            },
+            {
+              "name": "toastClass",
+              "type": "String | CSS classes",
+              "default": "null",
+              "required": false
+            },
+            {
+              "name": "slimVersion",
+              "type": "Boolean",
+              "default": "false",
+              "required": false
+            }
+          ]
         }
       ],
       "slots": [],
@@ -669,7 +695,12 @@
         {
           "title": "Error",
           "content": "When displaying alert for error",
-          "code": "alert('Something Went Wrong')"
+          "code": "alert('Something Went Wrong', 'danger')"
+        },
+        {
+          "title": "Disappear after xTime",
+          "content": "When displaying alert for info",
+          "code": "alert('Information', 'info', { autohide: true, timeout: 3000 })"
         }
       ]
     },
@@ -680,6 +711,7 @@
       "type": "Function",
       "category": "Utilities",
       "path": "o365.controls.confirm.ts",
+      "pathtype": "Direct",
       "props": [],
       "params": [
         {
@@ -736,6 +768,7 @@
             {
               "name": "backdrop",
               "type": "Boolean",
+              "default": "false",
               "required": false
             },
             {
@@ -1202,7 +1235,6 @@
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.Column.jsx",
-      "template": "",
       "props": [
         {
           "name": "pinned",
@@ -1955,7 +1987,7 @@
       "id": 8,
       "name": "ButtonGroup",
       "description": "Button Group is often used in combination with DataGrid",
-      "type": "",
+      "type": "Component",
       "category": "WIN",
       "path": "WIN365.vue.components.ButtonGroup.vue",
       "props": [
@@ -5414,7 +5446,7 @@
           "type": "Number | String",
           "default": "null",
           "description": "ID of person you want to get profilepicture from.",
-          "example": "personId=\"102480\"",
+          "template": "personId=\"102480\"",
           "required": false
         }
       ],
@@ -5433,10 +5465,11 @@
     {
       "id": 62,
       "name": "formatNumber",
-      "description": "",
+      "description": "Function for formatting numbers",
       "type": "Function",
       "category": "Utilities",
       "path": "o365.modules.utils.js",
+      "pathtype": "Object",
       "props": [],
       "slots": [],
       "events": [],
@@ -5473,6 +5506,7 @@
       "type": "Function",
       "category": "Utilities",
       "path": "o365.modules.utils.js",
+      "pathtype": "Object",
       "props": [],
       "slots": [],
       "events": [],
@@ -5666,6 +5700,105 @@
     },
     {
       "id": 65,
+      "name": "getQueryParameter",
+      "description": "Function for getting query parameters",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.url.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "key",
+          "type": "String",
+          "template": "{COMPONENT}(\"ID\")",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(\"ID\")"
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "name": "setQueryParameter",
+      "description": "Function for setting query parameters",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.url.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "key",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "pageReload",
+          "type": "Boolean",
+          "description": "Set to true if you want page reload after value has been set",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(\"ID\", 10000)"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "name": "deleteQueryParameter",
+      "description": "Function for deleting query parameters",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.url.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "key",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "pageReload",
+          "type": "Boolean",
+          "description": "Set to true if you want page reload after value has been set",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(\"ID\")"
+        }
+      ]
+    },
+    {
+      "id": 68,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
