@@ -24,7 +24,7 @@
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
             <Section v-if="selectedTab?.path" title="Import">
-              <CodeBlock disable-code-formatting language="javascript" :code="`import ${selectedTab.pathtype === 'Object' ? `{ ${selectedTab.name} }` : selectedTab?.name} from '${selectedTab?.path}';`" />
+              <CodeBlock disable-code-formatting language="javascript" :code="generateImportString(selectedTab)" />
             </Section>
             
             <Section v-if="selectedTab?.params?.length" title="Syntax">
@@ -51,10 +51,10 @@
                 </a>
               </template>
 
-              <PropSelector class="my-3 collapse" @search="" id="snippets" input-id="snippetsinput">
+              <PropSelector class="my-3 collapse" @search="searchValue => onSearchChange(searchValue, 'snippets')" id="snippets" input-id="snippetsinput">
                 <template #list>
                   <ul class="list-group">
-                    <li class="list-group-item" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                    <li class="list-group-item" v-for="({ title, content, code, imports }, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
                       <div class="card bg-transparent border-0">
                         <a class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" :aria-expanded="selectedTab?.snippets.length < 2" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
                           {{ title }}
@@ -76,6 +76,8 @@
                           <div class="card-body" v-if="content">
                             <p class="card-text">{{ content }}</p>
                           </div>
+
+                          <CodeBlock v-if="imports" class="card-img mb-2" language="javascript" disable-code-formatting :code="imports?.join('\n')" />
                           <CodeBlock v-if="code" language="html" :code="code" />
                         </div>
                       </div>
@@ -85,13 +87,16 @@
 
                 <template #table>
                   <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 g-3">
-                    <div class="col" v-for="({ title, content, code}, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                    <div class="col" v-for="({ title, content, code, imports }, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
                       <div class="card shadow-sm">
-                        <CodeBlock class="card-img-top" v-if="code" language="html" :code="code" />
-                        <div class="card-body">
+                        <div class="card-header">
                           <h5 class="card-title">{{ title }}</h5>
+                        </div>
+                        <CodeBlock v-if="imports" class="card-img-top mb-2" language="javascript" disable-code-formatting :code="imports?.join('\n')" />
+                        <div class="card-body">
                           <p class="card-text">{{ content }}</p>
                         </div>
+                        <CodeBlock class="card-img-bottom" v-if="code" language="html" :code="code" />
                       </div>
                     </div>
                   </div>
@@ -181,7 +186,7 @@
                           
                           <div class="mt-3" v-if="vProp.example || vProp.template">
                             <span>Example:</span>
-                            <CodeBlock :code="vProp.example || vProp.template" />
+                            <CodeBlock disable-code-formatting :code="vProp.example || vProp.template" />
                           </div>
                         </div>
                       </div>
@@ -260,7 +265,7 @@
                           :id="`prop-${vPropIndex}-collapse`"
                         >
                           <span class="mb-0">Example:</span>
-                          <CodeBlock :code="vProp.example || vProp.template" />
+                          <CodeBlock disable-code-formatting :code="vProp.example || vProp.template" />
                         </div>
                       </div>
                     </div>
@@ -342,7 +347,7 @@
                           
                           <div class="" v-if="vEvent.syntax">
                             <span>Example:</span>
-                            <CodeBlock :code="vEvent.syntax" />
+                            <CodeBlock disable-code-formatting :code="vEvent.syntax" />
                           </div>
                         </div>
                       </div>
@@ -355,8 +360,6 @@
                     <div class="" role="rowheader">
                       <div class="row fw-bold">
                         <div class="col">Name</div>
-                        <div class="col">Type</div>
-                        <div class="col">Default</div>
                         <div class="col">Description</div>
                         <div class="col-1"></div>
                       </div>
@@ -408,7 +411,7 @@
                           :id="`prop-${vEventIndex}-collapse`"
                         >
                           <span class="mb-0">Example:</span>
-                          <CodeBlock :code="vEvent.syntax" />
+                          <CodeBlock disable-code-formatting :code="vEvent.syntax" />
                         </div>
                       </div>
                     </div>
@@ -437,6 +440,8 @@
                 </a>
               </template>
 
+              <!-- TODO: add params view somehow -->
+
               <PropSelector
                 input-id="exposes-input"
                 class="my-3 collapse"
@@ -463,6 +468,7 @@
                           style="width: 36px; height: 36px"
                           type="button"
                           data-bs-toggle="collapse"
+                          :class="{ 'collapsed': !vExpose.description }"
                           :data-bs-target="`#expose-collapse-panel-${vExposeIndex}`"
                           aria-expanded="true"
                           :aria-controls="`expose-collapse-panel-${vExposeIndex}`"
@@ -482,7 +488,8 @@
                       </h2>
                       <div
                         :id="`expose-collapse-panel-${vExposeIndex}`"
-                        class="accordion-collapse collapse text-start show"
+                        class="accordion-collapse collapse text-start"
+                        :class="{ 'show': vExpose.description }"
                         :aria-labelledby="`expose-collapse-panel-heading-${vExposeIndex}`"
                       >
                         <div class="d-flex flex-column gap-1 pb-3">
@@ -683,7 +690,7 @@
 
 
 <script setup lang="ts">
-// TODO: adjust import for functions with import {}
+// TODO: add slots and events to code builder?
 // TODO: update lookup snippets
 // TODO: make view for exposes, params, slots, props params
 import components from "./assets/Components.json";
@@ -712,6 +719,7 @@ interface Snippet {
   title?: string | undefined;
   content?: string | undefined;
   code?: string | undefined;
+  imports: Array<string> | undefined
 }
 interface Param {
   name?: string | undefined;
@@ -749,10 +757,10 @@ export type Tab = {
 
 
 const checkForDuplicates = (component: Tab): void => {
-  function findDuplicates(
+  const findDuplicates = (
     array: Partial<{ name: string; title: string }>[],
     prop: string = "name",
-  ): string[] {
+  ): string[] => {
     const names = array.map((item: any) => item[prop]);
     const uniqueNames = new Set(names);
     const duplicates: string[] = [];
@@ -897,21 +905,58 @@ const setSelectedTab = (pTab_ID: number) => {
   }
 };
 
+const generateImportString = (pComponent: Partial<Tab>) => {
+  const { pathtype, path, name } = pComponent;
+  return `import ${pathtype === 'Direct' || !pathtype ? name : `{ ${name} }`} from '${path}'`
+}
+
 const RefactorComponent = (component: Tab) => {
   return JSON.parse(JSON.stringify(component)
     .replace(/\{COMPONENT\}/g, component.name)
-    .replace(/\{COMPONENT=(\d+)\}/g, (match, id) => {
-      const referencedComponent = components.components.find(c => c.id === parseInt(id));
-      return referencedComponent ? referencedComponent.name : match;
+    .replace(/\{COMPONENT=(\d+)\}/g, (pMatch, pID) => {
+      const referencedComponent = components.components.find(c => c.id === parseInt(pID));
+      return referencedComponent ? referencedComponent.name : pMatch;
     }));
 }
 
-
 onBeforeMount(() => {
+  const vComponentRegex = /\{COMPONENT\}/g;
+  const vComponentReferenceRegex = /{COMPONENT=(\d+)}/g;
+
   const vComponents = components.components.map((pComponent) => {
     checkForDuplicates(pComponent as Tab);
-    return RefactorComponent(pComponent as Tab);
+
+    return {
+      ...RefactorComponent(pComponent as Tab),
+      snippets: pComponent?.snippets.map((pSnippet) => {
+        const vImportPaths: string[] = [];
+
+        const addImportPath = (pComponentToAdd: Tab) => {
+          const vPath = generateImportString(pComponentToAdd);
+          if (!vImportPaths.includes(vPath)) {
+            vImportPaths.push(vPath)
+          }
+        } 
+
+        return {
+          ...pSnippet,
+          code: pSnippet?.code.replace(vComponentRegex, () => {
+            addImportPath(pComponent as Tab);
+            return pComponent.name;
+          }).replace(vComponentReferenceRegex, (pMatch, pID) => {
+            const vReferencedComponent = components.components.find(c => c.id === parseInt(pID));
+            if (vReferencedComponent) {
+              addImportPath(vReferencedComponent as Tab)
+              return vReferencedComponent.name
+            }
+            return pMatch;
+          }),
+          imports: vImportPaths,
+        }
+      }),
+    };
   });
+
   vTabs.value = vComponents as Tab[];
 });
 

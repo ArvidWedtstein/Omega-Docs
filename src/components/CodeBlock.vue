@@ -121,7 +121,7 @@ type ASTNode = {
 
 function parseHTML(htmlString: string) {
     const root = { tagName: 'root', attributes: {}, children: [], isSelfClosing: false, content: '' };
-    const stack = [root];
+    const stack: ASTNode[] = [root];
     let currentNode: any = root;
 
     for (let i = 0; i < htmlString.length; i++) {
@@ -145,7 +145,7 @@ function parseHTML(htmlString: string) {
             } else {
                 const [tagName, rawAttributes] = tagContent.split(/\s(.+)?/);
                 const attributes = parseAttributes(rawAttributes);
-                const newElement: any = { tagName, attributes, children: [], isSelfClosing: false, content: null };
+                const newElement: ASTNode = { tagName, attributes, children: [], isSelfClosing: isSelfClosingTag(tagName, htmlString, tagEnd), content: null };
 
                 currentNode.children.push(newElement);
 
@@ -173,28 +173,30 @@ function parseAttributes(rawAttributes: any) {
     if (!rawAttributes) {
         return attributes;
     }
-
-    const attributeRegex = /([\w-]+)\s*=\s*["']([^"']*)["']/g;
+    const vAttributeRegex = /([^\s=]+)(?:\s*=\s*(['"])(.*?)\2)?/g; // /([\w-]+)\s*=\s*["']([^"']*)["']/g
     let match;
 
-    while ((match = attributeRegex.exec(rawAttributes)) !== null) {
-        const [, key, value] = match;
-        attributes[key] = value;
+    while ((match = vAttributeRegex.exec(rawAttributes)) !== null) {
+      const [, attributeName, _, attributeValue] = match;
+      if (attributeName !== "/") {
+        attributes[attributeName] = attributeValue === undefined ? null : attributeValue;
+      }
     }
 
     return attributes;
 }
 
-function isSelfClosingTag(tagName: string, htmlString: string, tagEnd: any) {
+function isSelfClosingTag(tagName: string, htmlString: string, tagEnd: number) {
     const selfClosingTags = ['br', 'img', 'input', 'hr', 'meta'];
     const tagContent = htmlString.substring(tagEnd - tagName.length - 1, tagEnd).trim();
+
     return tagContent.endsWith('/');
 }
 
 
 onMounted(() => {
   if (vProps.code) {
-    console.log(parseHTML(vProps.code))
+    console.log(vProps.code,parseHTML(vProps.code))
   }
 });
 const convertHTMLToAST = (pHTML: string, pTestMode: boolean = false) => {
@@ -334,6 +336,50 @@ const jsonToFormattedText = (pJSON: ASTNode[], pIndentLevel = 0) => {
     pJSON.forEach(vNode => processNode(vNode, pIndentLevel));
     return vText;
 }
+
+
+function formatSQL(rawSQL: string) {
+    // Split the SQL string into individual tokens
+    const tokens = rawSQL
+        .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+        .split(/([\s(),;])/) // Split by spaces, commas, parentheses, and semicolons while preserving delimiters
+
+    // Define indentation and current indentation level
+    let indent = '    ';
+    let indentationLevel = 0;
+
+    // Initialize formatted SQL string
+    let formattedSQL = '';
+
+    // Iterate over each token
+    tokens.forEach(token => {
+        // Ignore empty tokens
+        if (!token.trim()) return;
+
+        // Increase indentation level for each opening parenthesis
+        if (token === '(') {
+            formattedSQL += '\n' + indent.repeat(indentationLevel);
+            indentationLevel++;
+        }
+
+        // Decrease indentation level for each closing parenthesis
+        if (token === ')') {
+            indentationLevel--;
+            formattedSQL += '\n' + indent.repeat(indentationLevel);
+        }
+
+        // Append token to formatted SQL string with proper indentation
+        formattedSQL += token;
+
+        // Add newline and proper indentation after comma or semicolon
+        if (token === ',' || token === ';') {
+            formattedSQL += '\n' + indent.repeat(indentationLevel);
+        }
+    });
+
+    return formattedSQL.trim(); // Trim any leading/trailing whitespace
+}
+
 
 </script>
 

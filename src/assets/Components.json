@@ -181,6 +181,18 @@
             {
               "name": "distinctOptions",
               "type": "Array"
+            },
+            {
+              "name": "activeFilter",
+              "type": "String"
+            },
+            {
+              "name": "activeFilterObject",
+              "type": "Object"
+            },
+            {
+              "name": "filterString",
+              "type": "String"
             }
           ],
           "required": false
@@ -590,7 +602,13 @@
             },
             {
               "name": "selectedDataItems",
+              "description": "Will be populated with the selected rows",
               "type": "Set"
+            },
+            {
+              "name": "dataObject",
+              "description": "Current dataobject",
+              "type": "DataObject"
             },
             {
               "name": "selection",
@@ -1842,7 +1860,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<NodeColumn colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />"
+          "code": "<{COMPONENT} colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />"
         }
       ]
     },
@@ -1858,9 +1876,21 @@
           "title": "Example",
           "content": "",
           "code": "<{COMPONENT} :dataObject=\"\"v-model=\"\":bind=\"sel=>{}\"></{COMPONENT}>"
+        },
+        {
+          "title": "Multiselect Lookup",
+          "content": "Selected rows can be accessed by passing a function in :bind",
+          "code": "<{COMPONENT} :dataObject=\"\" v-model=\"\" :value=\"vSelectedRowsString\" multiselect :bind=\"sel=>{}\"><{COMPONENT=5} field=\"SomeField\"/></{COMPONENT}>"
         }
       ],
       "props": [
+        {
+          "name": "multiselect",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables multiple selection",
+          "required": false
+        },
         {
           "name": "disabled",
           "type": "Boolean",
@@ -1958,6 +1988,10 @@
       ],
       "slots": [
         {
+          "name": "header",
+          "template": "#header"
+        },
+        {
           "name": "actions",
           "template": "#actions"
         },
@@ -1967,7 +2001,7 @@
         },
         {
           "name": "target",
-          "description": "To use custom target instead of <input> you can pass #target slot. Scope object {target, open} is passed to this slot. By default a click listener is attached to the target that opens the lookup. This can be turned off with suppressClickEvent property on <ODataLookup>",
+          "description": "To use custom target instead of <input> you can pass #target slot. Scope object {target, open} is passed to this slot. By default a click listener is attached to the target that opens the lookup. This can be turned off with suppressClickEvent property on <{COMPONENT=7}>",
           "template": "#target=\"{target}\""
         }
       ],
@@ -2143,14 +2177,14 @@
         },
         {
           "name": "modalOptions",
-          "type": "",
-          "default": "",
-          "description": "",
-          "example": "",
+          "type": "Object",
+          "default": "null",
+          "description": "Setting backdrop as static will tell the modal to not close when clicked outside.",
           "params": [
             {
               "name": "backdrop",
-              "type": "Boolean"
+              "type": "Boolean | String",
+              "example": "static"
             }
           ],
           "required": false
@@ -3408,13 +3442,6 @@
           "required": false
         },
         {
-          "name": "hideCompleted",
-          "type": "Boolean",
-          "default": "false",
-          "description": "Hide completed subprojects (SubProjects with CompletedFinalAccount = 0)",
-          "required": false
-        },
-        {
           "name": "showAsButton",
           "type": "Boolean",
           "default": "false",
@@ -3454,6 +3481,13 @@
           "type": "Boolean",
           "default": "false",
           "description": "Disables masking for the InputMask component, fallback to normal input",
+          "required": false
+        },
+        {
+          "name": "includeDomainField",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes domain field",
           "required": false
         },
         {
