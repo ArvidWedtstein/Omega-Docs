@@ -26,7 +26,7 @@
 <script setup lang="ts">
 // TODO: add "W" before every win component
 // TODO: sort alphabetically
-import type { Tab } from "@/App.vue";
+import type { Tab } from "@/components";
 import { components } from "./../assets/Components.json";
 import TreeList from "./TreeList.vue";
 import { ref, onMounted, watch, onBeforeMount } from "vue";

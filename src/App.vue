@@ -18,7 +18,7 @@
           <h1 class="display-5 fw-bold">{{ selectedTab?.name }}</h1>
           <CodeBuilder
             v-if="(selectedTab?.props?.length || selectedTab?.params?.length) && selectedTab?.type !== 'Function' && selectedTab?.type !== 'Class'"
-            :tab="selectedTab" class="h-100 mb-2" />
+            :component="selectedTab" class="h-100 mb-2" />
 
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
@@ -33,8 +33,11 @@
             
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
               <template #title>
-                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#snippets" type="button" role="button" aria-expanded="false" aria-controls="snippets">
-                  Snippets
+                <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#snippets" type="button" role="button" aria-expanded="false" aria-controls="snippets">
+                  <span>
+                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.snippets?.length }}</span>
+                    Snippets
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -107,8 +110,11 @@
 
             <Section v-if="selectedTab?.props?.length" title="Props">
               <template #title>
-                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#props" role="button" aria-expanded="false" aria-controls="props">
-                  Props
+                <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#props" role="button" aria-expanded="false" aria-controls="props">
+                  <span>
+                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.props?.length }}</span>
+                    Props
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -276,8 +282,11 @@
 
             <Section v-if="selectedTab?.events?.length" title="Events">
               <template #title>
-                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#events" role="button" aria-expanded="false" aria-controls="events">
-                  Events
+                <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#events" role="button" aria-expanded="false" aria-controls="events">
+                  <span>
+                    <span class="badge border border-secondary text-secondary rounded-pill me-2 mb-0">{{ selectedTab?.events?.length }}</span>
+                    Events
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -422,8 +431,11 @@
 
             <Section v-if="selectedTab?.exposes?.length" title="Exposes">
               <template #title>
-                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#exposes" role="button" aria-expanded="false" aria-controls="exposes">
-                  Exposes
+                <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#exposes" role="button" aria-expanded="false" aria-controls="exposes">
+                  <span>
+                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.exposes?.length }}</span>
+                    Exposes
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -535,8 +547,11 @@
 
             <Section v-if="selectedTab?.slots?.length" title="Slots">
               <template #title>
-                <a class="h5 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#slots" role="button" aria-expanded="false" aria-controls="slots">
-                  Slots
+                <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#slots" role="button" aria-expanded="false" aria-controls="slots">
+                  <span>
+                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.slots?.length }}</span>
+                    Slots
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -690,10 +705,9 @@
 
 
 <script setup lang="ts">
-// TODO: add slots and events to code builder?
 // TODO: update lookup snippets
 // TODO: make view for exposes, params, slots, props params
-import components from "./assets/Components.json";
+import Components, { generateImportString, type Tab } from "./components";
 import { ref, onBeforeMount } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
@@ -701,140 +715,6 @@ import CodeBuilder from "./components/CodeBuilder.vue";
 import PropSelector from "./components/PropSelector.vue";
 import Section from "./components/Section.vue";
 
-interface Event {
-  name?: string | undefined;
-  description?: string | undefined;
-  syntax?: string | undefined;
-}
-interface Slot {
-  name?: string | undefined;
-  description?: string | undefined;
-  template?: string | undefined;
-}
-interface Expose {
-  name?: string | undefined;
-  description?: string | undefined;
-}
-interface Snippet {
-  title?: string | undefined;
-  content?: string | undefined;
-  code?: string | undefined;
-  imports: Array<string> | undefined
-}
-interface Param {
-  name?: string | undefined;
-  type?: string | undefined;
-  default?: string | undefined;
-  params?: Param[] | undefined;
-}
-interface Property {
-  name: string;
-  type?: string | undefined;
-  default?: string | undefined;
-  description?: string | undefined;
-  required?: boolean | undefined;
-  template?: string | undefined;
-  example?: string | undefined;
-  params?: Array<Partial<Param>> | undefined;
-}
-export type Tab = {
-  id: number;
-  name: string;
-  description?: string;
-  template?: string | undefined;
-  example?: string | undefined;
-  type: string;
-  category: string;
-  path: string;
-  pathtype?: string;
-  params?: Array<Partial<Param>>;
-  slots?: Array<Partial<Slot>> | undefined;
-  events?: Array<Partial<Event>> | undefined;
-  props: Array<Partial<Property>>;
-  snippets?: Array<Partial<Snippet>> | undefined;
-  exposes?: Array<Partial<Expose>> | undefined;
-};
-
-
-const checkForDuplicates = (component: Tab): void => {
-  const findDuplicates = (
-    array: Partial<{ name: string; title: string }>[],
-    prop: string = "name",
-  ): string[] => {
-    const names = array.map((item: any) => item[prop]);
-    const uniqueNames = new Set(names);
-    const duplicates: string[] = [];
-
-    uniqueNames.forEach((name) => {
-      const count = names.filter((n) => n === name).length;
-      if (count > 1 && name) {
-        duplicates.push(name);
-      }
-    });
-
-    return duplicates;
-  }
-
-
-  const duplicateProps = component.props ? findDuplicates(component.props) : [];
-  const duplicateSnippets = component.snippets
-    ? findDuplicates(component?.snippets, "title")
-    : [];
-  const duplicateExposes = component.exposes
-    ? findDuplicates(component.exposes)
-    : [];
-  const duplicateSlots = component.slots ? findDuplicates(component.slots) : [];
-  const duplicateEvents = component.events
-    ? findDuplicates(component.events)
-    : [];
-  const duplicateParams = component.params
-    ? findDuplicates(component.params)
-    : [];
-
-  if (duplicateProps.length > 0) {
-    console.error(
-      `Duplicate props found in component: ${component.name
-      }\nDuplicate prop names: ${duplicateProps.join(", ")}`,
-    );
-  }
-
-  if (duplicateSnippets.length > 0) {
-    console.error(
-      `Duplicate snippets found in component: ${component.name
-      }\nDuplicate snippet names: ${duplicateSlots.join(", ")}`,
-    );
-  }
-
-  if (duplicateExposes.length > 0) {
-    console.error(
-      `Duplicate exposes found in component: ${component.name
-      }\nDuplicate expose names: ${duplicateSlots.join(", ")}`,
-    );
-  }
-
-  if (duplicateSlots.length > 0) {
-    console.error(
-      `Duplicate slots found in component: ${component.name
-      }\nDuplicate slot names: ${duplicateSlots.join(", ")}`,
-    );
-  }
-
-  if (duplicateEvents.length > 0) {
-    console.error(
-      `Duplicate events found in component: ${component.name
-      }\nDuplicate event names: ${duplicateEvents.join(", ")}`,
-    );
-  }
-
-  if (duplicateParams.length > 0) {
-    console.error(
-      `Duplicate params found in component: ${component.name
-      }\nDuplicate param names: ${duplicateParams.join(", ")}`,
-    );
-  }
-}
-
-const selectedTab_ID = ref(0);
 const selectedTab = ref<Tab>();
 const vSearchProps = ref<Tab["props"]>([]);
 const vSearchSnippets = ref<Tab["snippets"]>([]);
@@ -884,7 +764,6 @@ const onSearchChange = (pSearchValue: string, pType: 'props' | 'events' | 'param
 
 const setSelectedTab = (pTab_ID: number) => {
 
-  selectedTab_ID.value = pTab_ID;
   const vTab = vTabs.value.find((vTab) => vTab?.id === pTab_ID);
 
   if (vTab) {
@@ -905,59 +784,9 @@ const setSelectedTab = (pTab_ID: number) => {
   }
 };
 
-const generateImportString = (pComponent: Partial<Tab>) => {
-  const { pathtype, path, name } = pComponent;
-  return `import ${pathtype === 'Direct' || !pathtype ? name : `{ ${name} }`} from '${path}'`
-}
-
-const RefactorComponent = (component: Tab) => {
-  return JSON.parse(JSON.stringify(component)
-    .replace(/\{COMPONENT\}/g, component.name)
-    .replace(/\{COMPONENT=(\d+)\}/g, (pMatch, pID) => {
-      const referencedComponent = components.components.find(c => c.id === parseInt(pID));
-      return referencedComponent ? referencedComponent.name : pMatch;
-    }));
-}
 
 onBeforeMount(() => {
-  const vComponentRegex = /\{COMPONENT\}/g;
-  const vComponentReferenceRegex = /{COMPONENT=(\d+)}/g;
-
-  const vComponents = components.components.map((pComponent) => {
-    checkForDuplicates(pComponent as Tab);
-
-    return {
-      ...RefactorComponent(pComponent as Tab),
-      snippets: pComponent?.snippets.map((pSnippet) => {
-        const vImportPaths: string[] = [];
-
-        const addImportPath = (pComponentToAdd: Tab) => {
-          const vPath = generateImportString(pComponentToAdd);
-          if (!vImportPaths.includes(vPath)) {
-            vImportPaths.push(vPath)
-          }
-        } 
-
-        return {
-          ...pSnippet,
-          code: pSnippet?.code.replace(vComponentRegex, () => {
-            addImportPath(pComponent as Tab);
-            return pComponent.name;
-          }).replace(vComponentReferenceRegex, (pMatch, pID) => {
-            const vReferencedComponent = components.components.find(c => c.id === parseInt(pID));
-            if (vReferencedComponent) {
-              addImportPath(vReferencedComponent as Tab)
-              return vReferencedComponent.name
-            }
-            return pMatch;
-          }),
-          imports: vImportPaths,
-        }
-      }),
-    };
-  });
-
-  vTabs.value = vComponents as Tab[];
+  vTabs.value = Components;
 });
 
 const formatParams = (indentation: string = '\t'): string => {

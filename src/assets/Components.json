@@ -6,6 +6,7 @@
       "description": "",
       "type": "Class",
       "path": "",
+      "pathtype": "Direct",
       "category": "Data",
       "props": [
         {
@@ -193,6 +194,28 @@
             {
               "name": "filterString",
               "type": "String"
+            },
+            {
+              "name": "getItem",
+              "type": "Function",
+              "params": [
+                {
+                  "name": "Field",
+                  "type": "String"
+                }
+              ],
+              "returns": [
+                {
+                  "name": "operator",
+                  "type": "String",
+                  "template": "between | contains | begin | inlist | notinlist | equals | dateequals | notequals | datenotequals | greaterthanorequal | greaterthan | lessthan | isfalse | istrue | isnull | isnotnull | isblank | isnotblank"
+                },
+                {
+                  "name": "selectedValue",
+                  "type": "String",
+                  "description": "Filterstring basically. Use 'isfalse' or 'istrue' for boolean/bit values instead of 1 and 0"
+                }
+              ]
             }
           ],
           "required": false
@@ -828,10 +851,17 @@
     {
       "id": 4,
       "name": "DataGrid",
-      "description": "",
+      "description": "Grid for sorting, filtering and displaying data",
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.vue",
+      "pathtype": "Direct",
+      "codebuilder_shortcuts": [
+        {
+          "keys": ["alt", "c"],
+          "component_id": 5
+        }
+      ],
       "props": [
         {
           "name": "dataObject",
@@ -1211,7 +1241,7 @@
         },
         {
           "name": "beforeCreate",
-          "description": "",
+          "description": "Fires before row is created",
           "syntax": "@beforeCreate=\"\""
         }
       ],
@@ -1253,6 +1283,7 @@
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.Column.jsx",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "pinned",
@@ -1630,10 +1661,11 @@
     {
       "id": 6,
       "name": "NodeColumn",
-      "description": "Used in DataGrid for grouping",
+      "description": "Used in {COMPONENT=4} for grouping",
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.NodeColumn.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "pinned",
@@ -1871,6 +1903,7 @@
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.DataLookup.vue",
+      "pathtype": "Direct",
       "snippets": [
         {
           "title": "Example",
@@ -2020,10 +2053,11 @@
     {
       "id": 8,
       "name": "ButtonGroup",
-      "description": "Button Group is often used in combination with DataGrid",
+      "description": "Button Group is often used in combination with {COMPONENT=4}",
       "type": "Component",
       "category": "WIN",
       "path": "WIN365.vue.components.ButtonGroup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "onClickShowHidden",
@@ -2150,6 +2184,7 @@
       "type": "Component",
       "category": "Modal",
       "path": "o365.vue.components.Modal.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "title",
@@ -2258,7 +2293,7 @@
         {
           "title": "Example",
           "content": "Use classes like modal-(sm, md, lg, xl, xxl) to adjust modal size",
-          "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">Close</button><button type=\"button\" class=\"btn btn-primary\">Save</button></div></div></div></{COMPONENT}>"
+          "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\">{{ $t('Save') }}</button></div></div></div></{COMPONENT}>"
         }
       ]
     },
@@ -2289,6 +2324,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.FormControl.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "title",
@@ -2348,6 +2384,7 @@
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.PersonsLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2361,6 +2398,7 @@
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.OrgUnitsLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2374,6 +2412,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.CustomersLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2387,6 +2426,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.SuppliersLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2400,6 +2440,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.CompaniesLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2413,6 +2454,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.GangsLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2426,6 +2468,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.WorkPackagesLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2439,6 +2482,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DisciplinesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2484,6 +2528,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.SFILookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2529,6 +2574,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.ArticlesLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2542,6 +2588,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.OrdersLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2586,7 +2633,7 @@
       "snippets": [
         {
           "title": "Orders Lookup Example",
-          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "content": "For use outside of grid. Remove class when using inside {COMPONENT=4}",
           "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Order:')\"><{COMPONENT=40} validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>"
         }
       ]
@@ -2598,6 +2645,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.ProjectsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2705,6 +2753,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.WarehousesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2734,6 +2783,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.QualificationsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2771,6 +2821,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2828,6 +2879,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsRevisionsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "documentId",
@@ -2895,6 +2947,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsGroupsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2936,6 +2989,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentOriginatorsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2981,6 +3035,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsStepsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -3030,6 +3085,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsTypesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "documentGroupId",
@@ -3099,6 +3155,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentTypesNumberingSchemesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "documentTypeId",
@@ -3162,6 +3219,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsWestconAreaLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -3203,6 +3261,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.RevisionDistributionStatusesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -3236,6 +3295,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.RevisionSendActionTypesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -3277,6 +3337,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.LocationsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "OnlyShowPersonnelLocations",
@@ -3297,6 +3358,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.PersonsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "includeAllPersons",
@@ -3360,6 +3422,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.BranchesLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -3373,6 +3436,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.SubProjectsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -3522,6 +3586,7 @@
       "type": "Component",
       "category": "WIN/Form",
       "path": "WIN365.vue.components.FormInputGroup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "title",
@@ -3578,6 +3643,7 @@
       "type": "Component",
       "category": "Tabs",
       "path": "o365.vue.components.Tabs.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "tabsClass",
@@ -3717,6 +3783,7 @@
       "type": "Component",
       "category": "Tabs",
       "path": "o365.vue.components.Tab.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "id",
@@ -3834,6 +3901,7 @@
       "type": "Component",
       "category": "Sizer",
       "path": "o365.vue.components.SizerPanel.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "width",
@@ -3973,6 +4041,7 @@
       "type": "Component",
       "category": "Container",
       "path": "o365.vue.components.RowContainer.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "desktop",
@@ -4008,6 +4077,7 @@
       "type": "Component",
       "category": "Container",
       "path": "o365.vue.components.ColContainer.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "desktop",
@@ -4043,6 +4113,7 @@
       "type": "Component",
       "category": "Card",
       "path": "o365.vue.components.CardView.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "dataObject",
@@ -4260,6 +4331,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.TextArea.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "autoGrow",
@@ -4342,6 +4414,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.DatePicker.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "modelValue",
@@ -4525,6 +4598,7 @@
       "type": "Component",
       "category": "Other",
       "path": "o365.vue.components.MatchMedia.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "query",
@@ -4574,6 +4648,7 @@
       "type": "Component",
       "category": "WIN/Form",
       "path": "WIN365.vue.components.Footer.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "dataObject",
@@ -4613,6 +4688,7 @@
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataTable.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "dataObject",
@@ -5026,6 +5102,7 @@
       "type": "Component",
       "category": "General",
       "path": "o365.vue.components.ONavbar.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "contextWhereClause",
@@ -5076,6 +5153,7 @@
       "type": "Directive",
       "category": "Directive",
       "path": "o365.vue.directive.spotlight.js",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -5096,6 +5174,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.Select.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "modelValue",
@@ -5176,6 +5255,7 @@
       "type": "Component",
       "category": "Mobile",
       "path": "mobile.vue.components.ActionSheet.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "modelValue",
@@ -5221,6 +5301,7 @@
       "type": "Component",
       "category": "Mobile",
       "path": "mobile.vue.components.Accordion.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "title",
@@ -5283,6 +5364,7 @@
       "type": "Component",
       "category": "Mobile",
       "path": "mobile.vue.components.BottomSheet.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "modelValue",
@@ -5385,6 +5467,7 @@
       "type": "Component",
       "category": "General",
       "path": "o365.vue.components.FileIcon.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "size",
@@ -5427,6 +5510,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.SearchInput.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "modelValue",
@@ -5480,6 +5564,7 @@
       "type": "Component",
       "category": "General",
       "path": "system.vue.components.PersonImage.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "personId",
@@ -5583,6 +5668,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.Autocomplete.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "modelValue",
@@ -5839,11 +5925,204 @@
     },
     {
       "id": 68,
+      "name": "UploadDrop",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.UploadDrop.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "Dataobject where files get uploaded too",
+          "required": true
+        },
+        {
+          "name": "beforeUpload",
+          "type": "Function",
+          "default": "null",
+          "description": "fires before upload. returns row as param",
+          "required": false
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "default": "Upload",
+          "description": "Does nothing. Not used",
+          "required": false
+        },
+        {
+          "name": "hideProgressBar",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Hides progress bar for uploading file",
+          "required": false
+        },
+        {
+          "name": "primKey",
+          "type": "String",
+          "default": "null",
+          "description": "Will overwrite file with that primkey if specified.",
+          "required": false
+        },
+        {
+          "name": "routeUrl",
+          "type": "String",
+          "default": "null",
+          "description": "Uploads files to that url?",
+          "required": false
+        },
+        {
+          "name": "disableChunks",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "skipRecordCreate",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Skips creating record and just displays the file.",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "default drop area",
+          "template": "#default"
+        }
+      ],
+      "events": [
+        {
+          "name": "uploaded",
+          "description": "fires when file(s) have been uploaded",
+          "syntax": "@uploaded=\"\""
+        },
+        {
+          "name": "error",
+          "description": "fires when something went wrong.",
+          "syntax": "@error=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Droparea for {COMPONENT=4}",
+          "code": "<{COMPONENT} :dataObject=\"dsFiles\" @uploaded=\"{COMPONENT=2}($t(`File successfully uploaded`), 'success', { autohide: true, delay: 3000 }); dsFiles.load();\"><{COMPONENT=4} :dataObject=\"dsFiles\"><{COMPONENT=5} sortable class=\"text-center\" width=\"50\" field=\"Extension\" v-slot=\"{ row }\"><{COMPONENT=59} :fileName=\"row.FileName\" /></{COMPONENT=5}><{COMPONENT=5} sortable field=\"FileName\" width=\"400\" /></{COMPONENT=4}></{COMPONENT}>"
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "name": "FileUploadButton",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.FileUploadButton.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "Dataobject where files get uploaded too",
+          "required": true
+        },
+        {
+          "name": "beforeUpload",
+          "type": "Function",
+          "default": "null",
+          "description": "fires before upload. returns row as param",
+          "required": false
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "default": "Upload File",
+          "description": "text for button",
+          "required": false
+        },
+        {
+          "name": "hideProgressBar",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Hides progress bar for uploading file",
+          "required": false
+        },
+        {
+          "name": "primKey",
+          "type": "String",
+          "default": "null",
+          "description": "Will overwrite file with that primkey if specified.",
+          "required": false
+        },
+        {
+          "name": "accept",
+          "type": "String",
+          "default": "null",
+          "description": "Filetypes to accept",
+          "required": false
+        },
+        {
+          "name": "disableChunks",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "skipRecordCreate",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Skips creating record and just displays the file.",
+          "required": false
+        },
+        {
+          "name": "multiple",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Allows for selection multiple files.",
+          "required": false
+        },
+        {
+          "name": "showDropZone",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Shows dropzone.",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "uploaded",
+          "description": "fires when file(s) have been uploaded",
+          "syntax": "@uploaded=\"\""
+        },
+        {
+          "name": "error",
+          "description": "fires when something went wrong.",
+          "syntax": "@error=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": []
+    },
+    {
+      "id": 70,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
       "category": "",
       "path": "",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "",

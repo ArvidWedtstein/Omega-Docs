@@ -190,107 +190,16 @@ function isSelfClosingTag(tagName: string, htmlString: string, tagEnd: number) {
     const selfClosingTags = ['br', 'img', 'input', 'hr', 'meta'];
     const tagContent = htmlString.substring(tagEnd - tagName.length - 1, tagEnd).trim();
 
-    return tagContent.endsWith('/');
+    return tagContent.endsWith('/') || selfClosingTags.includes(tagName);
 }
 
 
-onMounted(() => {
-  if (vProps.code) {
-    console.log(vProps.code,parseHTML(vProps.code))
-  }
-});
-const convertHTMLToAST = (pHTML: string, pTestMode: boolean = false) => {
-    // Regular expression to match tags and attributes
-    const tagRegex = /<([a-zA-Z0-9\-]+)([^>]*)>(.*?)<\/\1>|<([a-zA-Z0-9\-]+)([^>]*)\/?>|([^<>]+)/g;
-    const attrRegex = /([^\s=]+)(?:\s*=\s*(['"])(.*?)\2)?/g;
+// onMounted(() => {
+//   if (vProps.code) {
+//     console.log(vProps.code,parseHTML(vProps.code))
+//   }
+// });
 
-    const fixCase = (pText: string, pHTMLString: string = pHTML) => {
-        const vRegex = new RegExp(pText, 'i');
-        const vMatch = pHTMLString.match(vRegex);
-        return vMatch ? vMatch[0] : pText;
-    }
-    
-    // Function to parse attributes
-    const parseAttributes = (pAttributeString: string) => {
-        const attributes: any = {};
-        let match;
-        while ((match = attrRegex.exec(pAttributeString)) !== null) {
-          const [, attributeName, _, attributeValue] = match;
-          if (attributeName !== "/") {
-            attributes[attributeName] = attributeValue === undefined ? null : attributeValue;
-          }
-        }
-        return attributes;
-    }
-
-
-
-    // Recursive function to parse nodes
-    let loops = 0
-    const parseNodes = (pHTML: string): ASTNode[] | null => {
-        if (loops > 50) return null
-
-        let vJSON: ASTNode[] = [];
-        let vMatch;
-
-        while ((vMatch = tagRegex.exec(pHTML)) !== null) {
-          const vTag = vMatch[1] || vMatch[4]; // Check which capture group matched
-          const attributes = vMatch[2] || vMatch[5] ? parseAttributes(vMatch[2] || vMatch[5]) : {};
-          const content = vMatch[3] || ''; // Inner content if available
-          const isTextNode = (!!vMatch[6] || !content.startsWith('<')) && !vTag;
-          const isSelfClosing = !!vMatch[5]
-          
-          if (pTestMode) console.log(vTag, content, isTextNode)
-
-          if (vTag) {
-              let node: ASTNode = {
-                  tagName: fixCase(vTag.toLowerCase(), vMatch[0]),
-                  attributes: attributes,
-                  children: [],
-                  isSelfClosing: isSelfClosing,
-                  content: null
-              };
-
-              if (content && content !== "") {
-                
-                if (!content.startsWith('<') && !content.includes('<') ) {
-                  node.children = [{
-                    tagName: 'TextNode',
-                    attributes: {},
-                    children: [],
-                    isSelfClosing: isSelfClosing,
-                    content: content.trim()
-                  }]
-                } else {
-                  if (pTestMode) console.log(content.split(/(?=<[^/])/).flatMap(parseNodes))
-
-                  node.children = (content.split(/(?=<[^/])/).flatMap(parseNodes).filter(vNode => vNode !== null) as ASTNode[]);
-                  node.children = (content.split(/(?=<[^/])/).flatMap(parseNodes).filter(vNode => vNode !== null) as ASTNode[]);
-                }
-              }
-
-              vJSON.push(node);
-          } else if (isTextNode) { // Text node
-              // Trim whitespace from text nodes
-              const textNode = vMatch[6].trim();
-              if (textNode) {
-                vJSON.push({
-                  tagName: 'TextNode',
-                  attributes: {},
-                  children: [],
-                  isSelfClosing: isSelfClosing,
-                  content: textNode
-                });
-              }
-          }
-        } 
-        loops++;
-
-        return vJSON.length > 0 ? vJSON.slice(0, vJSON.some((vNode) => vNode.content !== null) ? 2 : 1) : null
-    }
-
-    return parseNodes(pHTML);
-}
 
 const jsonToFormattedText = (pJSON: ASTNode[], pIndentLevel = 0) => {
     const indent = ' '.repeat(2); // 2 spaces for each indent level

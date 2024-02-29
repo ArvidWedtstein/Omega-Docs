@@ -5,78 +5,159 @@
         <CodeBlock style="height: 300px" language="html" :code="vGeneratedCode" />
       </div>
       <div class="col-4 ps-0">
-        <ul
-          v-if="tab"
-          class="overflow-y-auto list-group text-start rounded-start-none overflow-x-hidden"
-          style="
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            max-height: 300px;
-          "
-        >
-          <li
-            class="list-group-item d-flex align-items-center"
-            v-for="(
-              {
-                name,
-                description,
-                example,
-                type,
-                default: defaultValue,
-                ...other
-              },
-              vIndex
-            ) in vSelectableElements"
-            :key="vIndex"
-          >
-            <input
-              class="form-check-input me-2"
-              type="checkbox"
-              :value="name"
-              @change="
-                togglePropSelection({
-                  name,
-                  description,
-                  type,
-                  example,
-                  default: defaultValue,
-                  ...other,
-                })
-              "
-              :id="`checkbox-${name}`"
-            />
-            <label
-              class="form-check-label flex-grow-1"
-              :for="`checkbox-${name}`"
-              >{{ name }}</label
+        <div class="accordion overflow-y-auto accordion-flush" id="codebuilder" style="
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          max-height: 300px;
+        ">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProps" aria-expanded="true" aria-controls="collapseProps">
+                Props
+              </button>
+            </h2>
+            <div id="collapseProps" class="accordion-collapse collapse show" data-bs-parent="#codebuilder">
+              <ul
+              class="list-group rounded-0 text-start rounded-start-none overflow-x-hidden"
             >
-            <!-- <button
-              class="btn btn-sm btn-outline-secondary align-self-end"
-              type="button"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                width="20"
-                fill="currenntColor"
+              <li
+                class="list-group-item d-flex align-items-center"
+                v-for="(
+                  {
+                    name,
+                    description,
+                    example,
+                    type,
+                    default: defaultValue,
+                    ...other
+                  },
+                  vIndex
+                ) in vSelectableProps"
+                :key="vIndex"
               >
-                <path
-                  d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm169.8-90.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"
+                <input
+                  class="form-check-input me-2"
+                  type="checkbox"
+                  :value="name"
+                  @change="
+                    toggleSelection('props', {
+                      name,
+                      description,
+                      type,
+                      example,
+                      default: defaultValue,
+                      ...other,
+                    })
+                  "
+                  :id="`checkbox-props-${name}`"
                 />
-              </svg>
-            </button> -->
-          </li>
-        </ul>
+                <label
+                  class="form-check-label flex-grow-1"
+                  :for="`checkbox-props-${name}`"
+                  >{{ name }}</label
+                >
+              </li>
+            </ul>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSlots" aria-expanded="false" aria-controls="collapseSlots">
+                Slots
+              </button>
+            </h2>
+            <div id="collapseSlots" class="accordion-collapse collapse" data-bs-parent="#codebuilder">
+              <ul
+                class="list-group rounded-0 text-start rounded-start-none overflow-x-hidden"
+              >
+                <li
+                  class="list-group-item d-flex align-items-center"
+                  v-for="(
+                    {
+                      name,
+                      description,
+                      template,
+                    },
+                    vIndex
+                  ) in vSelectableSlots"
+                  :key="vIndex"
+                >
+                  <input
+                    class="form-check-input me-2"
+                    type="checkbox"
+                    :value="name"
+                    @change="
+                      toggleSelection('slots', {
+                        name,
+                        description,
+                        template
+                      })
+                    "
+                    :id="`checkbox-slot-${name}`"
+                  />
+                  <label
+                    class="form-check-label flex-grow-1"
+                    :for="`checkbox-slot-${name}`"
+                    >{{ name }}</label
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEvents" aria-expanded="false" aria-controls="collapseEvents">
+                Events
+              </button>
+            </h2>
+            <div id="collapseEvents" class="accordion-collapse collapse" data-bs-parent="#codebuilder">
+              <ul
+                class="list-group rounded-0 text-start rounded-start-none overflow-x-hidden"
+              >
+                <li
+                  class="list-group-item d-flex align-items-center"
+                  v-for="(
+                    {
+                      name,
+                      description,
+                      syntax
+                    },
+                    vIndex
+                  ) in vSelectableEvents"
+                  :key="vIndex"
+                >
+                  <input
+                    class="form-check-input me-2"
+                    type="checkbox"
+                    :value="name"
+                    @change="
+                      toggleSelection('events', {
+                        name,
+                        description,
+                        syntax
+                      })
+                    "
+                    :id="`checkbox-events-${name}`"
+                  />
+                  <label
+                    class="form-check-label flex-grow-1"
+                    :for="`checkbox-events-${name}`"
+                    >{{ name }}</label
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, ref, computed, onMounted } from "vue";
+import { watch, ref, onMounted, onBeforeUnmount } from "vue";
 import CodeBlock from "./CodeBlock.vue";
-import type { Tab } from "@/App.vue";
-
+import Components, { type Tab, type CodeBuilderShortcuts } from "@/components";
 
 // TODO: fix code rerendering on tab change
 /**
@@ -86,45 +167,80 @@ export type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 const vProps = defineProps<{
-  tab: NonNullable<Tab>;
+  component: NonNullable<Tab>;
 }>();
 
-const vSelectableElements = ref<Tab["props"]>([]);
-const vSelectedElements = ref<NonNullable<Tab["props"]>>([]);
+const vSelectableProps = ref<Tab["props"]>([]);
+const vSelectableSlots = ref<Tab["slots"]>([]);
+const vSelectableEvents = ref<Tab["events"]>([]);
+const vSelectedElements = ref<Array<any>>([]);
 const vGeneratedCode = ref<string>("");
 
-const togglePropSelection = (pProp: ArrayElement<NonNullable<Tab["props"]>>) => {
-  const propIndex = vSelectedElements.value.findIndex(selectedProp => selectedProp.name === pProp.name);
-  if (propIndex !== -1) {
-    vSelectedElements.value.splice(propIndex, 1); // Remove prop if already selected
+const toggleSelection = (pType: 'slots' | 'props' | 'events', pElement: ArrayElement<NonNullable<Tab["props"]>> | ArrayElement<NonNullable<Tab["slots"]>> | ArrayElement<NonNullable<Tab["events"]>>) => {
+  const vElementIndex = vSelectedElements.value.findIndex(pSelectedElement => pSelectedElement.name === pElement.name);
+  if (vElementIndex !== -1) {
+    vSelectedElements.value.splice(vElementIndex, 1); // Remove prop if already selected
   } else {
-    vSelectedElements.value.push(pProp); // Add prop if not selected
+    vSelectedElements.value.push({
+      elementType: pType,
+      ...pElement
+    }); // Add prop if not selected
   }
 };
 
-watch(() => vProps.tab.id, () => {
+watch(() => vProps.component.id, () => {
   vSelectedElements.value = [];
 
-  const vIsComponent = vProps.tab.type === 'Component';
+  const vIsComponent = vProps.component.type === 'Component';
   
-  vSelectableElements.value = vIsComponent
-                    ? vProps.tab.props 
-                    : vProps.tab.params || []
+  vSelectableProps.value = vIsComponent
+                    ? vProps.component.props 
+                    : vProps.component.params || []
+  vSelectableSlots.value = vProps.component.slots;
+  vSelectableEvents.value = vProps.component.events;
 }, { deep: true });
 
+
+const handleShortCut = (pEvent: KeyboardEvent) => {
+// if ()
+if (pEvent.altKey && pEvent.key === 'c') {
+  vSelectedElements.value.push({
+    elementType: 'nodes',
+    element: `<${Components.find((pComponent) => pComponent.id === 5)?.name} field="" sortable :headerName=""  />`
+  })
+}
+}
+
+
 watch(() => vSelectedElements, () => {
-  vGeneratedCode.value = `<${vProps.tab.name}\n${vSelectedElements.value.map((prop) => ` ${prop.type === 'Boolean' && (prop.default?.toLowerCase() === 'true' || prop.default?.toLowerCase() === 'false') ? ':' : ''}${prop.name}="${prop.default !== "null" ? prop.default : ""}"`).join("\n")} />`;
+  const vSelectedProps: NonNullable<Tab["props"]> = vSelectedElements.value.filter(pElement => pElement.elementType === 'props').sort((a,b) => (a?.name || "").localeCompare(b.name || "")) || [];
+  const vSelectedSlots: NonNullable<Tab["slots"]> = vSelectedElements.value.filter(pElement => pElement.elementType === 'slots').sort((a,b) => (a?.name || "").localeCompare(b.name || "")) || [];
+  const vSelectedEvents: NonNullable<Tab["events"]> = vSelectedElements.value.filter(pElement => pElement.elementType === 'events').sort((a,b) => (a?.name || "").localeCompare(b.name || "")) || [];
+  const vSelectedNodes: string[] = vSelectedElements.value.filter(pElement => pElement.elementType === 'nodes').map(pNode => pNode.element) || [];
+  
+  vGeneratedCode.value = `<${vProps.component.name}\n${vSelectedProps.map((prop) => ` ${prop.type === 'Boolean' && (prop.default?.toLowerCase() === 'true' || prop.default?.toLowerCase() === 'false') ? ':' : ''}${prop.name}="${prop.default !== "null" ? prop.default : ""}"`).join(" ")} ${vSelectedEvents.map((pEvent) => pEvent.syntax).join(' ')} ${vSelectedSlots.length > 0 || vSelectedNodes.length > 0 ? `>${vSelectedSlots.map((pSlot) => `<template ${pSlot.template}></template>`).join('')}${vSelectedNodes.join(' ')}</${vProps.component.name}>` : ' />'}`;
 }, { deep: true });
 
 onMounted(() => {
   vSelectedElements.value = [];
 
-  vSelectableElements.value = vProps.tab.type === 'Component' 
-                    ? vProps.tab.props 
+  vSelectableProps.value = vProps.component.type === 'Component' 
+                    ? vProps.component.props 
                     : []
+  
+  vSelectableSlots.value = vProps.component.slots;
+  vSelectableEvents.value = vProps.component.events;
 
-  vGeneratedCode.value = `<${vProps.tab.name}\n${vSelectedElements.value.map((prop) => ` ${prop.type === 'Boolean' ? ':' : ''}${prop.name}="${prop.default !== "null" ? prop.default : ""}"`).join("\n")} />`;
+  if ((vProps.component.codebuilder_shortcuts || []).length > 0) {
+    document.addEventListener('keyup', handleShortCut);
+  }
 });
+
+onBeforeUnmount(() => {
+  if ((vProps.component.codebuilder_shortcuts || []).length > 0) {
+    document.removeEventListener('keyup', handleShortCut)
+  }
+})
 </script>
 
 <style scoped></style>
