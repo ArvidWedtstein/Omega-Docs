@@ -7,6 +7,7 @@ type ArrayElement<ArrayType extends readonly unknown[]> =
 export interface CodeBuilderShortcuts {
   keys: string[];
   component_id: number;
+  props?: Property["name"][]
 }
 interface Event {
   name: string;

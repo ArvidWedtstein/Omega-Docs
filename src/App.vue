@@ -34,10 +34,7 @@
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
               <template #title>
                 <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#snippets" type="button" role="button" aria-expanded="false" aria-controls="snippets">
-                  <span>
-                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.snippets?.length }}</span>
                     Snippets
-                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -107,14 +104,10 @@
               </PropSelector>
             </Section>
 
-
             <Section v-if="selectedTab?.props?.length" title="Props">
               <template #title>
                 <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#props" role="button" aria-expanded="false" aria-controls="props">
-                  <span>
-                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.props?.length }}</span>
                     Props
-                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -283,10 +276,7 @@
             <Section v-if="selectedTab?.events?.length" title="Events">
               <template #title>
                 <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#events" role="button" aria-expanded="false" aria-controls="events">
-                  <span>
-                    <span class="badge border border-secondary text-secondary rounded-pill me-2 mb-0">{{ selectedTab?.events?.length }}</span>
                     Events
-                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -432,10 +422,7 @@
             <Section v-if="selectedTab?.exposes?.length" title="Exposes">
               <template #title>
                 <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#exposes" role="button" aria-expanded="false" aria-controls="exposes">
-                  <span>
-                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.exposes?.length }}</span>
                     Exposes
-                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
@@ -548,10 +535,7 @@
             <Section v-if="selectedTab?.slots?.length" title="Slots">
               <template #title>
                 <a class="h5 d-flex justify-content-between align-items-center mb-0" data-bs-toggle="collapse" href="#slots" role="button" aria-expanded="false" aria-controls="slots">
-                  <span>
-                    <span class="badge border border-secondary text-secondary rounded-pill me-2">{{ selectedTab?.slots?.length }}</span>
                     Slots
-                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"

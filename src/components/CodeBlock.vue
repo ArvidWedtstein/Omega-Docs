@@ -51,7 +51,7 @@
 
 
     <div class="d-flex h-100">
-      <div v-if="linenumbers" class="me-2 line-numbers">
+      <div v-if="linenumbers" class="me-2 line-numbers bg-dark">
         <div
           v-for="(vLine, vIndex) in vLines"
           :key="vIndex"
@@ -64,10 +64,11 @@
       <div class="text-start flex-grow-1 overflow-auto" ref="vCodeRef">
         <pre
           v-if="code"
-          class="mb-0 h-100"
-          :class=" [`language-${language}`]"
-          style="margin-top: 0; overflow-x: hidden; max-width: 100%;"
-        ><code contenteditable="false" style="overflow-x: hidden; height: 100%" :class=" [language ? `language-${language}` : 'language-html']" tabindex="0" spellcheck="false">{{ disableCodeFormatting ? code : jsonToFormattedText(parseHTML(code) || []) }}</code></pre>
+          class="mb-0 h-100 hljs p-2"
+          :class="[`language-${language}`]"
+          style="margin-top: 0; max-width: 100%;"
+          v-html="hljs.highlight(disableCodeFormatting ? code : jsonToFormattedText(parseHTML(code)), { language: vProps.language }).value"
+        ></pre>
 
         <slot v-else name="code"></slot>
       </div>
@@ -75,8 +76,10 @@
   </figure>
 </template>
 
+
 <script setup lang="ts">
 import { ref, computed, withDefaults, onMounted } from "vue";
+import hljs from 'highlight.js';
 
 export interface Props {
   filename?: string;
@@ -95,12 +98,10 @@ const vProps = withDefaults(defineProps<Props>(), {
 });
 
 
-const vLines = computed(() => {
-  return vCodeRef.value && vProps.linenumbers
-    ? vCodeRef.value["children"][0]["children"][0].innerText.split("\n")
-    : [];
-});
 const vCodeRef = ref();
+const vLines = computed(() => {
+  return vCodeRef.value && vCodeRef?.value["children"].length ? vCodeRef?.value["children"][0]["children"][0].innerText.split('\n') : [] || [];
+});
 
 const onCopy = () => {
   navigator.clipboard.writeText(
@@ -194,11 +195,6 @@ function isSelfClosingTag(tagName: string, htmlString: string, tagEnd: number) {
 }
 
 
-// onMounted(() => {
-//   if (vProps.code) {
-//     console.log(vProps.code,parseHTML(vProps.code))
-//   }
-// });
 
 
 const jsonToFormattedText = (pJSON: ASTNode[], pIndentLevel = 0) => {
@@ -317,14 +313,19 @@ figure:hover .toolbar {
 
 .line-numbers {
   counter-reset: line;
-  padding: 0 0.3rem 0 0;
-  border-right: 1px solid #ddd;
+  /* padding: 0 0.3rem 0 0; */
+  /* border-right: 1px solid #ddd; */
 }
 .line-number {
   counter-increment: line;
-  line-height: 1.77;
-  font-size: 0.75rem;
+  line-height: 1.75;
+  font-family: 'Consolas';
+  font-size: 0.75em;
 }
 
+pre {
+  border-radius: 0;
+  /* background-color: #1b1d1eb3; */
+}
 
 </style>

@@ -1,5 +1,18 @@
 <template>
   <div class="rounded border">
+    <div class="p-2 d-flex flex-wrap gap-3">
+      <nav style="--bs-breadcrumb-divider: '|';">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" v-for="(vShortcut) in component.codebuilder_shortcuts">
+            <span v-for="(vKey, vKeyIndex) in vShortcut.keys">
+              <kbd class="text-capitalize">{{ vKey }}</kbd>
+              <span v-if="vKeyIndex !== vShortcut.keys.length -1"> + </span>
+            </span>
+            <span> = new <strong>{{ Components.find(({ id }) => id === vShortcut.component_id)?.name }}</strong></span>
+          </li>
+        </ol>
+      </nav>
+    </div>
     <div class="row h-100 overflow-hidden" style="height: 300px;">
       <div class="col pe-0 flex-grow-1 h-100 overflow-y-auto">
         <CodeBlock style="height: 300px" language="html" :code="vGeneratedCode" />
@@ -202,13 +215,28 @@ watch(() => vProps.component.id, () => {
 
 
 const handleShortCut = (pEvent: KeyboardEvent) => {
-// if ()
-if (pEvent.altKey && pEvent.key === 'c') {
-  vSelectedElements.value.push({
-    elementType: 'nodes',
-    element: `<${Components.find((pComponent) => pComponent.id === 5)?.name} field="" sortable :headerName=""  />`
+  vProps.component.codebuilder_shortcuts?.forEach((vShortcut) => {
+    const vCriteria: boolean[] = vShortcut.keys.map((vKey) => {
+      if (vKey === 'alt') {
+        return pEvent.altKey;
+      } else {
+        return pEvent.key === vKey.toLowerCase();
+      }
+    });
+
+    if (vCriteria.every((pCriteria) => pCriteria === true)) {
+      const vComponent = Components.find((pComponent) => pComponent.id === vShortcut.component_id);
+      const vProps = vShortcut.props?.map((pPropName) => {
+        const vProp = vComponent?.props.find((pProp) => pProp.name === pPropName);
+
+        return `${pPropName}${vProp?.type !== 'Boolean' ? '=""' : ''}`
+      })
+      vSelectedElements.value.push({
+        elementType: 'nodes',
+        element: `<${vComponent?.name} ${vProps?.join(' ')} />`
+      })
+    }
   })
-}
 }
 
 

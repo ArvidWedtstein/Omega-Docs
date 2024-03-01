@@ -859,7 +859,8 @@
       "codebuilder_shortcuts": [
         {
           "keys": ["alt", "c"],
-          "component_id": 5
+          "component_id": 5,
+          "props": ["field", "sortable", "headerName"]
         }
       ],
       "props": [
@@ -1296,7 +1297,7 @@
         {
           "name": "colId",
           "type": "String",
-          "default": "field",
+          "default": "null",
           "description": "ptional unique id used for unbound columns.  ",
           "example": "",
           "required": false
@@ -1601,7 +1602,7 @@
           "name": "headerName",
           "type": "String",
           "default": "null",
-          "description": "",
+          "description": "name for header cell",
           "required": false
         },
         {
@@ -1904,6 +1905,13 @@
       "category": "Lookup",
       "path": "o365.vue.components.DataLookup.vue",
       "pathtype": "Direct",
+      "codebuilder_shortcuts": [
+        {
+          "keys": ["alt", "c"],
+          "component_id": 5,
+          "props": ["field", "sortable", "headerName"]
+        }
+      ],
       "snippets": [
         {
           "title": "Example",
@@ -6117,6 +6125,134 @@
     },
     {
       "id": 70,
+      "name": "getOrCreateProcedure",
+      "description": "",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.vue.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pOptions",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "props": [
+            {
+              "name": "id",
+              "type": "String",
+              "description": "",
+              "required": true
+            },
+            {
+              "name": "procedureName",
+              "type": "String",
+              "description": "",
+              "required": true
+            },
+            {
+              "name": "useAlert",
+              "type": "Boolean",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "useTransation",
+              "type": "Boolean",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "timeout",
+              "type": "Number",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "useStreamRequest",
+              "type": "Boolean",
+              "description": "",
+              "required": false
+            }
+          ],
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "",
+          "content": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "name": "getDataObjectById",
+      "description": "",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.vue.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "",
+          "content": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "name": "getOrCreateDataObject",
+      "description": "",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.vue.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pOptions",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [],
+          "example": "",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "",
+          "content": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "id": 73,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
