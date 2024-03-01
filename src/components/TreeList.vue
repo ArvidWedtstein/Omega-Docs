@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav nav-underline flex-column mb-0 pb-3 pt-1 pb-md-2 pe-lg-2 gap-0 overflow-hidden">
+  <ul class="nav nav-underline flex-column mb-0 pb-3 pt-1 pb-md-2 pe-lg-2 gap-0 overflow-y-hidden flex-nowrap">
     <li v-for="(itemOrCategory, index) in treeData" :key="index" class="nav-item">
       <template v-if="isItem(itemOrCategory)">
         <button
@@ -29,7 +29,8 @@
 import type { PropType } from 'vue';
 import TreeList from './TreeList.vue'
 import type { Category } from './Sidebar.vue';
-import type { Tab } from '@/App.vue';
+import type { Tab } from '@/components';
+
 
 
 defineProps({

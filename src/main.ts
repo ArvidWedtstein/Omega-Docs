@@ -7,7 +7,6 @@ import { createApp } from "vue";
 import App from "./App.vue";
 
 const app = createApp(App).mount("#app");
-
 // import javascript from 'highlight.js/lib/languages/javascript.js';
 // import html from 'highlight.js/lib/languages/html.js';
 // hljs.registerLanguage('javascript', javascript);
