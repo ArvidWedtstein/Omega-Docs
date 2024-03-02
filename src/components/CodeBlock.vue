@@ -1,109 +1,51 @@
 <template>
-  <figure class="mb-0">
+  <figure class="mb-0 overflow-auto bg-dark border border-secondary position-relative">
     <figcaption
-      class="d-flex justify-content-between px-2 py-1 align-items-center bg-black text-light fw-semibold text-start h-100"
+      class="position-sticky top-0 left-0 right-0 row m-0 bg-dark"
       v-if="filename"
     >
-      <span>{{ filename }}</span>
-
-      <button
-        class="btn d-inline-flex justify-content-center align-items-center text-light"
-        style="width: 40px; height: 40px"
-        type="button"
-        @click="onCopy"
-      >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            fill="currentColor"
-            v-if="!vCopiedCode"
-          >
-            <path
-              d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"
-            />
-          </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-          </svg>
-      </button>
-    </figcaption>
-
-    <div v-else class="toolbar d-flex flex-row gap-2 align-items-center">
-      <span v-if="language" class="d-inline-block badge rounded-pill bg-warning text-dark" style="opacity: 50%;">{{ language }}</span>
-      <div class="d-inline-block" v-if="!disableCopy">
-        <button
-          class="btn d-inline-flex justify-content-center align-items-center text-light"
-          style="
-            width: 40px;
-            height: 40px;
-          "
-          type="button"
-          @click="onCopy"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            fill="currentColor"
-            v-if="!vCopiedCode"
-          >
-            <path
-              d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"
-            />
-          </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-          </svg>
-        </button>
+      <div class="col-6 mt-0 px-0 d-flex gap-3 user-select-none">
+        <div class="btn-group">
+          <span v-if="filename" class="p-2 text-start fw-semibold">{{ filename }}</span>
+        </div>
+        <slot name="toolbar"></slot>
       </div>
-    </div>
 
-    <div class="row mt-0">
-      <div class="col-6 btn-group mt-0 mb-0" style="list-style-type: none;">
-        <button type="button" class="btn btn-outline-primary" style="border-radius: 0">Right</button>
-        <button type="button" class="btn btn-outline-primary" style="border-radius: 0">Right</button>
-        <button type="button" class="btn btn-outline-primary" style="border-radius: 0">Right</button>
-      </div>
-      <div class="col-6 btn-group">
-        <button type="button" class="btn btn-outline-primary" style="border-radius: 0; max-height: 40px">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            fill="currentColor"
-            width="16" height="16"
-            v-if="!vCopiedCode"
-          >
-            <path
-              d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"
-            />
-          </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-    <div class="d-flex h-100">
-      <div v-if="linenumbers" class="me-2 line-numbers bg-dark">
-        <div
-          v-for="(vLine, vIndex) in vLines"
-          :key="vIndex"
-          class="line-number"
-          style="user-select: none"
-        >
-          {{ vIndex + 1 }}
+      <div class="col-6 mt-0 px-0 d-flex justify-content-end">
+        <div class="btn-group">
+          <div class="d-flex justify-content-center align-items-center px-2 py-1" v-if="language">
+            <span class="badge text-bg-warning opacity-50">{{ language }}</span>
+          </div>
+          <button type="button" class="btn text-light" style="border-radius: 0;  max-height: 40px" @click="onCopy">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
+              fill="currentColor"
+              width="16" height="16"
+              v-if="!vCopiedCode"
+            >
+              <path
+                d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"
+              />
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+              <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+            </svg>
+          </button>
         </div>
       </div>
-      <div class="text-start flex-grow-1 overflow-auto" ref="vCodeRef">
+    </figcaption>
+    
+    <div class="d-flex w-100 h-100 flex-grow-1" ref="vCodeRef">
         <pre
           v-if="code"
-          class="mb-0 h-100 hljs p-2 border border-secondary"
+          class="mb-0 h-100 hljs p-2 text-start flex-grow-1"
           :class="[`language-${language}`]"
           style="margin-top: 0; max-width: 100%;"
           v-html="hljs.highlight(disableCodeFormatting ? code : jsonToFormattedText(parseHTML(code)), { language: vProps.language }).value"
         ></pre>
 
         <slot v-else name="code"></slot>
-      </div>
     </div>
   </figure>
 </template>
@@ -113,17 +55,16 @@
 import { ref, computed, withDefaults, onMounted } from "vue";
 import hljs from 'highlight.js';
 
+
 export interface Props {
   filename?: string;
   language?: string;
-  linenumbers?: boolean;
   code?: string;
   disableCopy?: boolean;
   disableCodeFormatting?: boolean;
 }
 const vProps = withDefaults(defineProps<Props>(), {
   filename: "",
-  linenumbers: false,
   language: "html",
   disableCopy: false,
   disableCodeFormatting: false,
@@ -132,14 +73,11 @@ const vProps = withDefaults(defineProps<Props>(), {
 const vCopiedCode = ref<boolean>(false);
 
 const vCodeRef = ref();
-const vLines = computed(() => {
-  return vCodeRef.value && vCodeRef?.value["children"].length ? vCodeRef?.value["children"][0]["children"][0].innerText.split('\n') : [] || [];
-});
 
 const onCopy = () => {
   vCopiedCode.value = true;
   navigator.clipboard.writeText(
-    vCodeRef.value["children"][0]["children"][0].innerText,
+    vProps.code || vCodeRef.value["children"][0]["children"][0].innerText,
   );
 
   setTimeout(() => {
@@ -156,24 +94,24 @@ type ASTNode = {
   content: string | null;
 }
 
-function parseHTML(htmlString: string) {
+const parseHTML = (pHtmlString: string) => {
     const root = { tagName: 'root', attributes: {}, children: [], isSelfClosing: false, content: '' };
     const stack: ASTNode[] = [root];
-    let currentNode: any = root;
+    let currentNode: ASTNode = root;
 
-    for (let i = 0; i < htmlString.length; i++) {
-        const char = htmlString[i];
+    for (let i = 0; i < pHtmlString.length; i++) {
+        const char = pHtmlString[i];
 
         if (char === '<') {
             const tagStart = i;
-            let tagEnd = htmlString.indexOf('>', tagStart);
+            let tagEnd = pHtmlString.indexOf('>', tagStart);
             
             if (tagEnd === -1) {
                 // Invalid HTML, tag not closed properly
                 continue;
             }
 
-            const tagContent = htmlString.substring(tagStart + 1, tagEnd);
+            const tagContent = pHtmlString.substring(tagStart + 1, tagEnd);
             const isClosingTag = tagContent.startsWith('/');
 
             if (isClosingTag) {
@@ -182,11 +120,11 @@ function parseHTML(htmlString: string) {
             } else {
                 const [tagName, rawAttributes] = tagContent.split(/\s(.+)?/);
                 const attributes = parseAttributes(rawAttributes);
-                const newElement: ASTNode = { tagName, attributes, children: [], isSelfClosing: isSelfClosingTag(tagName, htmlString, tagEnd), content: null };
+                const newElement: ASTNode = { tagName, attributes, children: [], isSelfClosing: isSelfClosingTag(tagName, pHtmlString, tagEnd), content: null };
 
                 currentNode.children.push(newElement);
 
-                if (!isSelfClosingTag(tagName, htmlString, tagEnd)) {
+                if (!isSelfClosingTag(tagName, pHtmlString, tagEnd)) {
                     stack.push(newElement);
                     currentNode = newElement;
                 }
@@ -345,18 +283,6 @@ figure .toolbar  {
 
 figure:hover .toolbar {
   opacity: 100;
-}
-
-.line-numbers {
-  counter-reset: line;
-  /* padding: 0 0.3rem 0 0; */
-  /* border-right: 1px solid #ddd; */
-}
-.line-number {
-  counter-increment: line;
-  line-height: 1.75;
-  font-family: 'Consolas';
-  font-size: 0.75em;
 }
 
 

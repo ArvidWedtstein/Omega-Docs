@@ -6214,8 +6214,8 @@
       "exposes": [],
       "snippets": [
         {
-          "title": "",
-          "content": "",
+          "title": "Example",
+          "content": "TBA",
           "code": ""
         }
       ]
@@ -6253,6 +6253,90 @@
     },
     {
       "id": 73,
+      "name": "context",
+      "description": "",
+      "type": "Object",
+      "category": "Utilities",
+      "path": "o365.modules.Context.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "id",
+          "type": "Number",
+          "description": "Gets current context id. Can be used as Domain_ID"
+        },
+        {
+          "name": "idPath",
+          "type": "String",
+          "description": "Get current context IdPath"
+        },
+        {
+          "name": "setContext",
+          "type": "Function",
+          "description": "Sets current context",
+          "params": [
+            {
+              "name": "pContext_ID",
+              "type": "Number",
+              "description": "",
+              "required": true
+            },
+            {
+              "name": "pOptions",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "preventSaving",
+                  "type": "Boolean"
+                },
+                {
+                  "name": "userTriggered",
+                  "type": "Boolean",
+                  "description": "Will always be true bc NT. Just kidding. True if user has selected a new Context via the Context selector dropdown (Only used by system)"
+                },
+                {
+                  "name": "contextDropdownItems",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "domain",
+                      "type": "String"
+                    },
+                    {
+                      "name": "domainId",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "orgUnit",
+                      "type": "String"
+                    },
+                    {
+                      "name": "orgUnitId",
+                      "type": "Number"
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ]
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "TBA",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "id": 74,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
