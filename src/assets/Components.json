@@ -736,12 +736,14 @@
         {
           "title": "Error",
           "content": "When displaying alert for error",
-          "code": "alert('Something Went Wrong', 'danger')"
+          "code": "alert('Something Went Wrong', 'danger')",
+          "language": "javascript"
         },
         {
           "title": "Disappear after xTime",
           "content": "When displaying alert for info",
-          "code": "alert('Information', 'info', { autohide: true, timeout: 3000 })"
+          "code": "alert('Information', 'info', { autohide: true, timeout: 3000 })",
+          "language": "javascript"
         }
       ]
     },
@@ -844,7 +846,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "{COMPONENT}({ title: 'Confirm title', message: 'Confirm message to display' }).then(() => { // Handle action confirmed }).catch(() => { // Handle confirm rejected });"
+          "code": "{COMPONENT}({ title: 'Confirm title', message: 'Confirm message to display' }).then(() => { // Handle action confirmed }).catch(() => { // Handle confirm rejected });",
+          "language": "javascript"
         }
       ]
     },
@@ -1247,13 +1250,6 @@
         }
       ],
       "params": [],
-      "snippets": [
-        {
-          "title": "Example",
-          "content": "",
-          "code": "<{COMPONENT} multilineHeader :dataObject=\"\"><{COMPONENT=5} field=\"\" /></{COMPONENT}>"
-        }
-      ],
       "exposes": [
         {
           "name": "dataColumns",
@@ -1274,6 +1270,20 @@
         {
           "name": "getScrollPosition",
           "type": "Function"
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} multilineHeader :dataObject=\"\"><{COMPONENT=5} field=\"\" /></{COMPONENT}>",
+          "language": "html"
+        },
+        {
+          "title": "File Grid Example",
+          "content": "",
+          "code": "<{COMPONENT=68} :dataObject=\"dsFiles\" @error=\"{COMPONENT=2}($t('Something went wrong', 'danger', { autohide: true, timeout: 3000 })\" @uploaded=\"dsFiles.load()\"><{COMPONENT=44}><{COMPONENT} multilineHeader :headerTitle=\"$t('Files')\" :dataObject=\"dsFiles\"><template #cardheader><{COMPONENT=69} :dataObject=\"dsFiles\"><i class=\"bi-upload\"/>{{ $t('Upload files') }}</{COMPONENT=69}></template><{COMPONENT=6} colId=\"FilesGroup\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates /><{COMPONENT=5} field=\"Extension\" width=\"50\" sortable v-slot=\"{ row }\"><{COMPONENT=59} :extension=\"row.Extension\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileName\" width=\"200\" sortable v-slot=\"{ row }\"><{COMPONENT=75} :dataObject=\"dsFiles\" :row=\"row\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileSize\" width=\"100\" sortable v-slot=\"{ row }\">{{ {COMPONENT=76}(row.FileSize) }}</{COMPONENT=5}></{COMPONENT}></{COMPONENT=44}></{COMPONENT=68}>",
+          "language": "html"
         }
       ]
     },
@@ -1893,7 +1903,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />"
+          "code": "<{COMPONENT} colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />",
+          "language": "html"
         }
       ]
     },
@@ -1916,12 +1927,14 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} :dataObject=\"\"v-model=\"\":bind=\"sel=>{}\"></{COMPONENT}>"
+          "code": "<{COMPONENT} :dataObject=\"\"v-model=\"\":bind=\"sel=>{}\"></{COMPONENT}>",
+          "language": "html"
         },
         {
           "title": "Multiselect Lookup",
           "content": "Selected rows can be accessed by passing a function in :bind",
-          "code": "<{COMPONENT} :dataObject=\"\" v-model=\"\" :value=\"vSelectedRowsString\" multiselect :bind=\"sel=>{}\"><{COMPONENT=5} field=\"SomeField\"/></{COMPONENT}>"
+          "code": "<{COMPONENT} :dataObject=\"\" v-model=\"\" :value=\"vSelectedRowsString\" multiselect :bind=\"sel=>{}\"><{COMPONENT=5} field=\"SomeField\"/></{COMPONENT}>",
+          "language": "html"
         }
       ],
       "props": [
@@ -2181,7 +2194,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} displayCommonTasks displayFilters>\n  <template #commonTasks>\n</template>\n  <template #filters>\n</template>\n</{COMPONENT}>"
+          "code": "<{COMPONENT} displayCommonTasks displayFilters>\n  <template #commonTasks>\n</template>\n  <template #filters>\n</template>\n</{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -2301,7 +2315,8 @@
         {
           "title": "Example",
           "content": "Use classes like modal-(sm, md, lg, xl, xxl) to adjust modal size",
-          "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\">{{ $t('Save') }}</button></div></div></div></{COMPONENT}>"
+          "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\">{{ $t('Save') }}</button></div></div></div></{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -2321,7 +2336,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT}>\n</{COMPONENT}>"
+          "code": "<{COMPONENT}>\n</{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -2381,7 +2397,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} :title=\"$t('Example')\" for=\"exampleInput\"><input type=\"text\" id=\"exampleInput\" v-model=\"vExampleValue\"></{COMPONENT}>"
+          "code": "<{COMPONENT} :title=\"$t('Example')\" for=\"exampleInput\"><input type=\"text\" id=\"exampleInput\" v-model=\"vExampleValue\"></{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -2642,7 +2659,8 @@
         {
           "title": "Orders Lookup Example",
           "content": "For use outside of grid. Remove class when using inside {COMPONENT=4}",
-          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Order:')\"><{COMPONENT=40} validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Order:')\"><{COMPONENT=40} validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
         }
       ]
     },
@@ -3583,7 +3601,8 @@
         {
           "title": "Example",
           "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT=40} validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT=40} validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
         }
       ]
     },
@@ -3640,7 +3659,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT} validate :title=\"vSomeNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"></{COMPONENT}></{COMPONENT=11}></div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT} validate :title=\"vSomeNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"></{COMPONENT}></{COMPONENT=11}></div>",
+          "language": "html"
         }
       ]
     },
@@ -3775,12 +3795,14 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT}><{COMPONENT=42} :title=\"$t('Tab 1')\" active>Tab 1 Content</{COMPONENT=42}><{COMPONENT=42}><template #title><i class=\"bi bi-bookmark\"></i> {{$t('Tab 2')}}</template>Tab 2 Content</{COMPONENT=42}></{COMPONENT}>"
+          "code": "<{COMPONENT}><{COMPONENT=42} :title=\"$t('Tab 1')\" active>Tab 1 Content</{COMPONENT=42}><{COMPONENT=42}><template #title><i class=\"bi bi-bookmark\"></i> {{$t('Tab 2')}}</template>Tab 2 Content</{COMPONENT=42}></{COMPONENT}>",
+          "language": "html"
         },
         {
           "title": "Tabs with Url",
           "content": "TBA",
-          "code": ""
+          "code": "",
+          "language": "html"
         }
       ]
     },
@@ -4023,12 +4045,14 @@
         {
           "title": "Horizontal Example",
           "content": "",
-          "code": "<{COMPONENT=45} appContainer>\n  <{COMPONENT=44}>\n\n  </{COMPONENT=44}>\n  <{COMPONENT} width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=45}>"
+          "code": "<{COMPONENT=45} appContainer>\n  <{COMPONENT=44}>\n\n  </{COMPONENT=44}>\n  <{COMPONENT} width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=45}>",
+          "language": "html"
         },
         {
           "title": "Vertical Example",
           "content": "",
-          "code": "<{COMPONENT=44} appContainer>\n  <{COMPONENT=45}>\n\n  </{COMPONENT=45}>\n  <{COMPONENT} height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=44}>"
+          "code": "<{COMPONENT=44} appContainer>\n  <{COMPONENT=45}>\n\n  </{COMPONENT=45}>\n  <{COMPONENT} height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=44}>",
+          "language": "html"
         }
       ],
       "exposes": [
@@ -4595,7 +4619,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} v-model=\"dsYourDataSource.current.Date\" format=\"dd/MM/yyyy\" class=\"form-control\" />"
+          "code": "<{COMPONENT} v-model=\"dsYourDataSource.current.Date\" format=\"dd/MM/yyyy\" class=\"form-control\" />",
+          "language": "html"
         }
       ]
     },
@@ -4645,7 +4670,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<script setup>\nimport { ref } from 'vue';\nimport {COMPONENT} from 'o365.vue.directive.draggable.ts';\n\nconst draggableOptions = ref({\n\t// handle\n\tonPositionChange: onPositionChange\n\t// onDragEnd\n\t// onDragStart\n\t// resetInitialPos\n\t// initialPosition\n\t// stopDragging\n\t// boundingRect\n\t// boundingElement\n\t// boundingRectMargin\n});\n\nfunction onPositionChange(positionDiff, absolutePosition, event) {\nconsole.log(\"left corner\", absolutePosition.left);\nconsole.log(\"top corner\", absolutePosition.top);\n}\n</script><template><div class=\"modal\" v-draggable=\"draggableOptions\"></div></template>"
+          "code": "<script setup>\nimport { ref } from 'vue';\nimport {COMPONENT} from 'o365.vue.directive.draggable.ts';\n\nconst draggableOptions = ref({\n\t// handle\n\tonPositionChange: onPositionChange\n\t// onDragEnd\n\t// onDragStart\n\t// resetInitialPos\n\t// initialPosition\n\t// stopDragging\n\t// boundingRect\n\t// boundingElement\n\t// boundingRectMargin\n});\n\nfunction onPositionChange(positionDiff, absolutePosition, event) {\nconsole.log(\"left corner\", absolutePosition.left);\nconsole.log(\"top corner\", absolutePosition.top);\n}\n</script><template><div class=\"modal\" v-draggable=\"draggableOptions\"></div></template>",
+          "language": "html"
         }
       ]
     },
@@ -4685,7 +4711,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} :dataObject=\"dsWorkflows\" />"
+          "code": "<{COMPONENT} :dataObject=\"dsWorkflows\" />",
+          "language": "html"
         }
       ]
     },
@@ -5099,7 +5126,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} multilineHeader :dataObject=\"\"><{COMPONENT=5} field=\"\" /></{COMPONENT}>"
+          "code": "<{COMPONENT} multilineHeader :dataObject=\"\"><{COMPONENT=5} field=\"\" /></{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -5150,7 +5178,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<[COMPONENT} hideOrgunitsTree contextWhereClause=\"IsDomain = 1\"></{COMPONENT}>"
+          "code": "<[COMPONENT} hideOrgunitsTree contextWhereClause=\"IsDomain = 1\"></{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -5171,7 +5200,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div v-spotlight><div v-for=\"file in dsFiles.data.filter(x=>x.Step_ID == step.ID)\"><a :href=\"'api/file/download/aviw_Workflow_ItemsFiles/'+file.PrimKey+'/'+file.FileName\"></a></div></div>"
+          "code": "<div v-spotlight><div v-for=\"file in dsFiles.data.filter(x=>x.Step_ID == step.ID)\"><a :href=\"`api/file/download/aviw_Workflow_ItemsFiles/${file.PrimKey}/${file.FileName}`\"></a></div></div>",
+          "language": "html"
         }
       ]
     },
@@ -5252,7 +5282,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} v-model=\"row.Alert\" class=\"form-control\"><option value=\"Danger\">Danger</option><option value=\"Warning\">Warning</option><option value=\"Success\">Success</option></{COMPONENT}>"
+          "code": "<{COMPONENT} v-model=\"row.Alert\" class=\"form-control\"><option value=\"Danger\">Danger</option><option value=\"Warning\">Warning</option><option value=\"Success\">Success</option></{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -5298,7 +5329,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div><button class=\"btn btn-primary\" @click=\"show = !show\">Toggle action sheet</button>\n<{COMPONENT} v-model=\"show\"><button @click=\"\">Edit</button><button @click=\"\">Delete</button></{COMPONENT}></div>"
+          "code": "<div><button class=\"btn btn-primary\" @click=\"show = !show\">Toggle action sheet</button>\n<{COMPONENT} v-model=\"show\"><button @click=\"\">Edit</button><button @click=\"\">Delete</button></{COMPONENT}></div>",
+          "language": "html"
         }
       ]
     },
@@ -5464,7 +5496,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div><button class=\"btn btn-primary\" @click=\"show = !show\">Toggle bottom sheet</button>\n<{COMPONENT} v-model=\"show\"><template #title>{{ $t(\"Bottom Sheet Title\") }}</template><template #body><div class=\"p-3\"><button class=\"btn btn-primary\" @click=\"show = false\">Hide bottom sheet</button></div></template></{COMPONENT}></div>"
+          "code": "<div><button class=\"btn btn-primary\" @click=\"show = !show\">Toggle bottom sheet</button>\n<{COMPONENT} v-model=\"show\"><template #title>{{ $t(\"Bottom Sheet Title\") }}</template><template #body><div class=\"p-3\"><button class=\"btn btn-primary\" @click=\"show = false\">Hide bottom sheet</button></div></template></{COMPONENT}></div>",
+          "language": "html"
         }
       ]
     },
@@ -5507,7 +5540,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} :fileName=\"excel.pdf\" />"
+          "code": "<{COMPONENT} :fileName=\"excel.pdf\" />",
+          "language": "html"
         }
       ]
     },
@@ -5561,7 +5595,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} class=\"form-control\" @onSearch=\"search\" />"
+          "code": "<{COMPONENT} class=\"form-control\" @onSearch=\"search\" />",
+          "language": "html"
         }
       ]
     },
@@ -5591,7 +5626,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} personId=\"102480\" />"
+          "code": "<{COMPONENT} personId=\"102480\" />",
+          "language": "html"
         }
       ]
     },
@@ -5628,7 +5664,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "{COMPONENT}(0.92, '0.0%');"
+          "code": "{COMPONENT}(0.92, '0.0%');",
+          "language": "javascript"
         }
       ]
     },
@@ -5665,7 +5702,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "{COMPONENT}(new Date(), 'Short Time');"
+          "code": "{COMPONENT}(new Date(), 'Short Time');",
+          "language": "javascript"
         }
       ]
     },
@@ -5828,7 +5866,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} :value=\"dsTest.current.OrgUnit\" :dataObject=\"dsOrgUnits\" field=\"Name\" :bind=\"sel => {dsTest.current.OrgUnit = sel.Name; dsTest.current.OrgUnit_ID = sel.ID;}\"/>"
+          "code": "<{COMPONENT} :value=\"dsTest.current.OrgUnit\" :dataObject=\"dsOrgUnits\" field=\"Name\" :bind=\"sel => {dsTest.current.OrgUnit = sel.Name; dsTest.current.OrgUnit_ID = sel.ID;}\"/>",
+          "language": "html"
         }
       ]
     },
@@ -5856,7 +5895,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "{COMPONENT}(\"ID\")"
+          "code": "{COMPONENT}(\"ID\")",
+          "language": "javascript"
         }
       ]
     },
@@ -5894,7 +5934,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "{COMPONENT}(\"ID\", 10000)"
+          "code": "{COMPONENT}(\"ID\", 10000)",
+          "language": "javascript"
         }
       ]
     },
@@ -5927,7 +5968,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "{COMPONENT}(\"ID\")"
+          "code": "{COMPONENT}(\"ID\")",
+          "language": "javascript"
         }
       ]
     },
@@ -6022,7 +6064,8 @@
         {
           "title": "Example",
           "content": "Droparea for {COMPONENT=4}",
-          "code": "<{COMPONENT} :dataObject=\"dsFiles\" @uploaded=\"{COMPONENT=2}($t(`File successfully uploaded`), 'success', { autohide: true, delay: 3000 }); dsFiles.load();\"><{COMPONENT=4} :dataObject=\"dsFiles\"><{COMPONENT=5} sortable class=\"text-center\" width=\"50\" field=\"Extension\" v-slot=\"{ row }\"><{COMPONENT=59} :fileName=\"row.FileName\" /></{COMPONENT=5}><{COMPONENT=5} sortable field=\"FileName\" width=\"400\" /></{COMPONENT=4}></{COMPONENT}>"
+          "code": "<{COMPONENT} :dataObject=\"dsFiles\" @uploaded=\"{COMPONENT=2}($t(`File successfully uploaded`), 'success', { autohide: true, delay: 3000 }); dsFiles.load();\"><{COMPONENT=4} :dataObject=\"dsFiles\"><{COMPONENT=5} sortable class=\"text-center\" width=\"50\" field=\"Extension\" v-slot=\"{ row }\"><{COMPONENT=59} :fileName=\"row.FileName\" /></{COMPONENT=5}><{COMPONENT=5} sortable field=\"FileName\" width=\"400\" /></{COMPONENT=4}></{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -6182,13 +6225,7 @@
         }
       ],
       "exposes": [],
-      "snippets": [
-        {
-          "title": "",
-          "content": "",
-          "code": ""
-        }
-      ]
+      "snippets": []
     },
     {
       "id": 71,
@@ -6212,13 +6249,7 @@
         }
       ],
       "exposes": [],
-      "snippets": [
-        {
-          "title": "Example",
-          "content": "TBA",
-          "code": ""
-        }
-      ]
+      "snippets": []
     },
     {
       "id": 72,
@@ -6243,13 +6274,7 @@
         }
       ],
       "exposes": [],
-      "snippets": [
-        {
-          "title": "",
-          "content": "",
-          "code": ""
-        }
-      ]
+      "snippets": []
     },
     {
       "id": 73,
@@ -6331,12 +6356,147 @@
         {
           "title": "Example",
           "content": "TBA",
-          "code": ""
+          "code": "",
+          "language": "javascript"
         }
       ]
     },
     {
       "id": 74,
+      "name": "GlobalMessenger",
+      "description": "Only works on Apps with parent set on detail app",
+      "type": "Object",
+      "category": "Utilities",
+      "path": "o365.modules.utils.GlobalMessenger.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "on",
+          "type": "Function",
+          "description": "Used in main app.",
+          "params": [
+            {
+              "name": "callback",
+              "type": "Function",
+              "description": "Callback function",
+              "template": "((pMessage) => {})"
+            }
+          ]
+        },
+        {
+          "name": "post",
+          "type": "Object",
+          "description": "Post a event."
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Master App",
+          "content": "",
+          "code": "{COMPONENT}.on((pMessage) => { //Sending custom json from details with action='saved' and refreshing if change happended.if(pMessage && pMessage.action == 'saved'){dsDataSource.recordSource.refreshRowById(currentWorkflow.value);}});",
+          "language": "javascript"
+        },
+        {
+          "title": "Details App",
+          "content": "",
+          "code": "{COMPONENT}.post({ action: 'saved' });",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "name": "AttachmentLink",
+      "description": "Use in files grid. Has integrated image editor.",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.components.AttachmentLink.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "Required to get the attachments data from.",
+          "required": true
+        },
+        {
+          "name": "row",
+          "type": "Object",
+          "default": "null",
+          "description": "Datarow",
+          "required": true
+        },
+        {
+          "name": "groupName",
+          "type": "String",
+          "default": "''",
+          "description": "Will put all items on the page of the same group together in one carousel.",
+          "required": false
+        },
+        {
+          "name": "documentViewer",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Enables or disables the ability to view documents in SpotLight (only images if false)",
+          "required": false
+        },
+        {
+          "name": "imageEditor",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Specifies whether or not the user can edit image attachments.",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT=5} field=\"FileName\" v-slot=\"{ row }\" sortable width=\"400\"><{COMPONENT} :dataObject=\"dsMyFiles\" :row=\"row\" /></{COMPONENT=5}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "name": "formatFileSize",
+      "description": "Formats file size",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.js",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFileSize",
+          "type": "Number",
+          "description": "File size in bytes",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Returns 41.08 KB",
+          "code": "{COMPONENT}(42069)",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 77,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
@@ -6378,7 +6538,8 @@
         {
           "title": "",
           "content": "",
-          "code": ""
+          "code": "",
+          "language": "html"
         }
       ]
     }

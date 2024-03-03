@@ -27,6 +27,7 @@ interface Snippet {
   title: string;
   content?: string | undefined;
   code?: string | undefined;
+  language?: string;
   imports: Array<string> | undefined
 }
 interface Param {

@@ -2,7 +2,7 @@
   <div class="rounded border">
     <div class="row h-100 overflow-hidden" style="height: 300px;">
       <div class="col pe-0 flex-grow-1 h-100 overflow-y-auto">
-        <CodeBlock style="height: 300px" language="html" filename="test.js" :code="vGeneratedCode">
+        <CodeBlock style="height: 300px" language="html" :code="vGeneratedCode">
           <template #toolbar>
             <div class="dropdown" v-if="component.codebuilder_shortcuts" data-bs-theme="dark">
               <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

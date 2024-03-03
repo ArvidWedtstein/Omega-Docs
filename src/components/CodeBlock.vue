@@ -2,7 +2,6 @@
   <figure class="mb-0 overflow-auto bg-dark border border-secondary position-relative">
     <figcaption
       class="position-sticky top-0 left-0 right-0 row m-0 bg-dark"
-      v-if="filename"
     >
       <div class="col-6 mt-0 px-0 d-flex gap-3 user-select-none">
         <div class="btn-group">

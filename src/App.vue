@@ -54,7 +54,7 @@
               <PropSelector class="my-3 collapse" @search="searchValue => onSearchChange(searchValue, 'snippets')" id="snippets" input-id="snippetsinput">
                 <template #list>
                   <ul class="list-group">
-                    <li class="list-group-item" v-for="({ title, content, code, imports }, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                    <li class="list-group-item" v-for="({ title, content, code, imports, language }, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
                       <div class="card bg-transparent border-0">
                         <a class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" :aria-expanded="selectedTab?.snippets.length < 2" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
                           {{ title }}
@@ -78,7 +78,8 @@
                           </div>
 
                           <CodeBlock v-if="imports" class="card-img mb-2" language="javascript" disable-code-formatting :code="imports?.join('\n')" />
-                          <CodeBlock v-if="code" language="html" :code="code" />
+
+                          <CodeBlock v-if="code" :language="language" :code="code" />
                         </div>
                       </div>
                     </li>
@@ -87,7 +88,7 @@
 
                 <template #table>
                   <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 g-3">
-                    <div class="col" v-for="({ title, content, code, imports }, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
+                    <div class="col" v-for="({ title, content, code, imports, language }, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
                       <div class="card shadow-sm">
                         <div class="card-header">
                           <h5 class="card-title">{{ title }}</h5>
@@ -96,7 +97,8 @@
                         <div class="card-body">
                           <p class="card-text">{{ content }}</p>
                         </div>
-                        <CodeBlock class="card-img-bottom" v-if="code" language="html" :code="code" />
+
+                        <CodeBlock v-if="code" :language="language" :code="code" />
                       </div>
                     </div>
                   </div>
