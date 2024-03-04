@@ -73,6 +73,7 @@ const vCopiedCode = ref<boolean>(false);
 
 const vCodeRef = ref();
 
+// TODO: add line whitespace to copy
 const onCopy = () => {
   vCopiedCode.value = true;
   navigator.clipboard.writeText(

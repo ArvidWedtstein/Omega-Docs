@@ -596,6 +596,95 @@
           "required": false
         },
         {
+          "name": "nodeData",
+          "type": "Object",
+          "default": "null",
+          "params": [
+            {
+              "name": "addConfiguration",
+              "type": "Function",
+              "params": [
+                {
+                  "name": "pOptions",
+                  "type": "Object",
+                  "default": "null",
+                  "params": [
+                    {
+                      "name": "type",
+                      "type": "String",
+                      "default": "null",
+                      "example": "groupBy",
+                      "required": true
+                    },
+                    {
+                      "name": "field",
+                      "type": "String | String[]",
+                      "default": "null",
+                      "example": "Field1",
+                      "required": true
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "default": "null",
+              "required": false
+            },
+            {
+              "name": "setGroupBy",
+              "type": "Function",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFields",
+                  "type": "Array",
+                  "default": "[]",
+                  "example": "['Field1', 'Field2', 'Field3']",
+                  "required": true
+                }
+              ],
+              "required": false
+            },
+            {
+              "name": "enable",
+              "type": "Function",
+              "params": [],
+              "default": "null",
+              "required": false
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "createNew",
+          "type": "Function",
+          "description": "Create new item in datasource.",
+          "default": "",
+          "params": [
+            {
+              "name": "pColumns",
+              "type": "Object",
+              "description": "All required fields in datasource.",
+              "required": true
+            },
+            {
+              "name": "pSetCurrentIndex",
+              "type": "Boolean",
+              "default": "true",
+              "description": "Will set current index to newly created item",
+              "required": false
+            },
+            {
+              "name": "pAppendRowCount",
+              "type": "Boolean",
+              "default": "true",
+              "description": "",
+              "required": false
+            }
+          ],
+          "required": false
+        },
+        {
           "name": "refreshRowsByFilter",
           "type": "Function",
           "default": "null",
@@ -2396,8 +2485,8 @@
       "snippets": [
         {
           "title": "Example",
-          "content": "",
-          "code": "<{COMPONENT} :title=\"$t('Example')\" for=\"exampleInput\"><input type=\"text\" id=\"exampleInput\" v-model=\"vExampleValue\"></{COMPONENT}>",
+          "content": "Form Control Example with Input",
+          "code": "<{COMPONENT} :title=\"$t('Example')\" for=\"exampleInput\"><input type=\"text\" id=\"exampleInput\" class=\"form-control\" v-model=\"vExampleValue\"></{COMPONENT}>",
           "language": "html"
         }
       ]
@@ -2414,7 +2503,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Person')\"><{COMPONENT} class=\"form-select\" v-model=\"vPersonName\" :bind=\"sel=>{ vPerson_ID = sel.ID; vPersonName = sel.Name; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 13,
@@ -2470,7 +2566,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Company')\"><{COMPONENT} class=\"form-select\" v-model=\"vCompanyName\" :bind=\"sel=>{ vCompany_ID = sel.ID; vCompanyName = sel.NAme; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 17,
@@ -2484,7 +2587,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Gang')\"><{COMPONENT} class=\"form-select\" v-model=\"vGangName\" :bind=\"sel=>{ vGang_ID = sel.ID; vGangName = sel.Description; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 18,
@@ -2600,11 +2710,51 @@
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.ArticlesLookup.vue",
       "pathtype": "Direct",
-      "props": [],
+      "props": [
+        {
+          "name": ":bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "example": ":bind=\"sel=>{ vArticle_ID = sel.ID }\"",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "DescriptionNOR",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "ShortDescription",
+              "type": "String"
+            },
+            {
+              "name": "Unit",
+              "type": "String"
+            }
+          ]
+        }
+      ],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Article')\"><{COMPONENT=40} validate :title=\"vArticleNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"><{COMPONENT} class=\"form-select\" v-model=\"vArticleDescription\" :bind=\"sel=>{ vArticle_ID = sel.ID; vArticleNo = sel.No; vArticleDescription = sel.Description; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 22,
@@ -2770,7 +2920,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Project No')\"><{COMPONENT=40} validate :title=\"vProjectName\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"><{COMPONENT} class=\"form-select\" v-model=\"vProjectNo\" :bind=\"sel=>{ vProject_ID = sel.ID; vProjectNo = sel.No; vProjectName = sel.ProjectName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 24,
@@ -3354,7 +3511,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Action Type')\"><{COMPONENT} class=\"form-select\" v-model=\"vActionTypeDescription\" :bind=\"sel=>{ vActionType_ID = sel.ID; vActionTypeDescription = sel.Description; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 36,
@@ -3375,7 +3539,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Location')\"><{COMPONENT} class=\"form-select\" v-model=\"vLocationName\" :bind=\"sel=>{ vLocation_ID = sel.ID; vLocationName = sel.Name; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 37,
@@ -3439,7 +3610,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Person')\"><{COMPONENT} class=\"form-select\" v-model=\"vPersonName\" :bind=\"sel=>{ vPerson_ID = sel.ID; vPersonName = sel.Name; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 38,
@@ -3453,7 +3631,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT=40} validate :title=\"vBranchNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"><{COMPONENT} class=\"form-select\" v-model=\"vBranchName\" :bind=\"sel=>{ vBranchNo = sel.No; vBranch_ID = sel.ID; vBranchName = sel.Name; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 39,
@@ -3659,7 +3844,7 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT} validate :title=\"vSomeNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"></{COMPONENT}></{COMPONENT=11}></div>",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('No')\"><{COMPONENT} validate :title=\"vSomeNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"></{COMPONENT}></{COMPONENT=11}></div>",
           "language": "html"
         }
       ]
@@ -4559,6 +4744,27 @@
           "type": "Boolean",
           "default": "false",
           "description": "Toggles UTC date",
+          "required": false
+        },
+        {
+          "name": "inputClassName",
+          "type": "String | CSS classes",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "inputStyle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "date",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
           "required": false
         }
       ],
