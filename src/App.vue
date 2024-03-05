@@ -28,7 +28,7 @@
             </Section>
             
             <Section v-if="selectedTab?.params?.length" title="Syntax">
-              <CodeBlock class="h-100" disable-copy language="javascript" :code="formatParams()" />
+              <CodeBlock class="h-100" disable-code-formatting language="javascript" :code="formatParams()" />
             </Section>
             
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
@@ -79,7 +79,7 @@
 
                           <CodeBlock v-if="imports" class="card-img mb-2" language="javascript" disable-code-formatting :code="imports?.join('\n')" />
 
-                          <CodeBlock v-if="code" :language="language" :code="code" />
+                          <CodeBlock v-if="code" :language="language" :disable-code-formatting="language === 'javascript'" :code="code" />
                         </div>
                       </div>
                     </li>

@@ -1371,7 +1371,7 @@
         {
           "title": "File Grid Example",
           "content": "",
-          "code": "<{COMPONENT=68} :dataObject=\"dsFiles\" @error=\"{COMPONENT=2}($t('Something went wrong', 'danger', { autohide: true, timeout: 3000 })\" @uploaded=\"dsFiles.load()\"><{COMPONENT=44}><{COMPONENT} multilineHeader :headerTitle=\"$t('Files')\" :dataObject=\"dsFiles\"><template #cardheader><{COMPONENT=69} :dataObject=\"dsFiles\"><i class=\"bi-upload\"/>{{ $t('Upload files') }}</{COMPONENT=69}></template><{COMPONENT=6} colId=\"FilesGroup\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates /><{COMPONENT=5} field=\"Extension\" width=\"50\" sortable v-slot=\"{ row }\"><{COMPONENT=59} :extension=\"row.Extension\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileName\" width=\"200\" sortable v-slot=\"{ row }\"><{COMPONENT=75} :dataObject=\"dsFiles\" :row=\"row\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileSize\" width=\"100\" sortable v-slot=\"{ row }\">{{ {COMPONENT=76}(row.FileSize) }}</{COMPONENT=5}></{COMPONENT}></{COMPONENT=44}></{COMPONENT=68}>",
+          "code": "<{COMPONENT=68} :dataObject=\"dsFiles\" @error=\"{COMPONENT=2}($t('Something went wrong'), 'danger', { autohide: true, timeout: 3000 })\" @uploaded=\"dsFiles.load()\"><{COMPONENT=44}><{COMPONENT} multilineHeader :headerTitle=\"$t('Files')\" :dataObject=\"dsFiles\"><template #cardheader><{COMPONENT=69} :dataObject=\"dsFiles\"><i class=\"bi-upload\"/>{{ $t('Upload files') }}</{COMPONENT=69}></template><{COMPONENT=6} colId=\"FilesGroup\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates /><{COMPONENT=5} field=\"Extension\" width=\"50\" sortable v-slot=\"{ row }\"><{COMPONENT=59} :extension=\"row.Extension\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileName\" width=\"200\" sortable v-slot=\"{ row }\"><{COMPONENT=75} :dataObject=\"dsFiles\" :row=\"row\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileSize\" width=\"100\" sortable v-slot=\"{ row }\">{{ {COMPONENT=76}(row.FileSize) }}</{COMPONENT=5}></{COMPONENT}></{COMPONENT=44}></{COMPONENT=68}>",
           "language": "html"
         }
       ]
@@ -2296,6 +2296,7 @@
       "category": "Modal",
       "path": "o365.vue.components.Modal.vue",
       "pathtype": "Direct",
+      "exposes": [],
       "props": [
         {
           "name": "title",
@@ -2376,7 +2377,13 @@
           "required": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "headerAction",
+          "description": "",
+          "template": "#headerAction"
+        }
+      ],
       "events": [
         {
           "name": "shown",
@@ -4230,13 +4237,13 @@
         {
           "title": "Horizontal Example",
           "content": "",
-          "code": "<{COMPONENT=45} appContainer>\n  <{COMPONENT=44}>\n\n  </{COMPONENT=44}>\n  <{COMPONENT} width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=45}>",
+          "code": "<{COMPONENT=45} appContainer><{COMPONENT=44}></{COMPONENT=44}><{COMPONENT} width=\"400px\" expand collapse ref=\"vSizerPanel\"></{COMPONENT}></{COMPONENT=45}>",
           "language": "html"
         },
         {
           "title": "Vertical Example",
           "content": "",
-          "code": "<{COMPONENT=44} appContainer>\n  <{COMPONENT=45}>\n\n  </{COMPONENT=45}>\n  <{COMPONENT} height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </{COMPONENT}>\n</{COMPONENT=44}>",
+          "code": "<{COMPONENT=44} appContainer><{COMPONENT=45}></{COMPONENT=45}><{COMPONENT} height=\"400px\" expand collapse ref=\"vSizerPanel\"></{COMPONENT}></{COMPONENT=44}>",
           "language": "html"
         }
       ],
@@ -4757,13 +4764,6 @@
           "name": "inputStyle",
           "type": "String",
           "default": "null",
-          "description": "",
-          "required": false
-        },
-        {
-          "name": "date",
-          "type": "Boolean",
-          "default": "false",
           "description": "",
           "required": false
         }
@@ -6703,6 +6703,84 @@
     },
     {
       "id": 77,
+      "name": "SendMail",
+      "description": "",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.components.SendMail.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "",
+          "template": "#"
+        }
+      ],
+      "events": [
+        {
+          "name": "after-send",
+          "description": "fires after email has been sent",
+          "syntax": "@after-send=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "refreshDraftEmail",
+          "type": "Function"
+        },
+        {
+          "name": "sendEmail",
+          "type": "Function",
+          "params": [
+            {
+              "name": "mail_id",
+              "type": "Number",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "setEmail",
+          "type": "Function",
+          "params": [
+            {
+              "name": "email",
+              "type": "String",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "",
+          "type": ""
+        },
+        {
+          "name": "",
+          "type": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 78,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
