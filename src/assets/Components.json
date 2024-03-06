@@ -685,11 +685,35 @@
           "required": false
         },
         {
-          "name": "refreshRowsByFilter",
-          "type": "Function",
-          "default": "null",
-          "description": "Refreshed rows by filter",
-          "example": "dsObject.recordSource.refreshRowsByFilter(`[ID] = ${ID}`)",
+          "name": "recordSource",
+          "type": "Object",
+          "description": "",
+          "params": [
+            {
+              "name": "refreshRowsByFilter",
+              "type": "Function",
+              "default": "null",
+              "description": "Refreshed rows by filter",
+              "example": "dsObject.recordSource.refreshRowsByFilter(`[ID] = ${ID}`)",
+              "required": false
+            },
+            {
+              "name": "refreshRow",
+              "type": "Function",
+              "default": "null",
+              "description": "Refreshed rows by index or current row",
+              "example": "dsObject.recordSource.refreshRow()",
+              "params": [
+                {
+                  "name": "index",
+                  "type": "Number",
+                  "default": "null",
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ],
           "required": false
         },
         {
@@ -6709,23 +6733,8 @@
       "category": "WIN",
       "path": "WIN365.vue.components.SendMail.vue",
       "pathtype": "Direct",
-      "props": [
-        {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
-          "example": "",
-          "required": false
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "",
-          "template": "#"
-        }
-      ],
+      "props": [ ],
+      "slots": [],
       "events": [
         {
           "name": "after-send",
@@ -6762,18 +6771,18 @@
           ]
         },
         {
-          "name": "",
-          "type": ""
+          "name": "dsMyEmailsAttachments",
+          "type": "DataObject"
         },
         {
-          "name": "",
-          "type": ""
+          "name": "dsMyDraftEmails",
+          "type": "DataObject"
         }
       ],
       "snippets": [
         {
           "title": "Example",
-          "content": "",
+          "content": "TBA",
           "code": "",
           "language": "html"
         }
@@ -6781,6 +6790,113 @@
     },
     {
       "id": 78,
+      "name": "FroalaEditor",
+      "description": "NB: Remember to include imports for FroalaEditor inside HTML File. \n<link href=\"https://cdn.omega365.com/libs/froala/v.4.0.15/froala_editor.pkgd.min.css\" rel=\"stylesheet\"/>\n<script src=\"https://cdn.omega365.com/libs/froala/v.4.0.15/froala_editor.pkgd.min.js\"></script>",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.froalaeditor.FroalaEditor.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "dataobject with HTMLContent column.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "boxId",
+          "type": "String",
+          "default": "null",
+          "description": "Unique ID for editor",
+          "example": "Test123",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables froalaeditor",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} :dataObject=\"dsMyDataObject\" boxId=\"myBoxId\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "name": "FroalaWithUploadBtn",
+      "description": "Froala editor with support for uploading word files. NB: Does not work yet",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.components.froalaeditor.uploadworddocuments.FroalaWithUploadBtn.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "text",
+          "type": "String",
+          "default": "Upload new Word Document",
+          "description": "Button text",
+          "required": false
+        },
+        {
+          "name": "boxId",
+          "type": "String",
+          "default": "null",
+          "description": "Box ID for froalaeditor",
+          "example": "Description",
+          "required": true
+        },
+        {
+          "name": "dsText",
+          "type": "DataObject",
+          "default": "null",
+          "description": "Data Object for text",
+          "example": "dsMyDataSource",
+          "required": false
+        },
+        {
+          "name": "dsFilesTemp",
+          "type": "DataObject",
+          "default": "null",
+          "description": "Temp table for uploading word files.",
+          "example": "dsGeneralTemp",
+          "required": false
+        },
+        {
+          "name": "beforeUpload",
+          "type": "Function",
+          "default": "null",
+          "description": "Fires before upload",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} :dsText=\"dsMyDataSource\" :dsFilesTemp=\"dsGeneralFilesTemp\" :boxId=\"UniqueId\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 80,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
@@ -6820,7 +6936,7 @@
       ],
       "snippets": [
         {
-          "title": "",
+          "title": "Example",
           "content": "",
           "code": "",
           "language": "html"
