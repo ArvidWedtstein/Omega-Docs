@@ -84,7 +84,7 @@ const onCopy = () => {
 
 const formattedCode = computed(() => {
   if (!vProps.code) return '';
-  if (vProps.disableCodeFormatting) return vProps.code;
+  if (vProps.disableCodeFormatting) return hljs.highlight(vProps.code, { language: vProps.language }).value;
 
   return hljs.highlight(vProps.language.includes('sql') ? formatSQL(vProps.code) : jsonToFormattedText(parseHTML(vProps.code)), { language: vProps.language }).value;
 });

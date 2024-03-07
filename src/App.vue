@@ -693,6 +693,7 @@
 <script setup lang="ts">
 // TODO: update lookup snippets
 // TODO: make view for exposes, params, slots, props params
+// TODO: add concatinatefiles.
 import Components, { generateImportString, type Tab } from "./components";
 import { ref, onBeforeMount } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";

@@ -2449,7 +2449,7 @@
     {
       "id": 10,
       "name": "Form",
-      "description": "",
+      "description": "NB: This component does not actually contain a form element",
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.Form.vue",
