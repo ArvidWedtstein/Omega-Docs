@@ -35,23 +35,21 @@
       </div>
     </figcaption>
     
-    <div class="d-flex w-100 h-100 flex-grow-1" ref="vCodeRef">
-        <pre
-          v-if="code"
-          class="mb-0 h-100 hljs p-2 text-start flex-grow-1"
-          :class="[`language-${language}`]"
-          style="margin-top: 0; max-width: 100%;"
-          v-html="hljs.highlight(disableCodeFormatting ? code : jsonToFormattedText(parseHTML(code)), { language: vProps.language }).value"
-        ></pre>
-
-        <slot v-else name="code"></slot>
+    <div class="d-flex w-100 h-100 flex-grow-1">
+      <pre
+        ref="vCodeRef"
+        class="mb-0 h-100 hljs p-2 text-start flex-grow-1"
+        :class="[`language-${language}`]"
+        style="margin-top: 0; max-width: 100%;"
+        v-html="formattedCode"
+      ></pre>
     </div>
   </figure>
 </template>
 
 
 <script setup lang="ts">
-import { ref, computed, withDefaults, onMounted } from "vue";
+import { ref, computed, withDefaults } from "vue";
 import hljs from 'highlight.js';
 
 
@@ -71,19 +69,26 @@ const vProps = withDefaults(defineProps<Props>(), {
 
 const vCopiedCode = ref<boolean>(false);
 
-const vCodeRef = ref();
+const vCodeRef = ref<HTMLPreElement>();
 
-// TODO: add line whitespace to copy
 const onCopy = () => {
   vCopiedCode.value = true;
   navigator.clipboard.writeText(
-    vProps.code || vCodeRef.value["children"][0]["children"][0].innerText,
+    vCodeRef.value?.innerText || vProps.code || '',
   );
 
   setTimeout(() => {
     vCopiedCode.value = false
   }, 3000)
 };
+
+const formattedCode = computed(() => {
+  if (!vProps.code) return '';
+  if (vProps.disableCodeFormatting) return vProps.code;
+
+  return hljs.highlight(vProps.language.includes('sql') ? formatSQL(vProps.code) : jsonToFormattedText(parseHTML(vProps.code)), { language: vProps.language }).value;
+});
+
 
 
 type ASTNode = {
@@ -273,17 +278,5 @@ figure {
   border-radius: 0.25rem;
   /* background: rgb(55, 55, 55); */
 }
-figure .toolbar  {
-  position: absolute;
-  right: 0.2em;
-  top: 0.3em;
-  opacity: 0;
-  transition: all 100ms ease-in;
-}
-
-figure:hover .toolbar {
-  opacity: 100;
-}
-
 
 </style>

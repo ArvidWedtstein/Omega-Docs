@@ -1397,6 +1397,12 @@
           "content": "",
           "code": "<{COMPONENT=68} :dataObject=\"dsFiles\" @error=\"{COMPONENT=2}($t('Something went wrong'), 'danger', { autohide: true, timeout: 3000 })\" @uploaded=\"dsFiles.load()\"><{COMPONENT=44}><{COMPONENT} multilineHeader :headerTitle=\"$t('Files')\" :dataObject=\"dsFiles\"><template #cardheader><{COMPONENT=69} :dataObject=\"dsFiles\"><i class=\"bi-upload\"/>{{ $t('Upload files') }}</{COMPONENT=69}></template><{COMPONENT=6} colId=\"FilesGroup\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates /><{COMPONENT=5} field=\"Extension\" width=\"50\" sortable v-slot=\"{ row }\"><{COMPONENT=59} :extension=\"row.Extension\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileName\" width=\"200\" sortable v-slot=\"{ row }\"><{COMPONENT=75} :dataObject=\"dsFiles\" :row=\"row\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileSize\" width=\"100\" sortable v-slot=\"{ row }\">{{ {COMPONENT=76}(row.FileSize) }}</{COMPONENT=5}></{COMPONENT}></{COMPONENT=44}></{COMPONENT=68}>",
           "language": "html"
+        },
+        {
+          "title": "Focus Grid Cell",
+          "content": "Code for focusing specific cell in datagrid",
+          "code": "const focusGridCell = (pGridRef, pCellString, pManualFocusElement = false) => {let vCell = pGridRef.dataGridControl.navigation.getCellFromString(pCellString);let vCellElement = pGridRef.dataGridControl.navigation._getCellElement(vCell) if (!pManualFocusElement) { pGridRef.dataGridControl.navigation.setFocus(vCell); vCellElement?.focus(); } return vCellElement; }",
+          "language": "javascript"
         }
       ]
     },
@@ -3921,7 +3927,7 @@
           "name": "hideNavbar",
           "type": "Boolean",
           "default": "false",
-          "description": "",
+          "description": "Hides navbar?",
           "required": false
         },
         {
@@ -3956,7 +3962,7 @@
           "name": "compactViewMode",
           "type": "String",
           "default": "accordion",
-          "description": "",
+          "description": "can be accordion or cards",
           "required": false
         }
       ],
@@ -3983,7 +3989,23 @@
           "type": "Boolean"
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Slot for {COMPONENT=42}'s",
+          "template": "#default"
+        },
+        {
+          "name": "beforeNav",
+          "description": "",
+          "template": "#beforeNav"
+        },
+        {
+          "name": "afterNav",
+          "description": "",
+          "template": "#afterNav"
+        }
+      ],
       "events": [
         {
           "name": "onHide",
@@ -6897,6 +6919,109 @@
     },
     {
       "id": 80,
+      "name": "Url",
+      "description": "Url utilities",
+      "type": "Class",
+      "category": "Utilities",
+      "path": "o365.modules.url.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "href",
+          "type": "string",
+          "description": ""
+        },
+        {
+          "name": "getParam",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "setParam",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "pValue",
+              "type": "any",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "decodeURL",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pUrl",
+              "type": "String",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "decodObject",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pValue",
+              "type": "any",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "setDecodedObject",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "pValue",
+              "type": "any",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "getDecodedObject",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            }
+          ],
+          "description": ""
+        }
+      ],
+      "snippets": []
+    },
+    {
+      "id": 80,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
@@ -6931,7 +7056,8 @@
       "exposes": [
         {
           "name": "",
-          "type": ""
+          "type": "",
+          "description": ""
         }
       ],
       "snippets": [
