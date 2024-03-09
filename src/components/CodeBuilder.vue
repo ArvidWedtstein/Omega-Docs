@@ -229,7 +229,7 @@ const handleShortCut = (pEvent: KeyboardEvent) => {
       if (vKey === 'alt') {
         return pEvent.altKey;
       } else {
-        return pEvent.key === vKey.toLowerCase();
+        return pEvent.key.toLowerCase() === vKey.toLowerCase();
       }
     });
 

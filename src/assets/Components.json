@@ -7021,7 +7021,241 @@
       "snippets": []
     },
     {
-      "id": 80,
+      "id": 81,
+      "name": "getFilesAsync",
+      "description": "opens file in new tab and downloads it. returns true if success or false if something went wrong.",
+      "type": "Function",
+      "category": "WIN/Concatinate",
+      "path": "WIN365.vue.composables.ConcatinateFile.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFiles",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [
+            {
+              "name": "files",
+              "type": "Array",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFile",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "name",
+                      "type": "String",
+                      "description": "Name of report or file",
+                      "required": false
+                    },
+                    {
+                      "name": "filePrimkey",
+                      "type": "String",
+                      "description": "PrimKey of file",
+                      "required": false
+                    },
+                    {
+                      "name": "filter",
+                      "type": "String",
+                      "description": "Filterstring for report",
+                      "required": false
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "pFileName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the file",
+          "example": "",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const gConcatinatedFiles = ref({files: [{ name: \"aviw_aMCCR_ChecklistsSignatures\", filePrimkey: \"e20e9a04-4987-4bc8-acf5-bea7575ba0ee\" },{ name: \"aviw_aDocument_Documents\", filePrimkey: \"615d20c2-4183-44bd-b15c-fe09c6127280\" },{ name: \"arpt_aWorkPermit_WorkPermits\", filter: \"No=6278\" },]})\n{COMPONENT}(gConcatinatedFiles.value, \"test-zip.zip\").then(() => {console.log(\"get done\")})}",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "name": "saveFilesAsync",
+      "description": "",
+      "type": "Function",
+      "category": "WIN/Concatinate",
+      "path": "WIN365.vue.composables.ConcatinateFile.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFiles",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [
+            {
+              "name": "files",
+              "type": "Array",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFile",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "name",
+                      "type": "String",
+                      "description": "Name of report or file",
+                      "required": false
+                    },
+                    {
+                      "name": "filePrimkey",
+                      "type": "String",
+                      "description": "PrimKey of file",
+                      "required": false
+                    },
+                    {
+                      "name": "filter",
+                      "type": "String",
+                      "description": "Filterstring for report",
+                      "required": false
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "pFileName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the file",
+          "example": "",
+          "required": true
+        },
+        {
+          "name": "pViewName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the view",
+          "example": "",
+          "required": true
+        },
+        {
+          "name": "pPrimKey",
+          "type": "String",
+          "default": "null",
+          "description": "For overwriting files.",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const gConcatinatedFiles = ref({files: [{ name: \"aviw_aMCCR_ChecklistsSignatures\", filePrimkey: \"e20e9a04-4987-4bc8-acf5-bea7575ba0ee\" },{ name: \"aviw_aDocument_Documents\", filePrimkey: \"615d20c2-4183-44bd-b15c-fe09c6127280\" },{ name: \"arpt_aWorkPermit_WorkPermits\", filter: \"No=6278\" },]})\n{COMPONENT}(gConcatinatedFiles.value, \"test-save.pdf\", \"atbv_aMCCR_ChecklistsSignatures\").then(() => {console.log(\"save done\")})",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "name": "zipFilesAsync",
+      "description": "zipps files",
+      "type": "Function",
+      "category": "WIN/Concatinate",
+      "path": "WIN365.vue.composables.ConcatinateFile.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFiles",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [
+            {
+              "name": "files",
+              "type": "Array",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFile",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "name",
+                      "type": "String",
+                      "description": "Name of report or file",
+                      "required": false
+                    },
+                    {
+                      "name": "filePrimkey",
+                      "type": "String",
+                      "description": "PrimKey of file",
+                      "required": false
+                    },
+                    {
+                      "name": "filter",
+                      "type": "String",
+                      "description": "Filterstring for report",
+                      "required": false
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "pFileName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the file",
+          "example": "",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const gConcatinatedFiles = ref({files: [{ name: \"aviw_aMCCR_ChecklistsSignatures\", filePrimkey: \"e20e9a04-4987-4bc8-acf5-bea7575ba0ee\" },{ name: \"aviw_aDocument_Documents\", filePrimkey: \"615d20c2-4183-44bd-b15c-fe09c6127280\" },{ name: \"arpt_aWorkPermit_WorkPermits\", filter: \"No=6278\" },]})\n{COMPONENT}(gConcatinatedFiles.value, \"test-save.pdf\", \"atbv_aMCCR_ChecklistsSignatures\").then(() => {console.log(\"save done\")})",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 84,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",

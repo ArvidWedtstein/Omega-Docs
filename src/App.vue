@@ -28,7 +28,7 @@
             </Section>
             
             <Section v-if="selectedTab?.params?.length" title="Syntax">
-              <CodeBlock class="h-100" disable-code-formatting language="javascript" :code="formatParams()" />
+              <CodeBlock class="h-100" language="javascript" :code="formatParams()" />
             </Section>
             
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
@@ -694,6 +694,7 @@
 // TODO: update lookup snippets
 // TODO: make view for exposes, params, slots, props params
 // TODO: add concatinatefiles.
+// TODO: check shortcuts in codebuilder
 import Components, { generateImportString, type Tab } from "./components";
 import { ref, onBeforeMount } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";

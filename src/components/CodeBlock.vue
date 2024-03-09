@@ -86,7 +86,7 @@ const formattedCode = computed(() => {
   if (!vProps.code) return '';
   if (vProps.disableCodeFormatting) return hljs.highlight(vProps.code, { language: vProps.language }).value;
 
-  return hljs.highlight(vProps.language.includes('sql') ? formatSQL(vProps.code) : jsonToFormattedText(parseHTML(vProps.code)), { language: vProps.language }).value;
+  return hljs.highlight(vProps.language.includes('sql') ? formatSQL(vProps.code) : vProps.language.includes('javascript') ? formatJavascript(vProps.code) : jsonToFormattedText(parseHTML(vProps.code)), { language: vProps.language }).value;
 });
 
 
@@ -221,6 +221,53 @@ const jsonToFormattedText = (pJSON: ASTNode[], pIndentLevel = 0) => {
     return vText;
 }
 
+const formatJavascript = (pText: string) => {
+    let formattedCode = "";
+    let indentLevel = 0;
+    const tabSize = 4;
+    const newline = "\n";
+    const indentString = " ".repeat(tabSize);
+
+    // Split code by lines
+    const lines: string[] = pText.split(newline);
+
+    // Check if the first line contains parentheses or brackets
+    const firstLineContainsParenthesesOrBrackets = lines[0].includes('(') || lines[0].includes('[');
+
+    lines.forEach((line, index) => {
+        // Count leading whitespaces
+        const leadingWhitespace = line.match(/^\s*/)![0];
+
+        // Ignore empty lines
+        if (line.trim() === "") return;
+
+
+        // Count opening and closing parentheses and brackets
+        const openParentheses = (line.match(/\(/g) || []).length;
+        const closeParentheses = (line.match(/\)/g) || []).length;
+        const openBrackets = (line.match(/\[/g) || []).length;
+        const closeBrackets = (line.match(/\]/g) || []).length;
+        const indentChange = openParentheses + openBrackets - closeParentheses - closeBrackets;
+
+        // Adjust the indentation level
+        if (index !== 0 || !firstLineContainsParenthesesOrBrackets || indentChange !== 0) {
+            indentLevel += indentChange;
+
+            // Ensure indentation level is not negative
+            indentLevel = Math.max(0, indentLevel);
+        }
+
+        // Append the line with proper indentation
+        formattedCode += leadingWhitespace.trim() + indentString.repeat(indentLevel) + line.trim();
+
+        // Add newline except for the last line
+        if (index < lines.length - 1) {
+            formattedCode += newline;
+        }
+    });
+
+    return formattedCode.trimStart()
+}
 
 function formatSQL(rawSQL: string) {
     // Split the SQL string into individual tokens
