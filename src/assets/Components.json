@@ -6,6 +6,7 @@
       "description": "",
       "type": "Class",
       "path": "",
+      "pathtype": "Direct",
       "category": "Data",
       "props": [
         {
@@ -181,6 +182,40 @@
             {
               "name": "distinctOptions",
               "type": "Array"
+            },
+            {
+              "name": "activeFilter",
+              "type": "String"
+            },
+            {
+              "name": "activeFilterObject",
+              "type": "Object"
+            },
+            {
+              "name": "filterString",
+              "type": "String"
+            },
+            {
+              "name": "getItem",
+              "type": "Function",
+              "params": [
+                {
+                  "name": "Field",
+                  "type": "String"
+                }
+              ],
+              "returns": [
+                {
+                  "name": "operator",
+                  "type": "String",
+                  "template": "between | contains | begin | inlist | notinlist | equals | dateequals | notequals | datenotequals | greaterthanorequal | greaterthan | lessthan | isfalse | istrue | isnull | isnotnull | isblank | isnotblank"
+                },
+                {
+                  "name": "selectedValue",
+                  "type": "String",
+                  "description": "Filterstring basically. Use 'isfalse' or 'istrue' for boolean/bit values instead of 1 and 0"
+                }
+              ]
             }
           ],
           "required": false
@@ -296,13 +331,18 @@
           "params": [
             {
               "name": "fieldName",
+              "description": "Name of field that was changed",
               "type": "String"
             },
             {
-              "name": "newValue"
+              "name": "newValue",
+              "description": "New Value of field",
+              "type": "any"
             },
             {
-              "name": "oldValue"
+              "name": "oldValue",
+              "description": "Value of field before it was touched",
+              "type": "any"
             },
             {
               "name": "currentValues"
@@ -541,7 +581,7 @@
       "exposes": [
         {
           "name": "reshiftItem",
-          "type": "function",
+          "type": "Function",
           "default": "",
           "description": "Reshifts items to new position.",
           "example": "dsWorkflows.reshiftItem(vIndexOfItem, vNewIndex)",
@@ -554,6 +594,201 @@
           "description": "",
           "example": "",
           "required": false
+        },
+        {
+          "name": "nodeData",
+          "type": "Object",
+          "default": "null",
+          "params": [
+            {
+              "name": "addConfiguration",
+              "type": "Function",
+              "params": [
+                {
+                  "name": "pOptions",
+                  "type": "Object",
+                  "default": "null",
+                  "params": [
+                    {
+                      "name": "type",
+                      "type": "String",
+                      "default": "null",
+                      "example": "groupBy",
+                      "required": true
+                    },
+                    {
+                      "name": "field",
+                      "type": "String | String[]",
+                      "default": "null",
+                      "example": "Field1",
+                      "required": true
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "default": "null",
+              "required": false
+            },
+            {
+              "name": "setGroupBy",
+              "type": "Function",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFields",
+                  "type": "Array",
+                  "default": "[]",
+                  "example": "['Field1', 'Field2', 'Field3']",
+                  "required": true
+                }
+              ],
+              "required": false
+            },
+            {
+              "name": "enable",
+              "type": "Function",
+              "params": [],
+              "default": "null",
+              "required": false
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "createNew",
+          "type": "Function",
+          "description": "Create new item in datasource.",
+          "default": "",
+          "params": [
+            {
+              "name": "pColumns",
+              "type": "Object",
+              "description": "All required fields in datasource.",
+              "required": true
+            },
+            {
+              "name": "pSetCurrentIndex",
+              "type": "Boolean",
+              "default": "true",
+              "description": "Will set current index to newly created item",
+              "required": false
+            },
+            {
+              "name": "pAppendRowCount",
+              "type": "Boolean",
+              "default": "true",
+              "description": "",
+              "required": false
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "recordSource",
+          "type": "Object",
+          "description": "",
+          "params": [
+            {
+              "name": "refreshRowsByFilter",
+              "type": "Function",
+              "default": "null",
+              "description": "Refreshed rows by filter",
+              "example": "dsObject.recordSource.refreshRowsByFilter(`[ID] = ${ID}`)",
+              "required": false
+            },
+            {
+              "name": "refreshRow",
+              "type": "Function",
+              "default": "null",
+              "description": "Refreshed rows by index or current row",
+              "example": "dsObject.recordSource.refreshRow()",
+              "params": [
+                {
+                  "name": "index",
+                  "type": "Number",
+                  "default": "null",
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "selectionControl",
+          "type": "Object",
+          "params": [
+            {
+              "name": "selectedRows",
+              "type": "Array"
+            },
+            {
+              "name": "isCopying",
+              "type": "Boolean"
+            },
+            {
+              "name": "selectAllLoading",
+              "type": "Boolean"
+            },
+            {
+              "name": "allRowsSelected",
+              "type": "Boolean"
+            },
+            {
+              "name": "selectedDataItems",
+              "description": "Will be populated with the selected rows",
+              "type": "Set"
+            },
+            {
+              "name": "dataObject",
+              "description": "Current dataobject",
+              "type": "DataObject"
+            },
+            {
+              "name": "selection",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "start",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "x",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "y",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "container",
+                      "type": "String"
+                    }
+                  ]
+                },
+                {
+                  "name": "end",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "x",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "y",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "container",
+                      "type": "String"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -564,6 +799,7 @@
       "type": "Function",
       "category": "Utilities",
       "path": "o365.controls.alert.ts",
+      "pathtype": "Direct",
       "props": [],
       "params": [
         {
@@ -574,12 +810,37 @@
         {
           "name": "pType",
           "default": "danger",
-          "type": "danger | success | info"
+          "type": "danger | info | success | warning | primary"
         },
         {
           "name": "pOptions",
           "type": "Object",
-          "default": "{ autohide: false, delay: 5000, slimVersion: false }"
+          "params": [
+            {
+              "name": "autohide",
+              "type": "Boolean",
+              "default": "false",
+              "required": false
+            },
+            {
+              "name": "delay",
+              "type": "Number",
+              "default": "5000",
+              "required": false
+            },
+            {
+              "name": "toastClass",
+              "type": "String | CSS classes",
+              "default": "null",
+              "required": false
+            },
+            {
+              "name": "slimVersion",
+              "type": "Boolean",
+              "default": "false",
+              "required": false
+            }
+          ]
         }
       ],
       "slots": [],
@@ -588,7 +849,14 @@
         {
           "title": "Error",
           "content": "When displaying alert for error",
-          "code": "alert('Something Went Wrong')"
+          "code": "alert('Something Went Wrong', 'danger')",
+          "language": "javascript"
+        },
+        {
+          "title": "Disappear after xTime",
+          "content": "When displaying alert for info",
+          "code": "alert('Information', 'info', { autohide: true, timeout: 3000 })",
+          "language": "javascript"
         }
       ]
     },
@@ -599,6 +867,7 @@
       "type": "Function",
       "category": "Utilities",
       "path": "o365.controls.confirm.ts",
+      "pathtype": "Direct",
       "props": [],
       "params": [
         {
@@ -651,6 +920,35 @@
               "name": "initialTextInputValue",
               "type": "String",
               "required": false
+            },
+            {
+              "name": "backdrop",
+              "type": "Boolean",
+              "default": "false",
+              "required": false
+            },
+            {
+              "name": "buttons",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "class",
+                  "type": "String | CSS classes",
+                  "required": false
+                },
+                {
+                  "name": "text",
+                  "type": "String",
+                  "required": false
+                },
+                {
+                  "name": "action",
+                  "type": "Function",
+                  "template": "(pConfirm: () => any, pCancel: () => any) => void",
+                  "required": false
+                }
+              ],
+              "required": false
             }
           ]
         }
@@ -661,17 +959,26 @@
         {
           "title": "Example",
           "content": "",
-          "code": "{COMPONENT}({ title: 'Confirm title', message: 'Confirm message to display' }).then(() => { // Handle action confirmed }).catch(() => { // Handle confirm rejected });"
+          "code": "{COMPONENT}({ title: 'Confirm title', message: 'Confirm message to display' }).then(() => { // Handle action confirmed }).catch(() => { // Handle confirm rejected });",
+          "language": "javascript"
         }
       ]
     },
     {
       "id": 4,
       "name": "DataGrid",
-      "description": "",
+      "description": "Grid for sorting, filtering and displaying data",
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.vue",
+      "pathtype": "Direct",
+      "codebuilder_shortcuts": [
+        {
+          "keys": ["alt", "c"],
+          "component_id": 5,
+          "props": ["field", "sortable", "headerName"]
+        }
+      ],
       "props": [
         {
           "name": "dataObject",
@@ -720,7 +1027,6 @@
           "type": "Record<String, any>[]",
           "default": "null",
           "description": "An array of custom tab definitions for the grid sidemenu details tab.",
-          "example": ":menuTabs=\"[{ title: 'Custom Tab', id: 'tab1', iconClass: 'bi bi-1-square-fill', component: MyTabComponent]\"",
           "required": false
         },
         {
@@ -1052,18 +1358,11 @@
         },
         {
           "name": "beforeCreate",
-          "description": "",
+          "description": "Fires before row is created",
           "syntax": "@beforeCreate=\"\""
         }
       ],
       "params": [],
-      "snippets": [
-        {
-          "title": "Example",
-          "content": "",
-          "code": "<{COMPONENT}\n  multilineHeader\n  :dataObject=\"\"\n>\n  <{COMPONENT=5} field=\"\" />\n</{COMPONENT}>"
-        }
-      ],
       "exposes": [
         {
           "name": "dataColumns",
@@ -1085,16 +1384,36 @@
           "name": "getScrollPosition",
           "type": "Function"
         }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} multilineHeader :dataObject=\"\"><{COMPONENT=5} field=\"\" /></{COMPONENT}>",
+          "language": "html"
+        },
+        {
+          "title": "File Grid Example",
+          "content": "",
+          "code": "<{COMPONENT=68} :dataObject=\"dsFiles\" @error=\"{COMPONENT=2}($t('Something went wrong'), 'danger', { autohide: true, timeout: 3000 })\" @uploaded=\"dsFiles.load()\"><{COMPONENT=44}><{COMPONENT} multilineHeader :headerTitle=\"$t('Files')\" :dataObject=\"dsFiles\"><template #cardheader><{COMPONENT=69} :dataObject=\"dsFiles\"><i class=\"bi-upload\"/>{{ $t('Upload files') }}</{COMPONENT=69}></template><{COMPONENT=6} colId=\"FilesGroup\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates /><{COMPONENT=5} field=\"Extension\" width=\"50\" sortable v-slot=\"{ row }\"><{COMPONENT=59} :extension=\"row.Extension\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileName\" width=\"200\" sortable v-slot=\"{ row }\"><{COMPONENT=75} :dataObject=\"dsFiles\" :row=\"row\" /></{COMPONENT=5}><{COMPONENT=5} field=\"FileSize\" width=\"100\" sortable v-slot=\"{ row }\">{{ {COMPONENT=76}(row.FileSize) }}</{COMPONENT=5}></{COMPONENT}></{COMPONENT=44}></{COMPONENT=68}>",
+          "language": "html"
+        },
+        {
+          "title": "Focus Grid Cell",
+          "content": "Code for focusing specific cell in datagrid",
+          "code": "const focusGridCell = (pGridRef, pCellString, pManualFocusElement = false) => {let vCell = pGridRef.dataGridControl.navigation.getCellFromString(pCellString);let vCellElement = pGridRef.dataGridControl.navigation._getCellElement(vCell) if (!pManualFocusElement) { pGridRef.dataGridControl.navigation.setFocus(vCell); vCellElement?.focus(); } return vCellElement; }",
+          "language": "javascript"
+        }
       ]
     },
     {
       "id": 5,
       "name": "Column",
-      "description": "Used in DataGrid and DataLookup",
+      "description": "Used in {COMPONENT=4} and {COMPONENT=7}",
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.Column.jsx",
-      "template": "",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "pinned",
@@ -1107,7 +1426,7 @@
         {
           "name": "colId",
           "type": "String",
-          "default": "field",
+          "default": "null",
           "description": "ptional unique id used for unbound columns.  ",
           "example": "",
           "required": false
@@ -1306,7 +1625,7 @@
         },
         {
           "name": "class",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "Class for all cells in this column.",
           "example": "class=\"bg-secondary p-2\"",
@@ -1412,7 +1731,7 @@
           "name": "headerName",
           "type": "String",
           "default": "null",
-          "description": "",
+          "description": "name for header cell",
           "required": false
         },
         {
@@ -1423,7 +1742,48 @@
           "required": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "editor",
+          "description": "The cell editor slot to be used when in edit mode",
+          "template": "#editor=\"{row}\""
+        },
+        {
+          "name": "bulkupdateeditor",
+          "description": "The bulk update editor slot",
+          "template": "#bulkupdateeditor=\"{row}\""
+        },
+        {
+          "name": "headertext",
+          "description": "Replaces label text contet of the header cell with this slot",
+          "template": "#headertext"
+        },
+        {
+          "name": "headerMenu",
+          "description": "Add custom menu items to the header menu for this column",
+          "template": "#headerMenu=\"{column, open}\""
+        },
+        {
+          "name": "summary",
+          "description": "The cell summary slot to be used for rendering summary values",
+          "template": "#summary=\"{row}\""
+        },
+        {
+          "name": "contextmenuTop",
+          "description": "Custom context menu items rendered at the top",
+          "template": "#contextmenuTop"
+        },
+        {
+          "name": "contextmenuBottom",
+          "description": "Custom context menu items rendered at the bottom",
+          "template": "#contextmenuBottom"
+        },
+        {
+          "name": "overlay",
+          "description": "Overlay over the entire column",
+          "template": "#overlay"
+        }
+      ],
       "events": [],
       "params": [],
       "snippets": []
@@ -1431,10 +1791,11 @@
     {
       "id": 6,
       "name": "NodeColumn",
-      "description": "Used in DataGrid for grouping",
+      "description": "Used in {COMPONENT=4} for grouping",
       "type": "Component",
       "category": "Grid",
       "path": "o365.vue.components.DataGrid.NodeColumn.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "pinned",
@@ -1646,13 +2007,6 @@
           "default": "false",
           "description": "When enabled this column will only be visible in grid when there is active group by",
           "required": false
-        },
-        {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
-          "required": false
         }
       ],
       "exposes": [
@@ -1668,7 +2022,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<NodeColumn colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />"
+          "code": "<{COMPONENT} colId=\"Group\" groupBy boldDisplay onlyShowOnGroupBy pinned=\"left\" userAggregates />",
+          "language": "html"
         }
       ]
     },
@@ -1679,14 +2034,36 @@
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.DataLookup.vue",
+      "pathtype": "Direct",
+      "codebuilder_shortcuts": [
+        {
+          "keys": ["alt", "c"],
+          "component_id": 5,
+          "props": ["field", "sortable", "headerName"]
+        }
+      ],
       "snippets": [
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT} :dataObject=\"\"v-model=\"\":bind=\"sel=>{}\"></{COMPONENT}>"
+          "code": "<{COMPONENT} :dataObject=\"\"v-model=\"\":bind=\"sel=>{}\"></{COMPONENT}>",
+          "language": "html"
+        },
+        {
+          "title": "Multiselect Lookup",
+          "content": "Selected rows can be accessed by passing a function in :bind",
+          "code": "<{COMPONENT} :dataObject=\"\" v-model=\"\" :value=\"vSelectedRowsString\" multiselect :bind=\"sel=>{}\"><{COMPONENT=5} field=\"SomeField\"/></{COMPONENT}>",
+          "language": "html"
         }
       ],
       "props": [
+        {
+          "name": "multiselect",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables multiple selection",
+          "required": false
+        },
         {
           "name": "disabled",
           "type": "Boolean",
@@ -1784,6 +2161,10 @@
       ],
       "slots": [
         {
+          "name": "header",
+          "template": "#header"
+        },
+        {
           "name": "actions",
           "template": "#actions"
         },
@@ -1793,7 +2174,7 @@
         },
         {
           "name": "target",
-          "description": "To use custom target instead of <input> you can pass #target slot. Scope object {target, open} is passed to this slot. By default a click listener is attached to the target that opens the lookup. This can be turned off with suppressClickEvent property on <ODataLookup>",
+          "description": "To use custom target instead of <input> you can pass #target slot. Scope object {target, open} is passed to this slot. By default a click listener is attached to the target that opens the lookup. This can be turned off with suppressClickEvent property on <{COMPONENT=7}>",
           "template": "#target=\"{target}\""
         }
       ],
@@ -1812,10 +2193,11 @@
     {
       "id": 8,
       "name": "ButtonGroup",
-      "description": "Button Group is often used in combination with DataGrid",
-      "type": "",
+      "description": "Button Group is often used in combination with {COMPONENT=4}",
+      "type": "Component",
       "category": "WIN",
       "path": "WIN365.vue.components.ButtonGroup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "onClickShowHidden",
@@ -1917,7 +2299,7 @@
         {
           "name": "reports",
           "description": "Items will be added into \"Reports\" dropdown. displayReports prop is required for this to show.",
-          "template": "#filters"
+          "template": "#reports"
         },
         {
           "name": "append",
@@ -1931,7 +2313,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<ButtonGroup displayCommonTasks displayFilters>\n  <template #commonTasks>\n</template>\n  <template #filters>\n</template>\n</ButtonGroup>"
+          "code": "<{COMPONENT} displayCommonTasks displayFilters>\n  <template #commonTasks>\n</template>\n  <template #filters>\n</template>\n</{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -1942,6 +2325,8 @@
       "type": "Component",
       "category": "Modal",
       "path": "o365.vue.components.Modal.vue",
+      "pathtype": "Direct",
+      "exposes": [],
       "props": [
         {
           "name": "title",
@@ -1969,21 +2354,21 @@
         },
         {
           "name": "modalOptions",
-          "type": "",
-          "default": "",
-          "description": "",
-          "example": "",
+          "type": "Object",
+          "default": "null",
+          "description": "Setting backdrop as static will tell the modal to not close when clicked outside.",
           "params": [
             {
               "name": "backdrop",
-              "type": "Boolean"
+              "type": "Boolean | String",
+              "example": "static"
             }
           ],
           "required": false
         },
         {
           "name": "class",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "HTML Classes",
           "example": "",
@@ -1991,7 +2376,7 @@
         },
         {
           "name": "dialogClass",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "",
           "example": "",
@@ -2012,9 +2397,23 @@
           "description": "Will always render modal. If false it will render when modal opens.",
           "example": "",
           "required": false
+        },
+        {
+          "name": "dataBsFocus",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "headerAction",
+          "description": "",
+          "template": "#headerAction"
+        }
+      ],
       "events": [
         {
           "name": "shown",
@@ -2038,20 +2437,35 @@
         }
       ],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Use classes like modal-(sm, md, lg, xl, xxl) to adjust modal size",
+          "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\">{{ $t('Save') }}</button></div></div></div></{COMPONENT}>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 10,
       "name": "Form",
-      "description": "",
+      "description": "NB: This component does not actually contain a form element",
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.Form.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT}>\n</{COMPONENT}>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 11,
@@ -2060,6 +2474,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.FormControl.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "title",
@@ -2107,8 +2522,9 @@
       "snippets": [
         {
           "title": "Example",
-          "content": "",
-          "code": "<FormControl :title=\"$t('Example')\" for=\"exampleInput\">\n  <input type=\"text\" id=\"exampleInput\" v-model=\"vExampleValue\">\n</FormControl>"
+          "content": "Form Control Example with Input",
+          "code": "<{COMPONENT} :title=\"$t('Example')\" for=\"exampleInput\"><input type=\"text\" id=\"exampleInput\" class=\"form-control\" v-model=\"vExampleValue\"></{COMPONENT}>",
+          "language": "html"
         }
       ]
     },
@@ -2119,11 +2535,19 @@
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.PersonsLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Person')\"><{COMPONENT} class=\"form-select\" v-model=\"vPersonName\" :bind=\"sel=>{ vPerson_ID = sel.ID; vPersonName = sel.Name; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 13,
@@ -2132,6 +2556,7 @@
       "type": "Component",
       "category": "Lookup",
       "path": "o365.vue.components.OrgUnitsLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2145,6 +2570,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.CustomersLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2158,6 +2584,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.SuppliersLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2171,11 +2598,19 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.CompaniesLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Company')\"><{COMPONENT} class=\"form-select\" v-model=\"vCompanyName\" :bind=\"sel=>{ vCompany_ID = sel.ID; vCompanyName = sel.NAme; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 17,
@@ -2184,11 +2619,19 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.GangsLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Gang')\"><{COMPONENT} class=\"form-select\" v-model=\"vGangName\" :bind=\"sel=>{ vGang_ID = sel.ID; vGangName = sel.Description; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 18,
@@ -2197,6 +2640,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.WorkPackagesLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
@@ -2210,6 +2654,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DisciplinesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2255,6 +2700,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.SFILookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2300,11 +2746,52 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.ArticlesLookup.vue",
-      "props": [],
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": ":bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "example": ":bind=\"sel=>{ vArticle_ID = sel.ID }\"",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "DescriptionNOR",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "ShortDescription",
+              "type": "String"
+            },
+            {
+              "name": "Unit",
+              "type": "String"
+            }
+          ]
+        }
+      ],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Article')\"><{COMPONENT=40} validate :title=\"vArticleNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"><{COMPONENT} class=\"form-select\" v-model=\"vArticleDescription\" :bind=\"sel=>{ vArticle_ID = sel.ID; vArticleNo = sel.No; vArticleDescription = sel.Description; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 22,
@@ -2313,6 +2800,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.OrdersLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2357,8 +2845,9 @@
       "snippets": [
         {
           "title": "Orders Lookup Example",
-          "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\">\n  <OFormControl class=\"col\" :title=\"$t('Order:')\">\n    <WInputGroup validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <OrdersLookup class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
+          "content": "For use outside of grid. Remove class when using inside {COMPONENT=4}",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Order:')\"><{COMPONENT=40} validate :title=\"vOrderNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vOrderName\" :bind=\"sel=>{ vOrderNo = sel.OrderNo; vOrder_ID = sel.ID; vOrderName = sel.OrderName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
         }
       ]
     },
@@ -2369,11 +2858,113 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.ProjectsLookup.vue",
-      "props": [],
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": ":bind",
+          "type": "Row",
+          "description": "Used to bind seleted values to your variables",
+          "params": [
+            {
+              "name": "ID",
+              "type": "Number"
+            },
+            {
+              "name": "IdPath",
+              "type": "String"
+            },
+            {
+              "name": "No",
+              "type": "String"
+            },
+            {
+              "name": "ProjectName",
+              "type": "String"
+            },
+            {
+              "name": "Domain_ID",
+              "type": "Number"
+            },
+            {
+              "name": "DomainName",
+              "type": "String"
+            },
+            {
+              "name": "Description",
+              "type": "String"
+            },
+            {
+              "name": "Customer_ID",
+              "type": "Number"
+            },
+            {
+              "name": "CustomerName",
+              "type": "String"
+            },
+            {
+              "name": "CompletedFinalAccount",
+              "type": "Boolean"
+            },
+            {
+              "name": "SearchColumn",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "modelValue",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "IncludeCompletedFinalAccount",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "UseAlternativeButton",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "Domain_ID",
+          "type": "Number",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "disableContextFilter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "disableInputMask",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disabled Project No input mask",
+          "required": false
+        }
+      ],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Project No')\"><{COMPONENT=40} validate :title=\"vProjectName\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"><{COMPONENT} class=\"form-select\" v-model=\"vProjectNo\" :bind=\"sel=>{ vProject_ID = sel.ID; vProjectNo = sel.No; vProjectName = sel.ProjectName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 24,
@@ -2382,6 +2973,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.WarehousesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2411,6 +3003,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.QualificationsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2448,6 +3041,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2505,6 +3099,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsRevisionsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "documentId",
@@ -2572,6 +3167,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsGroupsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2613,6 +3209,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentOriginatorsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2658,6 +3255,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsStepsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2707,6 +3305,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsTypesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "documentGroupId",
@@ -2776,6 +3375,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentTypesNumberingSchemesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "documentTypeId",
@@ -2839,6 +3439,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.DocumentsWestconAreaLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2880,6 +3481,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.RevisionDistributionStatusesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2913,6 +3515,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.RevisionSendActionTypesLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -2945,7 +3548,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Action Type')\"><{COMPONENT} class=\"form-select\" v-model=\"vActionTypeDescription\" :bind=\"sel=>{ vActionType_ID = sel.ID; vActionTypeDescription = sel.Description; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 36,
@@ -2954,6 +3564,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.LocationsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "OnlyShowPersonnelLocations",
@@ -2965,7 +3576,14 @@
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Location')\"><{COMPONENT} class=\"form-select\" v-model=\"vLocationName\" :bind=\"sel=>{ vLocation_ID = sel.ID; vLocationName = sel.Name; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 37,
@@ -2974,12 +3592,13 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.PersonsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "includeAllPersons",
           "type": "Boolean",
           "default": "false",
-          "description": "Includes all persons",
+          "description": "Includes all persons, even external persons",
           "required": false
         },
         {
@@ -3009,12 +3628,33 @@
           "default": "null",
           "description": "Class names for button. Required prop: showAsButton",
           "required": false
+        },
+        {
+          "name": "Company_ID",
+          "type": "Number",
+          "default": "null",
+          "description": "Filters on Company ID",
+          "required": false
+        },
+        {
+          "name": "includeCompanyInfo",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes company info",
+          "required": false
         }
       ],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('Person')\"><{COMPONENT} class=\"form-select\" v-model=\"vPersonName\" :bind=\"sel=>{ vPerson_ID = sel.ID; vPersonName = sel.Name; }\" /></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 38,
@@ -3023,11 +3663,19 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.BranchesLookup.vue",
+      "pathtype": "Direct",
       "props": [],
       "slots": [],
       "events": [],
       "params": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "For use outside of grid. Remove class when using inside DataGrid",
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT=40} validate :title=\"vBranchNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"><{COMPONENT} class=\"form-select\" v-model=\"vBranchName\" :bind=\"sel=>{ vBranchNo = sel.No; vBranch_ID = sel.ID; vBranchName = sel.Name; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
+        }
+      ]
     },
     {
       "id": 39,
@@ -3036,6 +3684,7 @@
       "type": "Component",
       "category": "WIN/Lookup",
       "path": "WIN365.vue.components.SubProjectsLookup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": ":bind",
@@ -3105,13 +3754,6 @@
           "required": false
         },
         {
-          "name": "hideCompleted",
-          "type": "Boolean",
-          "default": "false",
-          "description": "Hide completed subprojects (SubProjects with CompletedFinalAccount = 0)",
-          "required": false
-        },
-        {
           "name": "showAsButton",
           "type": "Boolean",
           "default": "false",
@@ -3119,15 +3761,22 @@
           "required": false
         },
         {
+          "name": "focusInput",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will focus input",
+          "required": false
+        },
+        {
           "name": "buttonIconClassName",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "Icon class names. Required prop: showAsButton",
           "required": false
         },
         {
           "name": "buttonClassName",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "Class names for button. Required prop: showAsButton",
           "required": false
@@ -3144,6 +3793,13 @@
           "type": "Boolean",
           "default": "false",
           "description": "Disables masking for the InputMask component, fallback to normal input",
+          "required": false
+        },
+        {
+          "name": "includeDomainField",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes domain field",
           "required": false
         },
         {
@@ -3167,7 +3823,8 @@
         {
           "title": "Example",
           "content": "For use outside of grid. Remove class when using inside DataGrid",
-          "code": "<div class=\"row\">\n  <OFormControl class=\"col\">\n    <WInputGroup validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\">\n      <SubProjectsLookup class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" />\n    </WInputGroup>\n  </OFormControl>\n</div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\"><{COMPONENT=40} validate :title=\"vSubProjectNo\" invalidFeedback=\"You forgot to fill you this field!\"><{COMPONENT} class=\"form-select\" v-model=\"vSubProjectName\" :bind=\"sel=>{ vSubProjectNo = sel.SubProjectNo; vSubProject_ID = sel.ID; vSubProjectName = sel.SubProjectName; }\" /></{COMPONENT=40}></{COMPONENT=11}></div>",
+          "language": "html"
         }
       ]
     },
@@ -3178,6 +3835,7 @@
       "type": "Component",
       "category": "WIN/Form",
       "path": "WIN365.vue.components.FormInputGroup.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "title",
@@ -3211,7 +3869,7 @@
         {
           "name": "invalidFeedback",
           "type": "String",
-          "default": "\"Please fill inn\"",
+          "default": "Please fill inn",
           "description": "Message that is displayed if input fails validation",
           "required": false
         }
@@ -3223,7 +3881,8 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<div class=\"row\">\n  <FormControl class=\"col\">\n    <InputGroup validate :title=\"vSomeNo\" invalidFeedback=\"You forgot to fill you this field!\"></InputGroup>\n  </FormControl>\n</div>"
+          "code": "<div class=\"row\"><{COMPONENT=11} class=\"col\" :title=\"$t('No')\"><{COMPONENT} validate :title=\"vSomeNo\" :invalidFeedback=\"$t('You forgot to fill you this field!')\"></{COMPONENT}></{COMPONENT=11}></div>",
+          "language": "html"
         }
       ]
     },
@@ -3234,10 +3893,11 @@
       "type": "Component",
       "category": "Tabs",
       "path": "o365.vue.components.Tabs.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "tabsClass",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "nav nav-tabs",
           "description": "",
           "required": false
@@ -3267,7 +3927,7 @@
           "name": "hideNavbar",
           "type": "Boolean",
           "default": "false",
-          "description": "",
+          "description": "Hides navbar?",
           "required": false
         },
         {
@@ -3302,7 +3962,7 @@
           "name": "compactViewMode",
           "type": "String",
           "default": "accordion",
-          "description": "",
+          "description": "can be accordion or cards",
           "required": false
         }
       ],
@@ -3329,7 +3989,23 @@
           "type": "Boolean"
         }
       ],
-      "slots": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Slot for {COMPONENT=42}'s",
+          "template": "#default"
+        },
+        {
+          "name": "beforeNav",
+          "description": "",
+          "template": "#beforeNav"
+        },
+        {
+          "name": "afterNav",
+          "description": "",
+          "template": "#afterNav"
+        }
+      ],
       "events": [
         {
           "name": "onHide",
@@ -3357,12 +4033,14 @@
         {
           "title": "Example",
           "content": "",
-          "code": "<{COMPONENT}><{COMPONENT=42} :title=\"$t('Tab 1')\" active>Tab 1 Content</{COMPONENT=42}><{COMPONENT=42}><template #title><i class=\"bi bi-bookmark\"></i> {{$t('Tab 2')}}</template>Tab 2 Content</{COMPONENT=42}></{COMPONENT}>"
+          "code": "<{COMPONENT}><{COMPONENT=42} :title=\"$t('Tab 1')\" active>Tab 1 Content</{COMPONENT=42}><{COMPONENT=42}><template #title><i class=\"bi bi-bookmark\"></i> {{$t('Tab 2')}}</template>Tab 2 Content</{COMPONENT=42}></{COMPONENT}>",
+          "language": "html"
         },
         {
           "title": "Tabs with Url",
-          "content": "",
-          "code": ""
+          "content": "TBA",
+          "code": "",
+          "language": "html"
         }
       ]
     },
@@ -3373,10 +4051,11 @@
       "type": "Component",
       "category": "Tabs",
       "path": "o365.vue.components.Tab.vue",
+      "pathtype": "Direct",
       "props": [
         {
-          "name": "ID",
-          "type": "Number",
+          "name": "id",
+          "type": "Number | String",
           "default": "null",
           "description": "Will be used as id for the tab-content element",
           "required": false
@@ -3404,7 +4083,7 @@
         },
         {
           "name": "linkClass",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "Classes for tablink",
           "required": false
@@ -3418,7 +4097,7 @@
         },
         {
           "name": "paneClass",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "Classes for pane",
           "required": false
@@ -3432,7 +4111,7 @@
         },
         {
           "name": "itemClass",
-          "type": "String | css classes",
+          "type": "String | CSS classes",
           "default": "null",
           "description": "Classes for item",
           "required": false
@@ -3446,7 +4125,7 @@
         },
         {
           "name": "tabHeight",
-          "type": "Nuber",
+          "type": "Number",
           "default": "null",
           "description": "Height of tab",
           "required": false
@@ -3478,19 +4157,19 @@
           "template": "#title"
         }
       ],
+      "exposes": [],
       "events": [],
       "params": [],
-      "snippets": [
-        
-      ]
+      "snippets": []
     },
     {
       "id": 43,
       "name": "SizerPanel",
       "description": "",
       "type": "Component",
-      "category": "Sider",
+      "category": "Sizer",
       "path": "o365.vue.components.SizerPanel.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "width",
@@ -3604,12 +4283,14 @@
         {
           "title": "Horizontal Example",
           "content": "",
-          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <SizerPanel width=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </SizerPanel>\n</OColContainer>"
+          "code": "<{COMPONENT=45} appContainer><{COMPONENT=44}></{COMPONENT=44}><{COMPONENT} width=\"400px\" expand collapse ref=\"vSizerPanel\"></{COMPONENT}></{COMPONENT=45}>",
+          "language": "html"
         },
         {
           "title": "Vertical Example",
           "content": "",
-          "code": "<OColContainer appContainer>\n  <ORowContainer>\n\n  </ORowContainer>\n  <SizerPanel height=\"400px\" expand collapse ref=\"vSizerPanel\">\n\n  </SizerPanel>\n</OColContainer>"
+          "code": "<{COMPONENT=44} appContainer><{COMPONENT=45}></{COMPONENT=45}><{COMPONENT} height=\"400px\" expand collapse ref=\"vSizerPanel\"></{COMPONENT}></{COMPONENT=44}>",
+          "language": "html"
         }
       ],
       "exposes": [
@@ -3630,6 +4311,7 @@
       "type": "Component",
       "category": "Container",
       "path": "o365.vue.components.RowContainer.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "desktop",
@@ -3665,6 +4347,7 @@
       "type": "Component",
       "category": "Container",
       "path": "o365.vue.components.ColContainer.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "desktop",
@@ -3700,6 +4383,7 @@
       "type": "Component",
       "category": "Card",
       "path": "o365.vue.components.CardView.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "dataObject",
@@ -3917,6 +4601,7 @@
       "type": "Component",
       "category": "Form",
       "path": "o365.vue.components.TextArea.vue",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "autoGrow",
@@ -3994,11 +4679,2355 @@
     },
     {
       "id": 48,
+      "name": "DatePicker",
+      "description": "Date Picker",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.DatePicker.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "any",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "date",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "column",
+          "type": "DataColumn",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "format",
+          "type": "String | Function",
+          "default": "",
+          "example": "(pDate: Date) => string",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "timepicker",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggles timepicker",
+          "required": false
+        },
+        {
+          "name": "timepickerOnly",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Shows only timepicker",
+          "required": false
+        },
+        {
+          "name": "callback",
+          "type": "Function",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "clearable",
+          "type": "Boolean",
+          "default": "true",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "clearableFromPicker",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "openOnIconClick",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "autoSuggestion",
+          "type": "Boolean",
+          "default": "true",
+          "description": "suggests date?",
+          "required": false
+        },
+        {
+          "name": "showInputIcon",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "teleport",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Throws an ender pearl. Just kidding. When true datepicker will be rendered inside input element.",
+          "required": false
+        },
+        {
+          "name": "containerClass",
+          "type": "String | CSS classes",
+          "default": "null",
+          "description": "Classes for Input field",
+          "required": false
+        },
+        {
+          "name": "range",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables for 'from'/'to' date selection",
+          "required": false
+        },
+        {
+          "name": "utc",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggles UTC date",
+          "required": false
+        },
+        {
+          "name": "inputClassName",
+          "type": "String | CSS classes",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "inputStyle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "fires then modelValue has changed.",
+          "syntax": "@update:modelValue=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "open",
+          "type": "Boolean"
+        },
+        {
+          "name": "setDate",
+          "type": "Function"
+        },
+        {
+          "name": "format",
+          "type": "String"
+        },
+        {
+          "name": "uiLocale",
+          "type": "String"
+        },
+        {
+          "name": "datepickerRef",
+          "type": "Ref"
+        },
+        {
+          "name": "textInputOptions",
+          "type": "Object",
+          "params": [
+            {
+              "name": "openMenu",
+              "type": "Boolean"
+            }
+          ]
+        },
+        {
+          "name": "openMenu",
+          "type": "Function"
+        },
+        {
+          "name": "hideInputIcon",
+          "type": "Boolean"
+        },
+        {
+          "name": "activateEditor",
+          "type": "Function"
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} v-model=\"dsYourDataSource.current.Date\" format=\"dd/MM/yyyy\" class=\"form-control\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "name": "MatchMedia",
+      "description": "",
+      "type": "Component",
+      "category": "Other",
+      "path": "o365.vue.components.MatchMedia.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "query",
+          "type": "String",
+          "default": "MediaQueryProvider",
+          "description": "Media query string to match against.",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "change",
+          "description": "Emitted when the media query status changes",
+          "syntax": "@change=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": []
+    },
+    {
+      "id": 50,
+      "name": "Draggable",
+      "description": "",
+      "type": "Directive",
+      "category": "Directive",
+      "path": "o365.vue.directive.draggable.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<script setup>\nimport { ref } from 'vue';\nimport {COMPONENT} from 'o365.vue.directive.draggable.ts';\n\nconst draggableOptions = ref({\n\t// handle\n\tonPositionChange: onPositionChange\n\t// onDragEnd\n\t// onDragStart\n\t// resetInitialPos\n\t// initialPosition\n\t// stopDragging\n\t// boundingRect\n\t// boundingElement\n\t// boundingRectMargin\n});\n\nfunction onPositionChange(positionDiff, absolutePosition, event) {\nconsole.log(\"left corner\", absolutePosition.left);\nconsole.log(\"top corner\", absolutePosition.top);\n}\n</script><template><div class=\"modal\" v-draggable=\"draggableOptions\"></div></template>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Footer",
+      "description": "Contain ActionSave and ActionCancel buttons",
+      "type": "Component",
+      "category": "WIN/Form",
+      "path": "WIN365.vue.components.Footer.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "undefined",
+          "description": "Data Object belonging to the form",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "prepend",
+          "description": "Add items before the buttons",
+          "template": "#prepend"
+        },
+        {
+          "name": "default",
+          "description": "Add items after the buttons",
+          "template": "#default"
+        }
+      ],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} :dataObject=\"dsWorkflows\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "name": "DataTable",
+      "description": "Mostly same as {COMPONENT=4}, but new records are created in R4 style 😎",
+      "type": "Component",
+      "category": "Grid",
+      "path": "o365.vue.components.DataTable.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "The data object used in the grid",
+          "required": false
+        },
+        {
+          "name": "columns",
+          "type": "Array",
+          "default": "null",
+          "description": "Columns passed as an array instead of slots",
+          "required": false
+        },
+        {
+          "name": "data",
+          "type": "Array",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "rowClass",
+          "type": "[Function, Object, String]",
+          "default": "null",
+          "description": "String, dynamic class object or function that will be bound to the row class property. The current row is provided to the function as an argument.",
+          "required": false
+        },
+        {
+          "name": "rowStyle",
+          "type": "[Function, Object, String]",
+          "default": "null",
+          "description": "String, dynamic class object or function that will be bound to the row class property. The current row is provided to the function as an argument.",
+          "required": false
+        },
+        {
+          "name": "headerTitle",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "menuTabs",
+          "type": "Record<String, any>[]",
+          "default": "null",
+          "description": "An array of custom tab definitions for the grid sidemenu details tab.",
+          "required": false
+        },
+        {
+          "name": "rowclickhandler",
+          "type": "Function",
+          "default": "null",
+          "description": "Override the row click handler, when provided will not set current index",
+          "required": false
+        },
+        {
+          "name": "noHeader",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render header.",
+          "required": false
+        },
+        {
+          "name": "noHeaderRow",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render header row, but will still render the header container.",
+          "required": false
+        },
+        {
+          "name": "noFooter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render footer.",
+          "required": false
+        },
+        {
+          "name": "disableFilterRow",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render filter row.",
+          "required": false
+        },
+        {
+          "name": "detailIframe",
+          "type": "String",
+          "default": "null",
+          "description": "Path for detail iframe",
+          "example": ":detailIframe=\"`/nt/your_app_here?ID=${ID_TO_CHILD}&HideNav=true&Context=${dsYourDataSource.current.Domain_ID}`\"",
+          "required": false
+        },
+        {
+          "name": "detailTabTitle",
+          "type": "String",
+          "default": "null",
+          "description": "The label used on the detail iframe tab",
+          "required": false
+        },
+        {
+          "name": "multilineHeader",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables word wrapping for header columns",
+          "required": false
+        },
+        {
+          "name": "importData",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When true, will show importData",
+          "required": false
+        },
+        {
+          "name": "initialMenuWidth",
+          "type": "String",
+          "default": "400px",
+          "description": "Sets the initial width of the grid menu, accepts values either in 'px' or '%' ",
+          "required": false
+        },
+        {
+          "name": "groupByFolders",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Adds group by folders selector into right panel",
+          "required": false
+        },
+        {
+          "name": "dynamicLoading",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Enables dynamic loading for the grid. When set to false will set the inner height to loaded data length.",
+          "required": false
+        },
+        {
+          "name": "disableNavigation",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will disable grid navigation features.",
+          "required": false
+        },
+        {
+          "name": "collapseGridMenu",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` the grid setup menu will be initially collapsed.",
+          "required": false
+        },
+        {
+          "name": "newRecordsPosition",
+          "type": "Boolean",
+          "default": "above-filters",
+          "description": "Position where new records are rendered.",
+          "required": false
+        },
+        {
+          "name": "disableSelectAll",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` the select all checkbox will not render",
+          "required": false
+        },
+        {
+          "name": "hideGridMenu",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to `true` will not render the grid setup menu.",
+          "required": false
+        },
+        {
+          "name": "fieldFilters",
+          "type": "Array",
+          "default": "null",
+          "description": "An array of initial field filters. For example `['Title', {name:'StatusCode', distinct:'StatusCode'}]`",
+          "required": false
+        },
+        {
+          "name": "disableDeleteConfirm",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When true will disable confirm dialog on delete actions in grid.",
+          "required": false
+        },
+        {
+          "name": "noRowsFound",
+          "type": "String | Boolean",
+          "default": "No rows found...",
+          "description": "Then set to true, will show default message and enable for custom overriding via 'noRowsFound' slot. Can also be used to override default message.",
+          "required": false
+        },
+        {
+          "name": "eagerGridControl",
+          "type": "Function",
+          "default": "null",
+          "description": "Returns grid control ref immediately after creation",
+          "required": false
+        },
+        {
+          "name": "onDemandFields",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Select list will contain only visible grid columns and sort order columns set on data object",
+          "required": false
+        },
+        {
+          "name": "loadDataObject",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true the grid will load the dataobject after mount",
+          "required": false
+        },
+        {
+          "name": "softDelete",
+          "type": "Boolean",
+          "default": "",
+          "description": "Use soft delete for ActionDelete in grid",
+          "required": false
+        },
+        {
+          "name": "autoFilterDebounce",
+          "type": "Number",
+          "default": "500",
+          "description": "If provided will filter automaticly when typing in filter cells with the debounce value.",
+          "required": false
+        },
+        {
+          "name": "noGroupByContainer",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will disable the group by container, used when you don't want to allow the user to change group by settings",
+          "required": false
+        },
+        {
+          "name": "groupColumnDefinition",
+          "type": "any",
+          "default": "null",
+          "description": "The column definition used when grouping is enabled for the Group column",
+          "required": false
+        },
+        {
+          "name": "treeColumnDefinition",
+          "type": "any",
+          "default": "null",
+          "description": "The column definition used to render TreeColumn when treeify is enabled on the provided dataobject",
+          "required": false
+        },
+        {
+          "name": "itemsToRender",
+          "type": "Number",
+          "default": "500",
+          "description": "Initial number of items to render for visual scroll.",
+          "required": false
+        },
+        {
+          "name": "createNewOverrideFn",
+          "type": "Function",
+          "default": "null",
+          "description": "Function for creating new",
+          "required": false
+        },
+        {
+          "name": "hideSystemColumn",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will not render system column (current row indicator)",
+          "required": false
+        },
+        {
+          "name": "disableSorting",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will disable sorting",
+          "required": false
+        },
+        {
+          "name": "activeRows",
+          "type": "Boolean",
+          "default": "true",
+          "description": "When set to false will not stylize active (current) row",
+          "required": false
+        },
+        {
+          "name": "disableBatchRecords",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will disable the new record button and new records container",
+          "required": false
+        },
+        {
+          "name": "hideActionColumn",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will not render action column",
+          "required": false
+        },
+        {
+          "name": "hideMultiselectColumn",
+          "type": "Boolean",
+          "default": "false",
+          "description": "When set to true will not render multi-select column",
+          "required": false
+        },
+        {
+          "name": "showNewRecordsPanel",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "hideNewRecords",
+          "type": "Boolean",
+          "default": "raw => !!raw.isLookup",
+          "description": "When set to true will skip rendering of the new record rows",
+          "required": false
+        },
+        {
+          "name": "detailMessageChannelId",
+          "type": "String",
+          "default": "null",
+          "description": "Optional id to enable the message channel on the detail iframe",
+          "required": false
+        },
+        {
+          "name": "detailMessageChannelFunctions",
+          "type": "String",
+          "default": "null",
+          "description": "Map of functions callable by the iframe message channel",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "detailTab",
+          "description": "Alternative to rendering detail Iframe",
+          "template": "#detailTab"
+        },
+        {
+          "name": "detailActions",
+          "template": "#detailActions"
+        },
+        {
+          "name": "cardheader",
+          "template": "#cardheader"
+        },
+        {
+          "name": "noRowsFound",
+          "template": "#noRowsFound"
+        },
+        {
+          "name": "overlay",
+          "template": "#overlay"
+        },
+        {
+          "name": "contextmenuTop",
+          "template": "#contextmenuTop=\"{row, column, close}\""
+        },
+        {
+          "name": "contextmenu",
+          "template": "#contextmenu=\"{row, column, close}\""
+        },
+        {
+          "name": "contextmenuBottom",
+          "template": "#contextmenuBottom=\"{row, column, close}\""
+        },
+        {
+          "name": "statusbar",
+          "template": "#statusbar"
+        }
+      ],
+      "events": [
+        {
+          "name": "mounted",
+          "description": "",
+          "syntax": "@mounted=\"\""
+        },
+        {
+          "name": "beforeCreate",
+          "description": "",
+          "syntax": "@beforeCreate=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "dataColumns",
+          "type": "Array"
+        },
+        {
+          "name": "setViewPortWidth",
+          "type": "Function"
+        },
+        {
+          "name": "dataGridControl",
+          "type": "Object"
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} multilineHeader :dataObject=\"\"><{COMPONENT=5} field=\"\" /></{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "name": "Navbar",
+      "description": "Navbar.",
+      "type": "Component",
+      "category": "General",
+      "path": "o365.vue.components.ONavbar.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "contextWhereClause",
+          "type": "String",
+          "default": "null",
+          "description": "whereclause for context.",
+          "example": ":contextWhereClause=\"IsDomain = 1\"",
+          "required": false
+        },
+        {
+          "name": "hideOrgUnitsTree",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "operationMode",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables some sort of operation mode. Removed profile image and context. Not used.",
+          "required": false
+        },
+        {
+          "name": "domainMode",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables set domain in navbar.",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<[COMPONENT} hideOrgunitsTree contextWhereClause=\"IsDomain = 1\"></{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "name": "Spotlight",
+      "description": "Directive hooks up to click event and will show spotlight image preview for images and supported videos. Supported video formats: ['mp4','webm','ogg']",
+      "type": "Directive",
+      "category": "Directive",
+      "path": "o365.vue.directive.spotlight.js",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<div v-spotlight><div v-for=\"file in dsFiles.data.filter(x=>x.Step_ID == step.ID)\"><a :href=\"`api/file/download/aviw_Workflow_ItemsFiles/${file.PrimKey}/${file.FileName}`\"></a></div></div>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "name": "Select",
+      "description": "Select Input. \n\nWhy use custom select component instead of the in-built browser one? Due to browser security policies, it's not allowed to open browser select boxes through JavaScript. This means that components like DataGrid, which rely on focus to open their editors, won't be able to open them by default.",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.Select.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "any",
+          "default": "null",
+          "description": "Currently selected value",
+          "required": false
+        },
+        {
+          "name": "multiple",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Enables multiple selection",
+          "required": false
+        },
+        {
+          "name": "itemSize",
+          "type": "Number",
+          "default": "24",
+          "description": "Height of item",
+          "required": false
+        },
+        {
+          "name": "minWidth",
+          "type": "Number",
+          "default": "0",
+          "description": "Minimun width of input",
+          "required": false
+        },
+        {
+          "name": "clearable",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Add a clear icon into the input.",
+          "required": false
+        },
+        {
+          "name": "wrapperClass",
+          "type": "String | CSS classes",
+          "default": "null",
+          "description": "CSS Classes for wrapper",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Slot for option elements.",
+          "template": "#default=\"{target, open}\""
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "Emits when the input has been changed",
+          "syntax": "@update:modelValue=\"sel => {}\""
+        },
+        {
+          "name": "selected",
+          "description": "Emits when a value has been selected",
+          "syntax": "@selected=\"sel => {}\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} v-model=\"row.Alert\" class=\"form-control\"><option value=\"Danger\">Danger</option><option value=\"Warning\">Warning</option><option value=\"Success\">Success</option></{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "name": "ActionSheet",
+      "description": "",
+      "type": "Component",
+      "category": "Mobile",
+      "path": "mobile.vue.components.ActionSheet.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggle if sheet is open or closed",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "contains the options for the sheet. For example: Edit, Delete",
+          "template": "#default"
+        },
+        {
+          "name": "header",
+          "description": "Content for Sheet header",
+          "template": "#header"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "Fires when sheet is toggled open or close",
+          "syntax": "@update:modelValue=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<div><button class=\"btn btn-primary\" @click=\"show = !show\">Toggle action sheet</button>\n<{COMPONENT} v-model=\"show\"><button @click=\"\">Edit</button><button @click=\"\">Delete</button></{COMPONENT}></div>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "name": "Accordion",
+      "description": "Mobile Accordion. Weirdly built. Do not use.",
+      "type": "Component",
+      "category": "Mobile",
+      "path": "mobile.vue.components.Accordion.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "title",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Additional Content for Accordion Header",
+          "template": "#default"
+        },
+        {
+          "name": "title",
+          "description": "Content for Accordion title",
+          "template": "#title"
+        },
+        {
+          "name": "description",
+          "description": "Content for Accordion description",
+          "template": "#description"
+        },
+        {
+          "name": "items",
+          "description": "Replacement for dataObject prop. Can also be used if dataObject is empty or has no data.",
+          "template": "#items"
+        },
+        {
+          "name": "footer",
+          "description": "Content for Accordion footer",
+          "template": "#footer"
+        }
+      ],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": []
+    },
+    {
+      "id": 58,
+      "name": "BottomSheet",
+      "description": "A swipeable sheet that comes up from the bottom. Generally a better alternative to modals when it comes to mobile.",
+      "type": "Component",
+      "category": "Mobile",
+      "path": "mobile.vue.components.BottomSheet.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggle if sheet is open or closed",
+          "required": false
+        },
+        {
+          "name": "show",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggle if sheet is open or closed",
+          "required": false
+        },
+        {
+          "name": "minHeight",
+          "type": "Number | String",
+          "default": "null",
+          "description": "Minimum height of bottom sheet when it is open",
+          "example": "auto | min | max | 50",
+          "required": false
+        },
+        {
+          "name": "maxHeight",
+          "type": "Number | String",
+          "default": "null",
+          "description": "Maximum height of bottom sheet",
+          "example": "auto | min | max | 50",
+          "required": false
+        },
+        {
+          "name": "fullScreen",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Toggle if sheet spans the whole screen",
+          "required": false
+        },
+        {
+          "name": "teleportTarget",
+          "type": "Element",
+          "default": "body",
+          "description": "element where {component} should get rendered",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "title",
+          "description": "Content for title",
+          "template": "#title"
+        },
+        {
+          "name": "action",
+          "description": "Slot for action button or similar stuff",
+          "template": "#action"
+        },
+        {
+          "name": "subheader",
+          "description": "Subheader content. For Descriptions or similar stuff",
+          "template": "#subheader"
+        },
+        {
+          "name": "body",
+          "description": "Body content",
+          "template": "#body"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "Fires when sheet is toggled open or close",
+          "syntax": "@update:modelValue=\"\""
+        },
+        {
+          "name": "show",
+          "description": "Fires when the sheet gets opened",
+          "syntax": "@show=\"\""
+        },
+        {
+          "name": "hide",
+          "description": "Fires when sheet gets closed",
+          "syntax": "@hide=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<div><button class=\"btn btn-primary\" @click=\"show = !show\">Toggle bottom sheet</button>\n<{COMPONENT} v-model=\"show\"><template #title>{{ $t(\"Bottom Sheet Title\") }}</template><template #body><div class=\"p-3\"><button class=\"btn btn-primary\" @click=\"show = false\">Hide bottom sheet</button></div></template></{COMPONENT}></div>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "name": "FileIcon",
+      "description": "Gives you an icon of the filetype of your file.",
+      "type": "Component",
+      "category": "General",
+      "path": "o365.vue.components.FileIcon.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "size",
+          "type": "Number | String",
+          "default": "1rem",
+          "description": "Size of the icon",
+          "required": false
+        },
+        {
+          "name": "extension",
+          "type": "String",
+          "default": "null",
+          "description": "file extension. Alternative for fileName prop",
+          "required": false
+        },
+        {
+          "name": "fileName",
+          "type": "String",
+          "default": "null",
+          "description": "Alternative for extension prop",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} :fileName=\"excel.pdf\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "name": "SearchInput",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.SearchInput.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "String",
+          "default": "null",
+          "description": "Same as v-model",
+          "required": false
+        },
+        {
+          "name": "mask",
+          "type": "String",
+          "default": "null",
+          "description": "Mask for input field",
+          "required": false
+        },
+        {
+          "name": "debounce",
+          "type": "Boolean",
+          "default": "false",
+          "description": "enables search on every keystroke with debounce",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "onSearch",
+          "description": "",
+          "syntax": "@onSearch=\"\""
+        },
+        {
+          "name": "update:modelValue",
+          "description": "",
+          "syntax": "@update:modelValue=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} class=\"form-control\" @onSearch=\"search\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "name": "PersonImage",
+      "description": "Gets ProfileImage of user",
+      "type": "Component",
+      "category": "General",
+      "path": "system.vue.components.PersonImage.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "personId",
+          "type": "Number | String",
+          "default": "null",
+          "description": "ID of person you want to get profilepicture from.",
+          "template": "personId=\"102480\"",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} personId=\"102480\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "name": "formatNumber",
+      "description": "Function for formatting numbers",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.js",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "number",
+          "type": "Number",
+          "default": "null",
+          "description": "Number to format",
+          "required": false
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "default": "null",
+          "description": "The way your number shall get formatted",
+          "example": "0.0%",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(0.92, '0.0%');",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "name": "formatDate",
+      "description": "function for formatting dates",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.js",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "number",
+          "type": "Number",
+          "default": "null",
+          "description": "Number to format",
+          "required": false
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "default": "null",
+          "description": "The way your date shall get formatted",
+          "example": "Short Time | General Date Short Time",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(new Date(), 'Short Time');",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "name": "AutoComplete",
+      "description": "Autocomplete input field",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.Autocomplete.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "any",
+          "default": "null",
+          "description": "Same as v-model",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "any",
+          "default": "null",
+          "description": "Current Selected Value",
+          "required": false
+        },
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "dataObject to search from.",
+          "required": false
+        },
+        {
+          "name": "getData",
+          "type": "Function",
+          "default": "null",
+          "description": "Alternative for dataObject prop",
+          "required": false
+        },
+        {
+          "name": "itemTitle",
+          "type": "Function",
+          "default": "null",
+          "params": [
+            {
+              "name": "pRow",
+              "type": "Object"
+            }
+          ],
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "bind",
+          "type": "Function",
+          "default": "null",
+          "description": "Bind selected value to your variables",
+          "example": ":bind=\"sel => { vValue = sel.ID }\"",
+          "required": false
+        },
+        {
+          "name": "field",
+          "type": "String",
+          "default": "null",
+          "description": "Field to search from",
+          "required": false
+        },
+        {
+          "name": "itemSize",
+          "type": "Number",
+          "default": "24",
+          "description": "Size of the individual items",
+          "required": false
+        },
+        {
+          "name": "wrapperClass",
+          "type": "String | CSS classes",
+          "default": "null",
+          "description": "CSS Classes for wrapper",
+          "required": false
+        },
+        {
+          "name": "disableFirstItemAutoSelect",
+          "type": "Boolean",
+          "default": "false",
+          "description": "By default first item gets selected. enable this prop to turn it off.",
+          "required": false
+        },
+        {
+          "name": "disableCloseOnEnter",
+          "type": "Boolean",
+          "default": "false",
+          "description": "By default it autocloses when enter is pressed.",
+          "required": false
+        },
+        {
+          "name": "id",
+          "type": "String",
+          "default": "null",
+          "description": "ID for input element",
+          "required": false
+        },
+        {
+          "name": "minWidth",
+          "type": "Number | String",
+          "default": "200",
+          "description": "Minimum width of popup values",
+          "required": false
+        },
+        {
+          "name": "filterOperator",
+          "type": "String",
+          "default": "beginswith",
+          "description": "Operator that is used when searching",
+          "required": false
+        },
+        {
+          "name": "hideNoResults",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Hides no results text when dataobject is empty",
+          "required": false
+        },
+        {
+          "name": "searchOnFocuz",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Only available with getData prop. When this is enabled focusing the input will do a getData function call",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "noResults",
+          "description": "Text for when dataObject is empty",
+          "template": "#noResults"
+        }
+      ],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "fires then modelValue has changed.",
+          "syntax": "@update:modelValue=\"sel => {}\""
+        },
+        {
+          "name": "enter:input",
+          "description": "fires then input has changed.",
+          "syntax": "@enter:input\"\""
+        },
+        {
+          "name": "blur:noSelection",
+          "description": "",
+          "syntax": "@blur:noSelection=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} :value=\"dsTest.current.OrgUnit\" :dataObject=\"dsOrgUnits\" field=\"Name\" :bind=\"sel => {dsTest.current.OrgUnit = sel.Name; dsTest.current.OrgUnit_ID = sel.ID;}\"/>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "name": "getQueryParameter",
+      "description": "Function for getting query parameters",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.url.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "key",
+          "type": "String",
+          "template": "{COMPONENT}(\"ID\")",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(\"ID\")",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "name": "setQueryParameter",
+      "description": "Function for setting query parameters",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.url.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "key",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "pageReload",
+          "type": "Boolean",
+          "description": "Set to true if you want page reload after value has been set",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(\"ID\", 10000)",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "name": "deleteQueryParameter",
+      "description": "Function for deleting query parameters",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.url.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "key",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "pageReload",
+          "type": "Boolean",
+          "description": "Set to true if you want page reload after value has been set",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "{COMPONENT}(\"ID\")",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "name": "UploadDrop",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.UploadDrop.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "Dataobject where files get uploaded too",
+          "required": true
+        },
+        {
+          "name": "beforeUpload",
+          "type": "Function",
+          "default": "null",
+          "description": "fires before upload. returns row as param",
+          "required": false
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "default": "Upload",
+          "description": "Does nothing. Not used",
+          "required": false
+        },
+        {
+          "name": "hideProgressBar",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Hides progress bar for uploading file",
+          "required": false
+        },
+        {
+          "name": "primKey",
+          "type": "String",
+          "default": "null",
+          "description": "Will overwrite file with that primkey if specified.",
+          "required": false
+        },
+        {
+          "name": "routeUrl",
+          "type": "String",
+          "default": "null",
+          "description": "Uploads files to that url?",
+          "required": false
+        },
+        {
+          "name": "disableChunks",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "skipRecordCreate",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Skips creating record and just displays the file.",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "default drop area",
+          "template": "#default"
+        }
+      ],
+      "events": [
+        {
+          "name": "uploaded",
+          "description": "fires when file(s) have been uploaded",
+          "syntax": "@uploaded=\"\""
+        },
+        {
+          "name": "error",
+          "description": "fires when something went wrong.",
+          "syntax": "@error=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Droparea for {COMPONENT=4}",
+          "code": "<{COMPONENT} :dataObject=\"dsFiles\" @uploaded=\"{COMPONENT=2}($t(`File successfully uploaded`), 'success', { autohide: true, delay: 3000 }); dsFiles.load();\"><{COMPONENT=4} :dataObject=\"dsFiles\"><{COMPONENT=5} sortable class=\"text-center\" width=\"50\" field=\"Extension\" v-slot=\"{ row }\"><{COMPONENT=59} :fileName=\"row.FileName\" /></{COMPONENT=5}><{COMPONENT=5} sortable field=\"FileName\" width=\"400\" /></{COMPONENT=4}></{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "name": "FileUploadButton",
+      "description": "",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.FileUploadButton.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "Dataobject where files get uploaded too",
+          "required": true
+        },
+        {
+          "name": "beforeUpload",
+          "type": "Function",
+          "default": "null",
+          "description": "fires before upload. returns row as param",
+          "required": false
+        },
+        {
+          "name": "text",
+          "type": "String",
+          "default": "Upload File",
+          "description": "text for button",
+          "required": false
+        },
+        {
+          "name": "hideProgressBar",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Hides progress bar for uploading file",
+          "required": false
+        },
+        {
+          "name": "primKey",
+          "type": "String",
+          "default": "null",
+          "description": "Will overwrite file with that primkey if specified.",
+          "required": false
+        },
+        {
+          "name": "accept",
+          "type": "String",
+          "default": "null",
+          "description": "Filetypes to accept",
+          "required": false
+        },
+        {
+          "name": "disableChunks",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "skipRecordCreate",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Skips creating record and just displays the file.",
+          "required": false
+        },
+        {
+          "name": "multiple",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Allows for selection multiple files.",
+          "required": false
+        },
+        {
+          "name": "showDropZone",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Shows dropzone.",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "uploaded",
+          "description": "fires when file(s) have been uploaded",
+          "syntax": "@uploaded=\"\""
+        },
+        {
+          "name": "error",
+          "description": "fires when something went wrong.",
+          "syntax": "@error=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": []
+    },
+    {
+      "id": 70,
+      "name": "getOrCreateProcedure",
+      "description": "",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.vue.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pOptions",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "props": [
+            {
+              "name": "id",
+              "type": "String",
+              "description": "",
+              "required": true
+            },
+            {
+              "name": "procedureName",
+              "type": "String",
+              "description": "",
+              "required": true
+            },
+            {
+              "name": "useAlert",
+              "type": "Boolean",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "useTransation",
+              "type": "Boolean",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "timeout",
+              "type": "Number",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "useStreamRequest",
+              "type": "Boolean",
+              "description": "",
+              "required": false
+            }
+          ],
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": []
+    },
+    {
+      "id": 71,
+      "name": "getDataObjectById",
+      "description": "",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.vue.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "exposes": [],
+      "snippets": []
+    },
+    {
+      "id": 72,
+      "name": "getOrCreateDataObject",
+      "description": "",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.vue.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pOptions",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [],
+          "example": "",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": []
+    },
+    {
+      "id": 73,
+      "name": "context",
+      "description": "",
+      "type": "Object",
+      "category": "Utilities",
+      "path": "o365.modules.Context.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "id",
+          "type": "Number",
+          "description": "Gets current context id. Can be used as Domain_ID"
+        },
+        {
+          "name": "idPath",
+          "type": "String",
+          "description": "Get current context IdPath"
+        },
+        {
+          "name": "setContext",
+          "type": "Function",
+          "description": "Sets current context",
+          "params": [
+            {
+              "name": "pContext_ID",
+              "type": "Number",
+              "description": "",
+              "required": true
+            },
+            {
+              "name": "pOptions",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "preventSaving",
+                  "type": "Boolean"
+                },
+                {
+                  "name": "userTriggered",
+                  "type": "Boolean",
+                  "description": "Will always be true bc NT. Just kidding. True if user has selected a new Context via the Context selector dropdown (Only used by system)"
+                },
+                {
+                  "name": "contextDropdownItems",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "domain",
+                      "type": "String"
+                    },
+                    {
+                      "name": "domainId",
+                      "type": "Number"
+                    },
+                    {
+                      "name": "orgUnit",
+                      "type": "String"
+                    },
+                    {
+                      "name": "orgUnitId",
+                      "type": "Number"
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ]
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "TBA",
+          "code": "",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "name": "GlobalMessenger",
+      "description": "Only works on Apps with parent set on detail app",
+      "type": "Object",
+      "category": "Utilities",
+      "path": "o365.modules.utils.GlobalMessenger.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "on",
+          "type": "Function",
+          "description": "Used in main app.",
+          "params": [
+            {
+              "name": "callback",
+              "type": "Function",
+              "description": "Callback function",
+              "template": "((pMessage) => {})"
+            }
+          ]
+        },
+        {
+          "name": "post",
+          "type": "Object",
+          "description": "Post a event."
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Master App",
+          "content": "",
+          "code": "{COMPONENT}.on((pMessage) => { //Sending custom json from details with action='saved' and refreshing if change happended.if(pMessage && pMessage.action == 'saved'){dsDataSource.recordSource.refreshRowById(currentWorkflow.value);}});",
+          "language": "javascript"
+        },
+        {
+          "title": "Details App",
+          "content": "",
+          "code": "{COMPONENT}.post({ action: 'saved' });",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "name": "AttachmentLink",
+      "description": "Use in files grid. Has integrated image editor.",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.components.AttachmentLink.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "Required to get the attachments data from.",
+          "required": true
+        },
+        {
+          "name": "row",
+          "type": "Object",
+          "default": "null",
+          "description": "Datarow",
+          "required": true
+        },
+        {
+          "name": "groupName",
+          "type": "String",
+          "default": "''",
+          "description": "Will put all items on the page of the same group together in one carousel.",
+          "required": false
+        },
+        {
+          "name": "documentViewer",
+          "type": "Boolean",
+          "default": "true",
+          "description": "Enables or disables the ability to view documents in SpotLight (only images if false)",
+          "required": false
+        },
+        {
+          "name": "imageEditor",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Specifies whether or not the user can edit image attachments.",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT=5} field=\"FileName\" v-slot=\"{ row }\" sortable width=\"400\"><{COMPONENT} :dataObject=\"dsMyFiles\" :row=\"row\" /></{COMPONENT=5}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "name": "formatFileSize",
+      "description": "Formats file size",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "o365.modules.utils.js",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFileSize",
+          "type": "Number",
+          "description": "File size in bytes",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Returns 41.08 KB",
+          "code": "{COMPONENT}(42069)",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "name": "SendMail",
+      "description": "",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.components.SendMail.vue",
+      "pathtype": "Direct",
+      "props": [ ],
+      "slots": [],
+      "events": [
+        {
+          "name": "after-send",
+          "description": "fires after email has been sent",
+          "syntax": "@after-send=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "refreshDraftEmail",
+          "type": "Function"
+        },
+        {
+          "name": "sendEmail",
+          "type": "Function",
+          "params": [
+            {
+              "name": "mail_id",
+              "type": "Number",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "setEmail",
+          "type": "Function",
+          "params": [
+            {
+              "name": "email",
+              "type": "String",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "dsMyEmailsAttachments",
+          "type": "DataObject"
+        },
+        {
+          "name": "dsMyDraftEmails",
+          "type": "DataObject"
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "TBA",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "name": "FroalaEditor",
+      "description": "NB: Remember to include imports for FroalaEditor inside HTML File. \n<link href=\"https://cdn.omega365.com/libs/froala/v.4.0.15/froala_editor.pkgd.min.css\" rel=\"stylesheet\"/>\n<script src=\"https://cdn.omega365.com/libs/froala/v.4.0.15/froala_editor.pkgd.min.js\"></script>",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.froalaeditor.FroalaEditor.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "Object",
+          "default": "null",
+          "description": "dataobject with HTMLContent column.",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "boxId",
+          "type": "String",
+          "default": "null",
+          "description": "Unique ID for editor",
+          "example": "Test123",
+          "required": false
+        },
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables froalaeditor",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} :dataObject=\"dsMyDataObject\" boxId=\"myBoxId\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "name": "FroalaWithUploadBtn",
+      "description": "Froala editor with support for uploading word files. NB: Does not work yet",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIN365.vue.components.froalaeditor.uploadworddocuments.FroalaWithUploadBtn.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "text",
+          "type": "String",
+          "default": "Upload new Word Document",
+          "description": "Button text",
+          "required": false
+        },
+        {
+          "name": "boxId",
+          "type": "String",
+          "default": "null",
+          "description": "Box ID for froalaeditor",
+          "example": "Description",
+          "required": true
+        },
+        {
+          "name": "dsText",
+          "type": "DataObject",
+          "default": "null",
+          "description": "Data Object for text",
+          "example": "dsMyDataSource",
+          "required": false
+        },
+        {
+          "name": "dsFilesTemp",
+          "type": "DataObject",
+          "default": "null",
+          "description": "Temp table for uploading word files.",
+          "example": "dsGeneralTemp",
+          "required": false
+        },
+        {
+          "name": "beforeUpload",
+          "type": "Function",
+          "default": "null",
+          "description": "Fires before upload",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} :dsText=\"dsMyDataSource\" :dsFilesTemp=\"dsGeneralFilesTemp\" :boxId=\"UniqueId\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "name": "Url",
+      "description": "Url utilities",
+      "type": "Class",
+      "category": "Utilities",
+      "path": "o365.modules.url.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "href",
+          "type": "string",
+          "description": ""
+        },
+        {
+          "name": "getParam",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "setParam",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "pValue",
+              "type": "any",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "decodeURL",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pUrl",
+              "type": "String",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "decodObject",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pValue",
+              "type": "any",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "setDecodedObject",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "pValue",
+              "type": "any",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "getDecodedObject",
+          "type": "Function",
+          "params": [
+            {
+              "name": "pKey",
+              "type": "String",
+              "required": true
+            }
+          ],
+          "description": ""
+        }
+      ],
+      "snippets": []
+    },
+    {
+      "id": 80,
       "name": "TEMPLATE",
       "description": "",
-      "type": "",
+      "type": "TEMPLATE",
       "category": "",
       "path": "",
+      "pathtype": "Direct",
       "props": [
         {
           "name": "",
@@ -4027,14 +7056,16 @@
       "exposes": [
         {
           "name": "",
-          "type": ""
+          "type": "",
+          "description": ""
         }
       ],
       "snippets": [
         {
-          "title": "",
+          "title": "Example",
           "content": "",
-          "code": ""
+          "code": "",
+          "language": "html"
         }
       ]
     }

@@ -16,104 +16,7 @@
 
       <div class="offcanvas-body">
         <nav class="w-100" aria-label="Docs navigation">
-          <ul
-            class="nav flex-column mb-0 pb-3 pb-md-2 pe-lg-2"
-            v-for="(vGroupContent, vGroupName, vIndex) in vGroupedTabs"
-            :key="vIndex"
-          >
-            <li class="nav-item py-2 d-block">
-              <strong class="d-flex w-100 align-items-center fw-semibold">
-                {{ vGroupName }}
-              </strong>
-
-              <ul class="nav flex-column fw-normal pb-2 small">
-                <li
-                  class="nav-item text-truncate"
-                  v-for="(vTab, vTabIndex) in vGroupContent"
-                  :key="vTabIndex"
-                >
-                  <button
-                    type="button"
-                    class="btn d-inline-block rounded text-truncate"
-                    :class="{ 'fw-bold': vSelectedTab === vTab.id }"
-                    @click="selectTab(vTab.id)"
-                  >
-                    {{ vTab.name }}
-                  </button>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <!-- {{ sidebar }} -->
-          <!-- <ul
-            class="nav flex-column mb-0 pb-3 pb-md-2 pe-lg-2"
-            v-for="(vGroup, vIndex) in vTabs"
-            :key="vIndex"
-          >
-            <li class="nav-item py-2 d-block">
-              <strong class="d-flex w-100 align-items-center fw-semibold">
-                {{ vGroup.category }}
-              </strong>
-
-              <ul
-                class="nav flex-column fw-normal pb-2 small"
-                v-if="vGroup.children"
-              >
-                <li
-                  class="nav-item text-truncate py-2 d-block"
-                  v-for="(vTab, vTabIndex) in vGroup.children"
-                  :key="vTabIndex"
-                >
-                  <strong
-                    v-if="vTab?.children"
-                    class="d-flex w-100 align-items-center fw-semibold"
-                  >
-                    {{ vTab.category }}
-                  </strong>
-
-                  <ul
-                    class="nav flex-column fw-normal pb-2 small"
-                    v-if="vTab?.children"
-                  >
-                    <li
-                      class="nav-item text-truncate"
-                      v-for="(vTabChild, vTabChildIndex) in vTab.children"
-                      :key="vTabChildIndex"
-                    >
-                      <button
-                        type="button"
-                        class="btn d-inline-block rounded text-truncate"
-                        :class="{ 'fw-bold': vSelectedTab === vTab.id }"
-                        @click="selectTab(vTab.id)"
-                      >
-                        {{ vTabChild.name }}
-                      </button>
-                    </li>
-                  </ul>
-
-                  <button
-                    v-else
-                    type="button"
-                    class="btn d-inline-block rounded text-truncate"
-                    :class="{ 'fw-bold': vSelectedTab === vTab.id }"
-                    @click="selectTab(vTab.id)"
-                  >
-                    {{ vTab.name }}
-                  </button>
-                </li>
-              </ul>
-
-              <button
-                v-else
-                type="button"
-                class="btn d-inline-block rounded text-truncate"
-                :class="{ 'fw-bold': vSelectedTab === vGroup.id }"
-                @click="selectTab(vGroup.id)"
-              >
-                {{ vGroup.name }}
-              </button>
-            </li>
-          </ul> -->
+          <TreeList :treeData="vGroupedTabs" @tab-selected="selectTab" :selected-tab="vSelectedTab" />
         </nav>
       </div>
     </div>
@@ -121,33 +24,61 @@
 </template>
 
 <script setup lang="ts">
-// TODO: Add folder support for category
 // TODO: add "W" before every win component
-import type { Tab } from "@/App.vue";
+// TODO: sort alphabetically
+import type { Tab } from "@/components";
 import { components } from "./../assets/Components.json";
-import { ref, onMounted, h, computed } from "vue";
-import useSidebarRenderer from "./useSidebarRenderer";
-interface GroupedTabs {
-  [category: string]: Tab[];
+import TreeList from "./TreeList.vue";
+import { ref, onMounted, watch, onBeforeMount } from "vue";
+
+
+export interface Category {
+  treeId: string;
+  name: string;
+  items: (Tab | Category)[];
 }
-// const { sidebar } = useSidebarRenderer(
-//   components.map((p, id) => ({ id, ...p })) as Tab[]
-// );
 
-const groupBy = <T extends Tab, K extends keyof T>(
-  array: T[],
-  key: K,
-): GroupedTabs => {
-  return array.reduce((rv, x) => {
-    const keyValue = x[key] as string;
-    (rv[keyValue] = rv[keyValue] || []).push(x);
-    return rv;
-  }, {} as GroupedTabs);
-};
+const assignUniqueIds = (data: Category[], parentId = ''): void => {
+  data.forEach((category, index) => {
+    const categoryId = parentId ? `${parentId}-${index}` : `${index}`;
+    category.treeId = categoryId;
+    if (category.items && category.items.length > 0) {
+      assignUniqueIds(category.items as Category[], categoryId);
+    }
+  });
+}
 
-const vGroupedTabs = ref<GroupedTabs>();
-const vTabs = ref<Record<string, any>[]>();
-const vSelectedTab = ref();
+const groupByCategoryPath = (data: Tab[]): Category[] => {
+  const groupedData: Category[] = [];
+
+  data.forEach((item) => {
+    const category = item?.category?.split('/') || [];
+    let currentGroup: any = groupedData;
+
+    category.forEach((category, i) => {
+      // Find if the category already exists
+      let existingCategory = currentGroup.find((c: any) => c.name === category);
+
+      // If the category doesn't exist, create it
+      if (!existingCategory) {
+        existingCategory = { name: category, items: [] };
+        currentGroup.push(existingCategory);
+      }
+
+      // Update currentGroup for the next iteration
+      currentGroup = existingCategory.items as Category[];
+    });
+
+    currentGroup.push(item);
+  });
+
+  assignUniqueIds(groupedData);
+
+  return groupedData;
+}
+
+const vGroupedTabs = ref();
+const vSelectedTab = ref<number>(1);
 const emit = defineEmits(["tabSelected"]);
 
 // Emit event to parent component when tab is selected
@@ -156,12 +87,39 @@ const selectTab = (pTab_ID: Tab["id"]) => {
   emit("tabSelected", pTab_ID);
 };
 
-onMounted(() => {
-  vGroupedTabs.value = groupBy(
-    components as Tab[],
-    // .filter((t) => t.type === "Component" || !t.type),
-    "category",
+
+
+onBeforeMount(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedTabParam = urlParams.get('tab');
+
+  if (selectedTabParam) {
+    const vSelectTab = components.find((vTab) => vTab.name.includes(selectedTabParam) || vTab.id === parseInt(selectedTabParam));
+    
+    if (vSelectTab) {
+      vSelectedTab.value = vSelectTab.id
+
+      emit("tabSelected", vSelectTab.id)
+    }
+  }
+
+  vGroupedTabs.value = groupByCategoryPath(
+    components.filter((t) => t.type !== "TEMPLATE") as Tab[]
   );
+});
+
+window.addEventListener('popstate', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedTabParam = urlParams.get('tab');
+  if (selectedTabParam) {
+    const vSelectTab = components.find((vTab) => vTab.name.includes(selectedTabParam) || vTab.id === parseInt(selectedTabParam));
+    
+    if (vSelectTab) {
+      vSelectedTab.value = vSelectTab.id
+
+      emit("tabSelected", vSelectTab.id);
+    }
+  }
 });
 </script>
 
