@@ -26,6 +26,7 @@ interface Expose {
 interface Snippet {
   title: string;
   content?: string | undefined;
+  script?: string | undefined;
   code?: string | undefined;
   language?: string;
   imports: Array<string> | undefined

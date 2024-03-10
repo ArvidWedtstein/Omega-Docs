@@ -845,17 +845,54 @@
       ],
       "slots": [],
       "events": [],
+      "exposes": [
+        {
+          "name": "updateMessage",
+          "type": "Function",
+          "description": "Update message of alert",
+          "params": [
+            {
+              "name": "pMessage",
+              "type": "String",
+              "description": "New message",
+              "required": true
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "updateType",
+          "type": "Function",
+          "description": "Update type of alert",
+          "params": [
+            {
+              "name": "pType",
+              "type": "String",
+              "template": "danger | info | success",
+              "required": true
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "close",
+          "type": "Function",
+          "description": "Closes alert",
+          "params": [],
+          "required": false
+        }
+      ],
       "snippets": [
         {
           "title": "Error",
           "content": "When displaying alert for error",
-          "code": "alert('Something Went Wrong', 'danger')",
+          "code": "{COMPONENT}('Something Went Wrong', 'danger')",
           "language": "javascript"
         },
         {
           "title": "Disappear after xTime",
           "content": "When displaying alert for info",
-          "code": "alert('Information', 'info', { autohide: true, timeout: 3000 })",
+          "code": "{COMPONENT}('Information', 'info', { autohide: true, timeout: 3000 })",
           "language": "javascript"
         }
       ]
@@ -2442,6 +2479,13 @@
           "title": "Example",
           "content": "Use classes like modal-(sm, md, lg, xl, xxl) to adjust modal size",
           "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\">{{ $t('Save') }}</button></div></div></div></{COMPONENT}>",
+          "language": "html"
+        },
+        {
+          "title": "Send Mail Modal",
+          "content": "Put in File for modal",
+          "code": "<template><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title\">{{ $t('Send Mail') }}</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><{COMPONENT=44} class=\"modal-body\"><{COMPONENT=77} ref=\"vSendEmailComponent\" /></{COMPONENT=44}><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\" @click=\"sendEmail\">{{ $t('Send') }}</button></div></div></div></{COMPONENT}></template>",
+          "script": "",
           "language": "html"
         }
       ]

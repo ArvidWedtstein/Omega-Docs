@@ -312,6 +312,124 @@ function formatSQL(rawSQL: string) {
 }
 
 
+type FilterValue = string | number | boolean;
+interface Filter {
+    [key: string]: FilterValue | { operator: string; value: FilterValue };
+}
+interface FilterArray {
+    field: string;
+    operator: string;
+    value: FilterValue;
+    criteria?: boolean;
+}
+
+// TODO: add groups to filter somehow?
+const generateSQLFilterString = (filters: FilterArray[], logicalOperator: 'AND' | 'OR' = 'AND') =>  {
+    const validOperators = ['=', '!=', '>', '>=', '<', '<=', 'LIKE', 'IN', 'NOT IN'];
+    let filterString = '';
+    let isFirstFilter = true;
+
+    for (const filter of filters) {
+        if (!filter.criteria || filter.value === null || filter.value === undefined || filter.value === '') {
+            continue;
+        }
+
+        if (!isFirstFilter) {
+            filterString += ` ${logicalOperator} `;
+        } else {
+            isFirstFilter = false;
+        }
+
+        if (Array.isArray(filter.value)) {
+            if (filter.operator === 'IN' || filter.operator === 'NOT IN') {
+                const operator = filter.operator === 'IN' ? 'IN' : 'NOT IN';
+                filterString += `${filter.field} ${operator} (${filter.value.map(v => typeof v === 'string' && !v.startsWith("'") ? `'${v}'` : v).join(', ')})`;
+            } else {
+                console.error(`Invalid operator "${filter.operator}" for array value.`);
+            }
+        } else if (validOperators.includes(filter.operator)) {
+            filterString += `${filter.field} ${filter.operator} ${typeof filter.value === 'string' && !filter.value.startsWith("'") ? `'${filter.value}'` : filter.value}`;
+        } else {
+            console.error(`Invalid operator "${filter.operator}".`);
+        }
+    }
+    
+    return filterString;
+}
+// let vFilters = [
+//       {
+//         field: "Company_ID",
+//         operator: '=',
+//         value: dsCanteenReportFilters.current.Company_ID,
+//         criteria: vFormFieldEnabledStates.Company && dsCanteenReportFilters.current.Company_ID !== null
+//       },
+//       {
+//         field: "MealDate",
+//         operator: '>=',
+//         value: utils.formatDate(dsCanteenReportFilters.current.FromDate, 'yyyy-MM-dd'),
+//         criteria: vFormFieldEnabledStates.UseDateInFilter && vFormFieldEnabledStates.FromDate && dsCanteenReportFilters.current.FromDate !== null
+//       },
+//       {
+//         field: "MealDate",
+//         operator: '<=',
+//         value: utils.formatDate(dsCanteenReportFilters.current.ToDate, 'yyyy-MM-dd'),
+//         criteria: vFormFieldEnabledStates.UseDateInFilter && vFormFieldEnabledStates.ToDate && dsCanteenReportFilters.current.ToDate !== null
+//       },
+//       {
+//         field: "CanteenLocation_ID",
+//         operator: '=',
+//         value: dsCanteenReportFilters.current.CanteenLocation_ID,
+//         criteria: vFormFieldEnabledStates.UseLocationInFilter && dsCanteenReportFilters.current.CanteenLocation_ID !== null
+//       },
+//       {
+//         field: "HasRoom",
+//         operator: '=',
+//         value: 0,
+//         criteria: vFormFieldEnabledStates.ExcludePersonsWithRoom && dsCanteenReportFilters.current.ExcludePersonsWithRoom
+//       },
+//       {
+//         field: "Overtime",
+//         operator: '=',
+//         value: 0,
+//         criteria: vFormFieldEnabledStates.ExcludeOvertime && dsCanteenReportFilters.current.ExcludeOvertime
+//       },
+//       {
+//         field: "Overtime",
+//         operator: '=',
+//         value: 1,
+//         criteria: vFormFieldEnabledStates.IncludeOvertimeOnly && dsCanteenReportFilters.current.IncludeOvertimeOnly
+//       },
+//       {
+//         field: "HasWorkedNightShift",
+//         operator: '=',
+//         value: 0,
+//         criteria: vFormFieldEnabledStates.ExcludePersonsWithNightShift && dsCanteenReportFilters.current.ExcludePersonsWithNightShift
+//       },
+//       {
+//         field: "Department_ID",
+//         operator: 'NOT IN',
+//         value: [9, 169],
+//         criteria: vFormFieldEnabledStates.ExcludeCateringPartner && dsCanteenReportFilters.current.ExcludeCateringPartner
+//       },
+//       {
+//         field: "MealType_ID",
+//         operator: 'IN',
+//         value: vCheckedMeal_IDs.value,
+//         criteria: vFormFieldEnabledStates.IncludeMeals
+//       },
+//       {
+//         field: "AssignmentCategory",
+//         operator: 'IN',
+//         value: vCheckedAssignmentCategories.value.map(vCategory => `'${vCategory}'`),
+//         criteria: vFormFieldEnabledStates.AssignmentCategories
+//       },
+//       {
+//         field: "Person_ID",
+//         operator: vIncludeOrExcludePersonsList.value !== 'include' ? 'NOT IN' : 'IN',
+//         value: dsCanteenReportFiltersIncludeOrExcludePersons.data.map(({ Person_ID }) => Person_ID),
+//         criteria: vFormFieldEnabledStates.GroupPersonlist && vIncludeOrExcludePersonsList.value !== "disable" && dsCanteenReportFiltersIncludeOrExcludePersons.data.length !== 0
+//       },
+//     ]
 </script>
 
 <style scoped>
@@ -326,4 +444,10 @@ figure {
   /* background: rgb(55, 55, 55); */
 }
 
+.custom-btn {
+	border: 2px solid color-mix(in srgb, #ffffff, #7188a8 10%);
+	box-shadow: 0 10px 10px -10px hsl(180 5% 90% / 50%), 0 10px color-mix(in srgb, #14161b, hsl(180 20% 20%) 80%), 0 12px 8px hsl(180 10% 5%), inset 0 2px 2px hsl(180 10% 30%);
+}
 </style>
+
+
