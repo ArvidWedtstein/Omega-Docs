@@ -588,11 +588,34 @@
           "required": false
         },
         {
+          "name": "getDataLength",
+          "type": "Function",
+          "default": "",
+          "params": [],
+          "description": "Gets number of rows",
+          "example": "dsWorkflows.getDataLength()",
+          "required": false
+        },
+        {
           "name": "fileUpload",
           "type": "Object",
           "default": "",
           "description": "",
           "example": "",
+          "required": false
+        },
+        {
+          "name": "masterDetails",
+          "type": "Object",
+          "params": [
+            {
+              "name": "loadDetailDataObjects",
+              "type": "Function",
+              "description": "",
+              "params": [],
+              "required": false
+            }
+          ],
           "required": false
         },
         {
@@ -6521,7 +6544,14 @@
         }
       ],
       "exposes": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Example Procedure",
+          "code": "const procExample = {COMPONENT}({id: \"procExample\", procedureName: \"astp_aPerson_CreateContact\", timeout: 42069})",
+          "language": "javascript"
+        }
+      ]
     },
     {
       "id": 71,
@@ -6536,16 +6566,24 @@
       "events": [],
       "params": [
         {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
+          "name": "pDataObject",
+          "type": "String",
+          "default": "null",
+          "description": "Name of data object",
+          "params": [],
           "example": "",
-          "required": false
+          "required": true
         }
       ],
       "exposes": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const dsWelds = {COMPONENT}(\"dsWelds\");",
+          "language": "javascript"
+        }
+      ]
     },
     {
       "id": 72,
@@ -6564,7 +6602,14 @@
           "type": "Object",
           "default": "null",
           "description": "",
-          "params": [],
+          "params": [
+            {
+              "name": "id",
+              "type": "String",
+              "default": "null",
+              "required": true
+            }
+          ],
           "example": "",
           "required": true
         }
@@ -7300,6 +7345,104 @@
     },
     {
       "id": 84,
+      "name": "Cropper",
+      "description": "Image cropper",
+      "type": "Component",
+      "category": "General",
+      "path": "o365.vue.components.Cropper.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "",
+          "template": "#"
+        }
+      ],
+      "events": [
+        {
+          "name": "",
+          "description": "",
+          "syntax": "@=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "",
+          "type": "",
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "name": "NumberEditor",
+      "description": "",
+      "type": "Component",
+      "category": "",
+      "path": "",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "",
+          "type": "",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "",
+          "template": "#"
+        }
+      ],
+      "events": [
+        {
+          "name": "",
+          "description": "",
+          "syntax": "@=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "",
+          "type": "",
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 86,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",

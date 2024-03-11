@@ -695,6 +695,7 @@
 // TODO: make view for exposes, params, slots, props params
 // TODO: add concatinatefiles.
 // TODO: check shortcuts in codebuilder
+// TODO: Finish added components
 import Components, { generateImportString, type Tab } from "./components";
 import { ref, onBeforeMount } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
