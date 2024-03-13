@@ -6844,7 +6844,22 @@
       "category": "WIN",
       "path": "WIN365.vue.components.SendMail.vue",
       "pathtype": "Direct",
-      "props": [ ],
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "description": "Disables input fields",
+          "default": "false",
+          "required": false
+        },
+        {
+          "name": "useRecipientAutocomplete",
+          "type": "Boolean",
+          "description": "Enables for Autocomplete with freetext on To, Cc and Bcc fields.",
+          "default": "false",
+          "required": false
+        }
+      ],
       "slots": [],
       "events": [
         {
@@ -7353,41 +7368,116 @@
       "pathtype": "Direct",
       "props": [
         {
-          "name": "",
-          "type": "",
-          "default": "",
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "dataobject for images",
+          "example": "dsPersonsImages",
+          "required": true
+        },
+        {
+          "name": "fieldName",
+          "type": "String",
+          "default": "null",
+          "description": "image ref column field",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "aspectRatio",
+          "type": "Number",
+          "default": "3/4",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableAspectRatioUnlocking",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "disableUserRatios",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "src",
+          "type": "String",
+          "default": "null",
+          "description": "Image url source",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "wrapperClass",
+          "type": "String | CSS classes",
+          "default": "null",
           "description": "",
           "example": "",
           "required": false
         }
       ],
-      "slots": [
-        {
-          "name": "",
-          "description": "",
-          "template": "#"
-        }
-      ],
-      "events": [
-        {
-          "name": "",
-          "description": "",
-          "syntax": "@=\"\""
-        }
-      ],
+      "slots": [],
+      "events": [],
       "params": [],
       "exposes": [
         {
-          "name": "",
-          "type": "",
-          "description": ""
+          "name": "cropper",
+          "type": "Ref",
+          "description": "Ref for Cropper Element"
+        },
+        {
+          "name": "cropperControl",
+          "type": "Ref",
+          "description": "",
+          "params": [
+            {
+              "name": "dataObject",
+              "type": "DataObject"
+            },
+            {
+              "name": "fieldName",
+              "type": "String"
+            },
+            {
+              "name": "aspectRatio",
+              "type": "Number"
+            },
+            {
+              "name": "cropperFunctions",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "openModal",
+                  "type": "Function",
+                  "params": []
+                },
+                {
+                  "name": "closeModal",
+                  "type": "Function",
+                  "params": []
+                },
+                {
+                  "name": "getResult",
+                  "type": "Function",
+                  "params": [],
+                  "description": "Gets result of cropping."
+                }
+              ]
+            }
+          ]
         }
       ],
       "snippets": [
         {
           "title": "Example",
-          "content": "",
-          "code": "",
+          "content": "Persons Image",
+          "code": "<{COMPONENT} :dataObject=\"dsImages\" :src=\"`/nt/api/file/view/sviw_System_PersonsImages/${dsImages.current.PrimKey}/${dsImages.current.FileRef}`\" />",
           "language": "html"
         }
       ]
@@ -7395,49 +7485,459 @@
     {
       "id": 85,
       "name": "NumberEditor",
-      "description": "",
+      "description": "Basically same as {COMPONENT=62}",
       "type": "Component",
-      "category": "",
-      "path": "",
+      "category": "Form",
+      "path": "o365.vue.components.inputEditors.jsx",
       "pathtype": "Direct",
       "props": [
         {
-          "name": "",
-          "type": "",
+          "name": "modalValue",
+          "type": "Number",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "column",
+          "type": "Object",
           "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "default": "",
+          "description": "",
+          "example": "1234.567",
+          "required": false
+        },
+        {
+          "name": "returnAsString",
+          "type": "Boolean",
+          "default": "false",
           "description": "",
           "example": "",
           "required": false
         }
       ],
-      "slots": [
-        {
-          "name": "",
-          "description": "",
-          "template": "#"
-        }
-      ],
+      "slots": [],
       "events": [
         {
-          "name": "",
+          "name": "update:modelValue",
           "description": "",
-          "syntax": "@=\"\""
+          "syntax": "@update:modelValue=\"\""
         }
       ],
       "params": [],
       "exposes": [
         {
-          "name": "",
-          "type": "",
-          "description": ""
+          "name": "elRef",
+          "type": "Ref",
+          "description": "element ref"
+        },
+        {
+          "name": "activateEditor",
+          "type": "Function",
+          "description": "Activates editor"
         }
       ],
       "snippets": [
         {
           "title": "Example",
           "content": "",
-          "code": "",
+          "code": "<{COMPONENT} v-model=\"dsPurchaseOrdersItems.current.UnitPrice\" format=\"1234.567\" />",
           "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "name": "API",
+      "description": "Api functions",
+      "type": "Module",
+      "category": "General",
+      "path": "o365.modules.data.api.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "request",
+          "type": "Function",
+          "description": "Alternative for fetch",
+          "params": [
+            {
+              "name": "pOptions",
+              "type": "Object",
+              "decription": "",
+              "params": [
+                {
+                  "name": "requestInfo",
+                  "type": "String | RequestInfo",
+                  "description": "",
+                  "required": true
+                },
+                {
+                  "name": "method",
+                  "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+                  "description": "Method for request",
+                  "required": false
+                },
+                {
+                  "name": "headers",
+                  "type": "Object",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "body",
+                  "type": "BodyInit",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "mode",
+                  "type": "RequestMode",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "credentials",
+                  "type": "RequestCredentials",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "cache",
+                  "type": "default | force-cache | no-cache | no-store | only-if-cached | reload",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "redirect",
+                  "type": "error | follow | manual",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "integrity",
+                  "type": "String",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "keepalive",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "abortSignal",
+                  "type": "AbortSignal",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseStatusHandler",
+                  "type": "Function | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseBodyHandler",
+                  "type": "ResponseHandler | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "showErrorDialog",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "skipJwtCheck",
+                  "type": "Boolean",
+                  "description": "Skips Json web token check",
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestGet",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "pOptions",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "requestInfo",
+                  "type": "String | RequestInfo",
+                  "description": "",
+                  "required": true
+                },
+                {
+                  "name": "method",
+                  "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+                  "description": "Method for request",
+                  "required": false
+                },
+                {
+                  "name": "headers",
+                  "type": "Object",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "body",
+                  "type": "BodyInit",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "mode",
+                  "type": "RequestMode",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "credentials",
+                  "type": "RequestCredentials",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "cache",
+                  "type": "default | force-cache | no-cache | no-store | only-if-cached | reload",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "redirect",
+                  "type": "error | follow | manual",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "integrity",
+                  "type": "String",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "keepalive",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "abortSignal",
+                  "type": "AbortSignal",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseStatusHandler",
+                  "type": "Function | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseBodyHandler",
+                  "type": "ResponseHandler | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "showErrorDialog",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "skipJwtCheck",
+                  "type": "Boolean",
+                  "description": "Skips Json web token check",
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "requestPost",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "abortSignal",
+              "type": "AbortSignal",
+              "required": false
+            },
+            {
+              "name": "credentials",
+              "type": "RequestCredentials",
+              "default": "same-origin",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestFileCustomHeaders",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "headers",
+              "type": "Object",
+              "description": "",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "requestText",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "method",
+              "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+              "default": "GET",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestHtml",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "method",
+              "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+              "default": "GET",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestFile",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example request",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestGet",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestPost",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestFileCustomHeaders",
+          "content": "",
+          "code": "{COMPONENT}.requestFileCustomHeaders(`/file/view/reporting/arpt_aMeeting_Meetings/arpt_aMeeting_Meetings.pdf?Filter=ID=${dsMinutesOfMeetings.current.ID}`, '', { method: 'GET', headers: new Headers({ 'Accept': 'application/json', 'Content-type': 'application/json; charset=utf-8', 'X-NT-API': 'false' }) }).then(async (pResponse) => {})",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestText",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestHtml",
+          "content": "TBA",
+          "code": "{COMPONENT}.requestFile(`/nt/file/view/reporting/arpt_aMeeting_Meetings/arpt_aMeeting_Meetings.pdf`, { filter: `ID=${dsMinutesOfMeetings.current.ID}`}).then(async (pResponse) => {})",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestFile",
+          "content": "Can be used to get reports",
+          "code": "{COMPONENT}.requestFile(`/nt/file/view/reporting/arpt_aMeeting_Meetings/arpt_aMeeting_Meetings.pdf`, { filter: `ID=${dsMinutesOfMeetings.current.ID}`}).then(async (pResponse) => {})",
+          "language": "javascript"
         }
       ]
     },
