@@ -430,6 +430,107 @@ const generateSQLFilterString = (filters: FilterArray[], logicalOperator: 'AND' 
 //         criteria: vFormFieldEnabledStates.GroupPersonlist && vIncludeOrExcludePersonsList.value !== "disable" && dsCanteenReportFiltersIncludeOrExcludePersons.data.length !== 0
 //       },
 //     ]
+
+
+// AUTOCOMPLETE
+// <template>
+//   <div>
+//     <input
+//     class="form-control"
+//       v-model="searchQuery"
+//       @input="handleInput"
+//       placeholder="Type to search..."
+//     />
+//     <ul v-if="isOpen" class="autocomplete-list">
+//       <li
+//         v-for="(option, index) in filteredOptions"
+//         :key="index"
+//         @click="selectOption(option)"
+//       >
+//         {{ option }}
+//       </li>
+//     </ul>
+//     <div class="selected-options">
+//       <span
+//         v-for="(selectedOption, index) in selectedOptions"
+//         :key="index"
+//         @click="removeOption(selectedOption)"
+//         class="selected-option"
+//       >
+//         {{ selectedOption }} <span>&times;</span>
+//       </span>
+//     </div>
+//   </div>
+// </template>
+
+// <script setup>
+// import { getDataObjectById } from 'o365.vue.ts';
+// import { computed } from 'vue';
+
+// let options = ["test", "test1", "test2", "test3"];
+// let searchQuery = '';
+// let selectedOptions = [];
+// let isOpen = false;
+
+// const filteredOptions = computed(() => {
+//     return options.filter(option =>
+//         option.toLowerCase().includes(searchQuery.toLowerCase())
+//     );
+// });
+
+// const handleInput = () => {
+//     isOpen = true;
+// }
+
+// const selectOption = (option) => {
+//     if (!selectedOptions.includes(option)) {
+//         selectedOptions.push(option);
+//       }
+//       searchQuery = '';
+//       isOpen = false;
+// }
+
+// const removeOption = (option) => {
+//     const index = this.selectedOptions.indexOf(option);
+//     if (index !== -1) {
+//         this.selectedOptions.splice(index, 1);
+//     }
+// }
+
+// </script>
+
+
+// <style scoped>
+// .autocomplete-list {
+//   list-style-type: none;
+//   padding: 0;
+//   margin: 0;
+//   border: 1px solid #ccc;
+// }
+
+// .autocomplete-list li {
+//   padding: 10px;
+//   cursor: pointer;
+// }
+
+// .selected-options {
+//   margin-top: 10px;
+// }
+
+// .selected-option {
+//   background-color: #f0f0f0;
+//   padding: 5px 10px;
+//   margin-right: 5px;
+//   cursor: pointer;
+//   display: inline-block;
+// }
+
+// .selected-option span {
+//   margin-left: 5px;
+//   cursor: pointer;
+// }
+// </style>
+
 </script>
 
 <style scoped>
