@@ -23,6 +23,8 @@
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
+            <AutoComplete />
+
             <Section v-if="selectedTab?.path" title="Import">
               <CodeBlock disable-code-formatting language="javascript" :code="generateImportString(selectedTab)" />
             </Section>
@@ -702,6 +704,7 @@ import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
 import PropSelector from "./components/PropSelector.vue";
 import Section from "./components/Section.vue";
+import AutoComplete from "./components/AutoComplete.vue";
 
 const selectedTab = ref<Tab>();
 const vSearchProps = ref<Tab["props"]>([]);
