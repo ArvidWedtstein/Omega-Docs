@@ -103,7 +103,7 @@ const vInternalValue = computed({
 
 const vFilteredOptions = computed(() => {
   return items.filter((item: string) => {
-    return item.toLowerCase().includes(vInternalValue.value.toLowerCase())
+    return item.toLowerCase().includes(vUserInput.value.toLowerCase())
   });
 });
 
