@@ -23,7 +23,7 @@
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
-            <AutoComplete />
+            <AutoComplete :multiple="true" :getData="getData" field="value" :freeSolo="true" />
 
             <Section v-if="selectedTab?.path" title="Import">
               <CodeBlock disable-code-formatting language="javascript" :code="generateImportString(selectedTab)" />
@@ -715,6 +715,17 @@ const vSearchParams = ref<Tab["params"]>([]);
 const vSearchExposes = ref<Tab["exposes"]>([]);
 
 const vTabs = ref<Partial<Tab[]>>([]);
+
+function getData() {
+    // some async function that gets an array of results for the provided value (pValue is the current input value)
+    return Promise.resolve([
+        { value: 'Option 1' },
+        { value: 'Option 2' },
+        { value: 'Option 3' },
+        { value: 'Option 4' },
+        { value: 'Option 5' },
+    ]);
+} 
 
 const onSearchChange = (pSearchValue: string, pType: 'props' | 'events' | 'params' | 'slots' | 'exposes' | 'snippets') => {
   if (selectedTab?.value) {
