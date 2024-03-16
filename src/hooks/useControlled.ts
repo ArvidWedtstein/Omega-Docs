@@ -7,7 +7,7 @@ type UseControlledOptions<T> = {
     state?: string;
 };
   
-type UseControlledReturnValue<T> = [T, (newValue: T) => void];
+type UseControlledReturnValue<T> = [ComputedRef<T>, (newValue: T) => void];
 
 export const useControlled = <T extends unknown>({
     controlled,
@@ -26,5 +26,5 @@ export const useControlled = <T extends unknown>({
         }
     };
     
-    return [value.value, setValueIfUncontrolled];
+    return [value, setValueIfUncontrolled];
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative autocomplete d-flex flex-column">
+  <div class="position-relative autocomplete d-flex flex-column" @mousedown="handleMouseDown">
     <div class="position-relative d-inline-flex align-items-center flex-wrap border border-secondary rounded-1 p-1" @mouseover="handleClearVisible" @mouseleave="handleMouseLeave">
       <div v-if="multiple" v-for="(selectedItem, index) in vSelectedItems" :key="index" class="badge rounded-pill d-inline-flex align-items-center text-bg-secondary">
         {{ getOptionLabel?.(selectedItem) || selectedItem[field] }}
@@ -14,34 +14,36 @@
         type="text"
         class="border-transparent h-100 d-block border-0 flex-grow-1"
         style="box-sizing: content-box;"
-        v-model="vInternalValue"
+        v-model="inputValue"
         ref="vInputRef"
-        @input="handleInput"
+        @input="handleInputChange"
         @keydown.down="highlightNext"
         @keydown.up="highlightPrevious"
         @keydown.enter.prevent="selectHighlightedItem"
+        @mousedown="handleInputMouseDown"
         @keydown.delete="removeLastSelectedItem"
-        @focus="handleFocus"
-        @blur="handleBlur"
+        @focus="handleFocus2"
+        @blur="handleBlur2"
       />
 
-      <button class="btn position-absolute end-0 px-2" v-show="vClearIsVisisble" @click="clearSelection">
+      <button class="btn position-absolute end-0 px-2" v-show="vClearIsVisisble" @click="handleClear">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
         </svg>
       </button>
 
-      <button class="btn position-absolute start-100 px-2" @click="toggleOpen">
+      <button class="btn position-absolute start-100 px-2" @click="handlePopupIndicator">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
         </svg>
       </button>
     </div>
     
-    <div v-show="vShowDropdown" class="list-group list-group-flush bg-body-secondary border border-secondary rounded-1 mt-1 overflow-auto shadow autocomplete-container">
+    <div v-show="vOpen" class="list-group list-group-flush bg-body-secondary border border-secondary rounded-1 mt-1 overflow-auto shadow autocomplete-container">
       <button
         class="list-group-item list-group-item-action text-start"
         v-for="(item, index) in vFilteredOptions"
+        :data-option-index="index"
         :key="index"
         :class="{ 'list-group-item-light': index === vHighlightedIndex && !vSelectedItems.includes(item), 'list-group-item-primary': vSelectedItems.includes(item) }"
         @click="toggleSelectedItem(item)"
@@ -74,7 +76,8 @@ export type AutoCompleteProps = {
   filterOperator?: 'beginswith' | 'contains' | 'endswith';
   multiple?: boolean;
   freeSolo?: boolean
-  clearOnBlur: boolean;
+  clearOnBlur?: boolean;
+  disableClearable?: boolean;
   open?: boolean;
   disableCloseOnSelect?: boolean;
   /**
@@ -86,8 +89,6 @@ export type AutoCompleteProps = {
 const vProps = withDefaults(defineProps<AutoCompleteProps>(), {
   filterOperator: 'beginswith',
   disableCloseOnSelect: false,
-  value: null,
-  modelValue: null,
   multiple: false,
   freeSolo: false,
   clearOnBlur: false,
@@ -142,7 +143,7 @@ const resetInputvalue = (event: any, newValue: any) => {
     newInputValue = typeof optionLabel === 'string' ? optionLabel : '';
   }
 
-  if (inputValue === newInputValue) {
+  if (inputValue.value === newInputValue) {
     return;
   }
 
@@ -158,17 +159,19 @@ watch([inputValue], (newValue, oldValue) => {
   }
 });
 
-const [open, setOpenState] = useControlled({
+const [vOpen, setOpenState] = useControlled({
   controlled: vProps.open,
   default: false,
   state: 'open'
 });
 
+const inputPristine = ref<boolean>(false);
+
 const inputValueIsSelectedValue = 
   !vProps.multiple &&
-  !Array.isArray(value) &&
-  value != null &&
-  inputValue === (vProps.getOptionLabel?.(value) || value[vProps.field]) as string
+  !Array.isArray(value.value) &&
+  value.value != null &&
+  inputValue.value === (vProps.getOptionLabel?.(value.value) || value.value[vProps.field]) as string
 
 const vInternalValue = computed({
   get() {
@@ -184,6 +187,7 @@ const vInternalValue = computed({
   }
 });
 
+
 const vFilteredOptions = computed(() => {
   return vOptions.value.filter((item: Record<string, any>) => {
     switch (vProps.filterOperator) {
@@ -196,6 +200,169 @@ const vFilteredOptions = computed(() => {
     }
   });
 });
+
+
+const handleOpen = (pEvent: MouseEvent) => {
+  if (vOpen) {
+    return;
+  }
+
+  setOpenState(true);
+  inputPristine.value = true;
+}
+
+const handleClose = (pEvent: MouseEvent) => {
+  if (!vOpen) {
+    return
+  }
+
+  setOpenState(false);
+}
+
+const handleValue = (pEvent: any, newValue: any, reason: any, details = {}) => {
+  if (vProps.multiple && Array.isArray(value)) {
+    if (value.length === newValue.length && value.every((val, i) => val === newValue[i])) {
+      return;
+    }
+  } else if (value === newValue) {
+    return;
+  }
+
+  vEmit('update:modelValue', vProps.multiple 
+    ? Array.isArray(newValue) 
+      ? newValue.map((nv) => nv[vProps.field])
+      : newValue[vProps.field]
+    : newValue[vProps.field]
+  )
+
+  setValueState(newValue);
+} 
+
+const selectNewValue = (
+  event: any,
+  option: any,
+  reasonProp: string = "selectOption"
+) => {
+  let reason = reasonProp;
+  let newValue = null;
+  if (vProps.multiple) {
+    newValue = Array.isArray(value) ? value.slice() : [];
+
+    const itemIndex = newValue.findIndex((o) => option[vProps.field] === o[vProps.field]);
+
+    if (itemIndex === -1) {
+      newValue.push(option);
+    } else if (itemIndex !== -1) {
+      newValue.splice(itemIndex, 1);
+      reason = "removeOption";
+    }
+  }
+
+  
+  resetInputvalue(event, newValue);
+
+  handleValue(event, newValue, reason, { option });
+
+  if (!vProps.disableCloseOnSelect && (!event || (!event.ctrlKey && !event.metaKey))) {
+    handleClose(event);
+  }
+}
+
+const handleClear = (pEvent: MouseEvent) => {
+  setInputValueState("");
+
+  vEmit('update:modelValue', '')
+
+  handleValue(pEvent, vProps.multiple ? [] : null, "clear");
+}
+
+const handleFocus2 = (pEvent: FocusEvent) => {
+  vIsFocused.value = true;
+
+  console.log('handefocus')
+  handleOpen(pEvent as unknown as MouseEvent);
+}
+
+const handleBlur2 = (pEvent: FocusEvent) => {
+  vIsFocused.value = false;
+
+  // if (
+  //   listboxRef.current !== null &&
+  //   listboxRef.current.parentElement?.contains(document.activeElement)
+  // ) {
+  //   inputRef.current.focus();
+  //   return;
+  // }
+
+
+  if (vProps.clearOnBlur) {
+    resetInputvalue(pEvent, value);
+  }
+
+  handleClose(pEvent as unknown as MouseEvent);
+}
+
+const handleInputMouseDown = (event: MouseEvent) => {
+    if ((inputValue.value === "" || !vOpen.value)) {
+      handlePopupIndicator(event);
+    }
+  };
+
+const handleInputChange = (pEvent: Event) => {
+  const newValue = (pEvent?.target as HTMLInputElement).value;
+
+  if (inputValue.value !== newValue) {
+    setInputValueState(newValue);
+    inputPristine.value = false;
+
+    vEmit('update:modelValue', newValue);
+  }
+
+  if (newValue === "") {
+    if (!vProps.disableClearable && !vProps.multiple) {
+      handleValue(pEvent, null, "clear");
+    }
+  } else {
+    handleOpen(pEvent as unknown as MouseEvent);
+  }
+}
+
+const handleOptionClick = (event: MouseEvent) => {
+  const index = Number((event.currentTarget as HTMLButtonElement).getAttribute("data-option-index"));
+  selectNewValue(event, vFilteredOptions.value[index], "selectOption");
+};
+
+const handleTagDelete = (index: number) => (event: MouseEvent) => {
+  if (!vProps.multiple || !Array.isArray(value)) {
+    return;
+  }
+
+  const newvalue = value.slice();
+  newvalue.splice(index, 1);
+  handleValue(event, newvalue, "removeOption", {
+    option: value[index],
+  });
+};
+
+const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
+
+
+const handlePopupIndicator = (event: MouseEvent) => {
+  if (vOpen) {
+    handleClose(event);
+  } else {
+    handleOpen(event);
+  }
+};
+
+const handleMouseDown = (pEvent: MouseEvent) => {
+  if (!(pEvent.currentTarget as HTMLInputElement).contains((pEvent.target as HTMLElement))) {
+    return;
+  }
+  if ((pEvent.target as HTMLElement).getAttribute("id") !== uid) {
+    pEvent.preventDefault();
+  }
+};
 
 onMounted(async () => {
   if (vProps?.getData) {

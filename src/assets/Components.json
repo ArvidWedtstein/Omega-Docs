@@ -3876,6 +3876,13 @@
           "required": false
         },
         {
+          "name": "includeProjectField",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes project name field",
+          "required": false
+        },
+        {
           "name": "IncludeCompletedFinalAccount",
           "type": "Boolean",
           "default": "false",
