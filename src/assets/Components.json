@@ -2338,6 +2338,12 @@
           "description": "Auto closes taks",
           "example": "",
           "required": false
+        },
+        {
+          "name": "enableTaskSpinner",
+          "type": "Boolean",
+          "default": "false",
+          "required": false
         }
       ],
       "slots": [
@@ -2528,7 +2534,7 @@
       "snippets": [
         {
           "title": "Example",
-          "content": "",
+          "content": "Is basicly just a card",
           "code": "<{COMPONENT}>\n</{COMPONENT}>",
           "language": "html"
         }

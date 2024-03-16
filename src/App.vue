@@ -23,7 +23,7 @@
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
-            <AutoComplete :multiple="true" :getData="getData" field="value" :freeSolo="true" />
+            <AutoComplete :multiple="false" :getData="getData" field="value" v-model="vSelectedValue" :freeSolo="true" />
 
             <Section v-if="selectedTab?.path" title="Import">
               <CodeBlock disable-code-formatting language="javascript" :code="generateImportString(selectedTab)" />
@@ -698,7 +698,7 @@
 // TODO: add concatinatefiles.
 // TODO: check shortcuts in codebuilder
 import Components, { generateImportString, type Tab } from "./components";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, watch } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
@@ -716,14 +716,18 @@ const vSearchExposes = ref<Tab["exposes"]>([]);
 
 const vTabs = ref<Partial<Tab[]>>([]);
 
+
+const vSelectedValue = ref(null);
+
+
 function getData() {
     // some async function that gets an array of results for the provided value (pValue is the current input value)
     return Promise.resolve([
-        { value: 'Option 1' },
-        { value: 'Option 2' },
-        { value: 'Option 3' },
-        { value: 'Option 4' },
-        { value: 'Option 5' },
+        { value: 'Egg' },
+        { value: 'Melk' },
+        { value: 'Brød' },
+        { value: 'Kjøtt' },
+        { value: 'Klær' },
     ]);
 } 
 

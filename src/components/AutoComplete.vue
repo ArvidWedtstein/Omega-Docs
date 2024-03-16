@@ -1,6 +1,6 @@
 <template>
   <div class="position-relative autocomplete d-flex flex-column">
-    <div class="d-inline-flex align-items-center flex-wrap border border-secondary rounded-1 p-1">
+    <div class="position-relative d-inline-flex align-items-center flex-wrap border border-secondary rounded-1 p-1" @mouseover="handleClearVisible" @mouseleave="handleMouseLeave">
       <div v-if="multiple" v-for="(selectedItem, index) in vSelectedItems" :key="index" class="badge rounded-pill d-inline-flex align-items-center text-bg-secondary">
         {{ getOptionLabel?.(selectedItem) || selectedItem[field] }}
         <button type="button" class="btn btn-sm p-0 text-bg-secondary" @click="removeSelectedItem(index)">
@@ -19,14 +19,26 @@
         @input="handleInput"
         @keydown.down="highlightNext"
         @keydown.up="highlightPrevious"
-        @keydown.enter="selectHighlightedItem"
+        @keydown.enter.prevent="selectHighlightedItem"
         @keydown.delete="removeLastSelectedItem"
         @focus="handleFocus"
         @blur="handleBlur"
       />
+
+      <button class="btn position-absolute end-0 px-2" v-show="vClearIsVisisble" @click="clearSelection">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+        </svg>
+      </button>
+
+      <button class="btn position-absolute start-100 px-2" @click="toggleOpen">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+        </svg>
+      </button>
     </div>
     
-    <div v-if="vShowDropdown" class="list-group list-group-flush bg-body-secondary border border-secondary rounded-1 mt-1 overflow-auto shadow autocomplete-container">
+    <div v-show="vShowDropdown" class="list-group list-group-flush bg-body-secondary border border-secondary rounded-1 mt-1 overflow-auto shadow autocomplete-container">
       <button
         class="list-group-item list-group-item-action text-start"
         v-for="(item, index) in vFilteredOptions"
@@ -42,7 +54,8 @@
 </template>
     
 <script setup lang="ts">
-import { computed, nextTick, ref, onMounted } from 'vue';
+import { useControlled } from '@/hooks/useControlled';
+import { computed, nextTick, ref, onMounted, watch } from 'vue';
 
 type DataObject = any;
 type ItemModel = any;
@@ -51,6 +64,8 @@ type ItemModel = any;
 export type AutoCompleteProps = {
   modelValue?: any;
   value?: any;
+  searchText?: string;
+  defaultValue?: any;
   dataObject?: DataObject,
   getData?: () => Promise<ItemModel>
   getOptionLabel?: (pOption: Record<string, any>) => string;
@@ -59,6 +74,8 @@ export type AutoCompleteProps = {
   filterOperator?: 'beginswith' | 'contains' | 'endswith';
   multiple?: boolean;
   freeSolo?: boolean
+  clearOnBlur: boolean;
+  open?: boolean;
   disableCloseOnSelect?: boolean;
   /**
    * The first option is automatically highlighted
@@ -73,12 +90,13 @@ const vProps = withDefaults(defineProps<AutoCompleteProps>(), {
   modelValue: null,
   multiple: false,
   freeSolo: false,
-  field: ''
+  clearOnBlur: false,
 })
 
 const vInputRef = ref<HTMLInputElement>();
 
 const vUserInput = ref<string>('')
+const vClearIsVisisble = ref(false)
 const vShowDropdown = ref(false)
 const vIsFocused = ref(false);
 const vSelectedItems = ref<Record<string, any>[]>([]);
@@ -92,14 +110,76 @@ const vEmit = defineEmits<{
 }>();
 
 
+const [value, setValueState] = useControlled({
+  controlled: vProps.value,
+  default: vProps.multiple && Array.isArray(vProps.defaultValue) 
+    ? vOptions.value.filter((option: any) => vProps.defaultValue.some((value: any) => value === option[vProps.field])) 
+    : vOptions.value.find((option: any) => option[vProps.field] === vProps.defaultValue) || null,
+  name: 'Autocomplete'
+});
+
+const [inputValue, setInputValueState] = useControlled({
+  controlled: vProps.searchText,
+  default: "",
+  name: 'Search',
+  state: 'inputValue'
+});
+
+const resetInputvalue = (event: any, newValue: any) => {
+  const isOptionselected = vProps.multiple && Array.isArray(vProps.value)
+    ? vProps.value.length < newValue.length
+    : newValue !== null;
+
+  if (isOptionselected && !vProps.clearOnBlur) {
+    return;
+  }
+
+  let newInputValue;
+  if (vProps.multiple || newValue == null) {
+    newInputValue = '';
+  } else {
+    const optionLabel = vProps.getOptionLabel?.(newValue) || newValue[vProps.field];
+    newInputValue = typeof optionLabel === 'string' ? optionLabel : '';
+  }
+
+  if (inputValue === newInputValue) {
+    return;
+  }
+
+  setInputValueState(newInputValue);
+
+  vEmit('update:modelValue', newInputValue);
+};
+
+// Watch for changes in inputValue and trigger onInputChange event if available
+watch([inputValue], (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    vEmit('update:modelValue', newValue);
+  }
+});
+
+const [open, setOpenState] = useControlled({
+  controlled: vProps.open,
+  default: false,
+  state: 'open'
+});
+
+const inputValueIsSelectedValue = 
+  !vProps.multiple &&
+  !Array.isArray(value) &&
+  value != null &&
+  inputValue === (vProps.getOptionLabel?.(value) || value[vProps.field]) as string
+
 const vInternalValue = computed({
   get() {
     return vIsFocused.value 
-      ? vUserInput.value
-      : vProps.modelValue ?? vProps.value
+      ? typeof vUserInput.value === 'string' ? vUserInput.value : vUserInput.value[vProps.field]
+      : vProps.modelValue ? vProps.modelValue[vProps.field] : vProps.value ? vProps.value[vProps.field] : ''
   },
-  set(pValue) {
-    vUserInput.value = pValue;
+  set(pValue: string) {
+    
+
+    vUserInput.value = typeof pValue === 'string' ? pValue : pValue[vProps.field];
     vEmit('update:modelValue', pValue);
   }
 });
@@ -108,7 +188,7 @@ const vFilteredOptions = computed(() => {
   return vOptions.value.filter((item: Record<string, any>) => {
     switch (vProps.filterOperator) {
       case 'beginswith': 
-        return item[vProps.field].toString().toLowerCase().startsWith(vUserInput.value.toLowerCase())
+        return item[vProps.field].toString().toLowerCase().startsWith(vUserInput.value?.toLowerCase())
       case 'contains': 
         return item[vProps.field].toString().toLowerCase().includes(vUserInput.value.toLowerCase())
       case 'endswith':
@@ -144,17 +224,32 @@ onMounted(async () => {
   }
 });
 
+watch(vIsFocused, () => {
+  vClearIsVisisble.value = (vIsFocused.value && vSelectedItems.value.length > 0)
+})
+
+
 const handleFocus = () => {
   vIsFocused.value = true;
   vShowDropdown.value = true;
 
-  vUserInput.value = vProps.modelValue ?? vProps.value ?? ""
+  console.log('focus')
+
+  // vUserInput.value = vProps.modelValue ?? vProps.value ?? ""
 }
+
+const toggleOpen = () => {
+  vShowDropdown.value = !vShowDropdown.value; 
+}
+
 
 const handleBlur = async (pEvent: FocusEvent) => {
   vIsFocused.value = false;
 
   await nextTick();
+
+  console.log('blur')
+
 
   const vSkipClose = (pEvent?.relatedTarget as HTMLInputElement)?.closest('.autocomplete-container') != null;
   if (!vSkipClose && vSelectedItems.value.length === 0) {
@@ -174,6 +269,7 @@ const handleInput = async () => {
 }
 
 const toggleSelectedItem = (item: Record<string, any>) => {
+  vInputRef.value?.focus();
   if (!vSelectedItems.value.includes(item)) {
     if (vProps.multiple) {
       vSelectedItems.value.push(item);
@@ -183,19 +279,19 @@ const toggleSelectedItem = (item: Record<string, any>) => {
 
     vEmit('update:modelValue', item);
 
-    vInputRef.value?.focus();
 
     if (!vProps.disableCloseOnSelect) {
       window.requestAnimationFrame(() => {
         vShowDropdown.value = false;
           
-        vUserInput.value = vProps.multiple ? "" : vInternalValue.value;
+        // vUserInput.value = vProps.multiple ? "" : vInternalValue.value;
       })
     }
   } else if (!vProps.multiple) {
     removeSelectedItem(vSelectedItems.value.indexOf(item));
   }
 }
+
 const selectHighlightedItem = (pEvent: KeyboardEvent) => {
   if (vHighlightedIndex.value !== -1) {
     toggleSelectedItem(vFilteredOptions.value[vHighlightedIndex.value]);
@@ -220,11 +316,12 @@ const selectHighlightedItem = (pEvent: KeyboardEvent) => {
       window.requestAnimationFrame(() => {
         vShowDropdown.value = false;
           
-        vUserInput.value = vProps.multiple ? "" : vInternalValue.value;
+        // vUserInput.value = vProps.multiple ? "" : vInternalValue.value;
       })
     }
   }
 }
+
 const removeLastSelectedItem = () => {
   if (vUserInput.value === "" && vSelectedItems.value.length > 0) {
     vSelectedItems.value.pop();
@@ -245,6 +342,23 @@ const highlightNext = () => {
   }
 }
 
+const clearSelection = () => {
+  vSelectedItems.value = [];
+
+  vInternalValue.value = "";
+}
+
+const handleClearVisible = (pEvent: MouseEvent) => {
+  if (vSelectedItems.value.length > 0) {
+    vClearIsVisisble.value = true;
+  }
+}
+
+const handleMouseLeave = (pEvent: MouseEvent) => {
+  if (!vIsFocused.value) {
+    vClearIsVisisble.value = false;
+  }
+}
     
 </script>
     
