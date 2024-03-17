@@ -515,6 +515,7 @@
         },
         {
           "name": "BeforeCreate",
+          "description": "Fires before row is sent to server",
           "params": [
             {
               "name": "options",
@@ -7955,7 +7956,243 @@
       ]
     },
     {
-      "id": 86,
+      "id": 87,
+      "name": "ActionSave",
+      "description": "Save action for dataobject",
+      "type": "Component",
+      "category": "Form/Actions",
+      "path": "o365.vue.components.Action.Save.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "row",
+          "type": "Row",
+          "default": "null",
+          "description": "For use on rows",
+          "required": false
+        },
+        {
+          "name": "as",
+          "type": "String",
+          "description": "element",
+          "default": "button",
+          "required": false
+        },
+        {
+          "name": "disabledClasses",
+          "type": "String",
+          "default": "",
+          "required": false
+        },
+        {
+          "name": "onAfter",
+          "type": "Function",
+          "description": "On After",
+          "default": "null",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "onSave",
+          "description": "",
+          "syntax": "@onSave=\"\""
+        },
+        {
+          "name": "saved",
+          "description": "",
+          "syntax": "@saved=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} class=\"btn btn-sm btn-primary\" :dataObject=\"dsPurchaseOrders\">{{ $t('Save') }}</{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "name": "ActionCancel",
+      "description": "Cancels dataobject changes",
+      "type": "Component",
+      "category": "Form/Actions",
+      "path": "o365.vue.components.Action.Cancel.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "row",
+          "type": "Row",
+          "default": "null",
+          "description": "For use on rows",
+          "required": false
+        },
+        {
+          "name": "as",
+          "type": "String",
+          "description": "element",
+          "default": "button",
+          "required": false
+        },
+        {
+          "name": "enabledWithoutChanges",
+          "type": "Boolean",
+          "description": "will always be active no matter if changes or not",
+          "default": "false",
+          "required": false
+        },
+        {
+          "name": "disabledClasses",
+          "type": "String",
+          "default": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "canceled",
+          "description": "",
+          "syntax": "@canceled=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} class=\"btn btn-sm btn-outline-primary\" :dataObject=\"dsPurchaseOrders\">{{ $t('Cancel') }}</{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "name": "ActionDelete",
+      "description": "Deletes shit",
+      "type": "Component",
+      "category": "Form/Actions",
+      "path": "o365.vue.components.Action.Delete.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "row",
+          "type": "Row",
+          "default": "null",
+          "description": "For use on rows",
+          "required": false
+        },
+        {
+          "name": "confirm",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Asks for confirmation before actually deleting",
+          "required": false
+        },
+        {
+          "name": "softDelete",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will only soft delete",
+          "required": false
+        },
+        {
+          "name": "confirmOptions",
+          "type": "Object",
+          "description": "options for confirmation",
+          "params": [
+            {
+              "name": "title",
+              "type": "String",
+              "default": "null",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "default": "null",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "btnTextOk",
+              "type": "String",
+              "default": "Delete",
+              "description": "Text for ok button on confirmation",
+              "required": false
+            },
+            {
+              "name": "btnClassOk",
+              "type": "String | CSS classes",
+              "default": "btn-primary",
+              "description": "Classes for ok button on confirmation",
+              "required": false
+            },
+            {
+              "name": "btnClassCancel",
+              "type": "String | CSS classes",
+              "default": "btn-outline-primary",
+              "description": "Classes for cancel button on confirmation",
+              "required": false
+            }
+          ],
+          "default": "null",
+          "required": false
+        },
+        {
+          "name": "as",
+          "type": "String",
+          "description": "element",
+          "default": "button",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} class=\"btn btn-sm btn-outline-danger\" :dataObject=\"dsPurchaseOrders\">{{ $t('Delete') }}</{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 90,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
