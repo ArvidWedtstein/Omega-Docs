@@ -8193,6 +8193,106 @@
     },
     {
       "id": 90,
+      "name": "SignaturePad",
+      "description": "Signaturepad",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIn365.vue.components.SignaturePad.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables all inputs",
+          "required": false
+        },
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "atbl_aPerson_PersonsSignatures",
+          "description": "Data Source for saving signatures",
+          "required": false
+        },
+        {
+          "name": "autoloadSignature",
+          "type": "Boolean",
+          "default": "false",
+          "description": "autoloads current users signature",
+          "required": false
+        },
+        {
+          "name": "person_id",
+          "type": "Number",
+          "default": "Your person id",
+          "description": "For setting signature for other person",
+          "required": false
+        },
+        {
+          "name": "disableSignatureSave",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables saving signature to persons signature table ",
+          "required": false
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "default": "800",
+          "description": "Width of signature field",
+          "required": false
+        },
+        {
+          "name": "height",
+          "type": "Number",
+          "default": "atbl_aPerson_PersonsSignatures",
+          "description": "Height of signature field",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "description": "Card header",
+          "template": "#header"
+        }
+      ],
+      "events": [
+        {
+          "name": "onSign",
+          "description": "returns blob and fileref",
+          "syntax": "@onSign=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "description": ""
+        },
+        {
+          "name": "signaturePad",
+          "type": "Ref",
+          "description": ""
+        },
+        {
+          "name": "vSignatureIsCompleted",
+          "type": "Boolean",
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 91,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
