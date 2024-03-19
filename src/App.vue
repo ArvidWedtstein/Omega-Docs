@@ -23,12 +23,14 @@
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
+            <AutoComplete :multiple="false" :getData="getData" field="value" v-model="vSelectedValue" :freeSolo="true" />
+
             <Section v-if="selectedTab?.path" title="Import">
               <CodeBlock disable-code-formatting language="javascript" :code="generateImportString(selectedTab)" />
             </Section>
             
             <Section v-if="selectedTab?.params?.length" title="Syntax">
-              <CodeBlock class="h-100" disable-code-formatting language="javascript" :code="formatParams()" />
+              <CodeBlock class="h-100" language="javascript" :code="formatParams()" />
             </Section>
             
             <Section v-if="selectedTab?.snippets?.length" title="Snippets">
@@ -694,13 +696,15 @@
 // TODO: update lookup snippets
 // TODO: make view for exposes, params, slots, props params
 // TODO: add concatinatefiles.
+// TODO: check shortcuts in codebuilder
 import Components, { generateImportString, type Tab } from "./components";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, watch } from "vue";
 import CodeBlock from "./components/CodeBlock.vue";
 import Sidebar from "./components/Sidebar.vue";
 import CodeBuilder from "./components/CodeBuilder.vue";
 import PropSelector from "./components/PropSelector.vue";
 import Section from "./components/Section.vue";
+import AutoComplete from "./components/AutoComplete.vue";
 
 const selectedTab = ref<Tab>();
 const vSearchProps = ref<Tab["props"]>([]);
@@ -711,6 +715,21 @@ const vSearchParams = ref<Tab["params"]>([]);
 const vSearchExposes = ref<Tab["exposes"]>([]);
 
 const vTabs = ref<Partial<Tab[]>>([]);
+
+
+const vSelectedValue = ref(null);
+
+
+function getData() {
+    // some async function that gets an array of results for the provided value (pValue is the current input value)
+    return Promise.resolve([
+        { value: 'Egg' },
+        { value: 'Melk' },
+        { value: 'Brød' },
+        { value: 'Kjøtt' },
+        { value: 'Klær' },
+    ]);
+} 
 
 const onSearchChange = (pSearchValue: string, pType: 'props' | 'events' | 'params' | 'slots' | 'exposes' | 'snippets') => {
   if (selectedTab?.value) {

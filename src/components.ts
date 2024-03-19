@@ -26,6 +26,7 @@ interface Expose {
 interface Snippet {
   title: string;
   content?: string | undefined;
+  script?: string | undefined;
   code?: string | undefined;
   language?: string;
   imports: Array<string> | undefined
@@ -179,6 +180,14 @@ const Components: Tab[] = components.components.map((pComponent) => {
 
       return {
         ...pSnippet,
+        content: pSnippet.content.replace(vComponentRegex, () => pComponent.name).replace(vComponentReferenceRegex, (pMatch, pID) => {
+          const vReferencedComponent = components.components.find(c => c.id === parseInt(pID));
+          if (vReferencedComponent) {
+            addImportPath(vReferencedComponent)
+            return vReferencedComponent.name
+          }
+          return pMatch;
+        }),
         code: pSnippet?.code.replace(vComponentRegex, () => {
           addImportPath(pComponent);
           return pComponent.name;

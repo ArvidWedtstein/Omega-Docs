@@ -515,6 +515,7 @@
         },
         {
           "name": "BeforeCreate",
+          "description": "Fires before row is sent to server",
           "params": [
             {
               "name": "options",
@@ -588,11 +589,34 @@
           "required": false
         },
         {
+          "name": "getDataLength",
+          "type": "Function",
+          "default": "",
+          "params": [],
+          "description": "Gets number of rows",
+          "example": "dsWorkflows.getDataLength()",
+          "required": false
+        },
+        {
           "name": "fileUpload",
           "type": "Object",
           "default": "",
           "description": "",
           "example": "",
+          "required": false
+        },
+        {
+          "name": "masterDetails",
+          "type": "Object",
+          "params": [
+            {
+              "name": "loadDetailDataObjects",
+              "type": "Function",
+              "description": "",
+              "params": [],
+              "required": false
+            }
+          ],
           "required": false
         },
         {
@@ -845,17 +869,54 @@
       ],
       "slots": [],
       "events": [],
+      "exposes": [
+        {
+          "name": "updateMessage",
+          "type": "Function",
+          "description": "Update message of alert",
+          "params": [
+            {
+              "name": "pMessage",
+              "type": "String",
+              "description": "New message",
+              "required": true
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "updateType",
+          "type": "Function",
+          "description": "Update type of alert",
+          "params": [
+            {
+              "name": "pType",
+              "type": "String",
+              "template": "danger | info | success",
+              "required": true
+            }
+          ],
+          "required": false
+        },
+        {
+          "name": "close",
+          "type": "Function",
+          "description": "Closes alert",
+          "params": [],
+          "required": false
+        }
+      ],
       "snippets": [
         {
           "title": "Error",
           "content": "When displaying alert for error",
-          "code": "alert('Something Went Wrong', 'danger')",
+          "code": "{COMPONENT}('Something Went Wrong', 'danger')",
           "language": "javascript"
         },
         {
           "title": "Disappear after xTime",
           "content": "When displaying alert for info",
-          "code": "alert('Information', 'info', { autohide: true, timeout: 3000 })",
+          "code": "{COMPONENT}('Information', 'info', { autohide: true, timeout: 3000 })",
           "language": "javascript"
         }
       ]
@@ -2278,6 +2339,12 @@
           "description": "Auto closes taks",
           "example": "",
           "required": false
+        },
+        {
+          "name": "enableTaskSpinner",
+          "type": "Boolean",
+          "default": "false",
+          "required": false
         }
       ],
       "slots": [
@@ -2443,6 +2510,13 @@
           "content": "Use classes like modal-(sm, md, lg, xl, xxl) to adjust modal size",
           "code": "<button type=\"button\" class=\"btn btn-primary\" @click=\"vModalRef.show()\">Open modal</button><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title fs-5\" id=\"exampleModalLabel\">Modal title</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><div class=\"modal-body\"></div><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\">{{ $t('Save') }}</button></div></div></div></{COMPONENT}>",
           "language": "html"
+        },
+        {
+          "title": "Send Mail Modal",
+          "content": "Put in File for modal",
+          "code": "<template><{COMPONENT} ref=\"vModalRef\"><div class=\"modal-dialog modal-xl\"><div class=\"modal-content\"><div class=\"modal-header\"><h1 class=\"modal-title\">{{ $t('Send Mail') }}</h1><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button></div><{COMPONENT=44} class=\"modal-body\"><{COMPONENT=77} ref=\"vSendEmailComponent\" /></{COMPONENT=44}><div class=\"modal-footer\"><button type=\"button\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">{{ $t('Close') }}</button><button type=\"button\" class=\"btn btn-primary\" @click=\"sendEmail\">{{ $t('Send') }}</button></div></div></div></{COMPONENT}></template>",
+          "script": "",
+          "language": "html"
         }
       ]
     },
@@ -2461,7 +2535,7 @@
       "snippets": [
         {
           "title": "Example",
-          "content": "",
+          "content": "Is basicly just a card",
           "code": "<{COMPONENT}>\n</{COMPONENT}>",
           "language": "html"
         }
@@ -3800,6 +3874,13 @@
           "type": "Boolean",
           "default": "false",
           "description": "Includes domain field",
+          "required": false
+        },
+        {
+          "name": "includeProjectField",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Includes project name field",
           "required": false
         },
         {
@@ -6477,7 +6558,14 @@
         }
       ],
       "exposes": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Example Procedure",
+          "code": "const procExample = {COMPONENT}({id: \"procExample\", procedureName: \"astp_aPerson_CreateContact\", timeout: 42069})",
+          "language": "javascript"
+        }
+      ]
     },
     {
       "id": 71,
@@ -6492,16 +6580,24 @@
       "events": [],
       "params": [
         {
-          "name": "",
-          "type": "",
-          "default": "",
-          "description": "",
+          "name": "pDataObject",
+          "type": "String",
+          "default": "null",
+          "description": "Name of data object",
+          "params": [],
           "example": "",
-          "required": false
+          "required": true
         }
       ],
       "exposes": [],
-      "snippets": []
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const dsWelds = {COMPONENT}(\"dsWelds\");",
+          "language": "javascript"
+        }
+      ]
     },
     {
       "id": 72,
@@ -6520,7 +6616,14 @@
           "type": "Object",
           "default": "null",
           "description": "",
-          "params": [],
+          "params": [
+            {
+              "name": "id",
+              "type": "String",
+              "default": "null",
+              "required": true
+            }
+          ],
           "example": "",
           "required": true
         }
@@ -6755,7 +6858,22 @@
       "category": "WIN",
       "path": "WIN365.vue.components.SendMail.vue",
       "pathtype": "Direct",
-      "props": [ ],
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "description": "Disables input fields",
+          "default": "false",
+          "required": false
+        },
+        {
+          "name": "useRecipientAutocomplete",
+          "type": "Boolean",
+          "description": "Enables for Autocomplete with freetext on To, Cc and Bcc fields.",
+          "default": "false",
+          "required": false
+        }
+      ],
       "slots": [],
       "events": [
         {
@@ -7021,7 +7139,1296 @@
       "snippets": []
     },
     {
-      "id": 80,
+      "id": 81,
+      "name": "getFilesAsync",
+      "description": "opens file in new tab and downloads it. returns true if success or false if something went wrong.",
+      "type": "Function",
+      "category": "WIN/Concatinate",
+      "path": "WIN365.vue.composables.ConcatinateFile.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFiles",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [
+            {
+              "name": "files",
+              "type": "Array",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFile",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "name",
+                      "type": "String",
+                      "description": "Name of report or file",
+                      "required": false
+                    },
+                    {
+                      "name": "filePrimkey",
+                      "type": "String",
+                      "description": "PrimKey of file",
+                      "required": false
+                    },
+                    {
+                      "name": "filter",
+                      "type": "String",
+                      "description": "Filterstring for report",
+                      "required": false
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "pFileName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the file",
+          "example": "",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const gConcatinatedFiles = ref({files: [{ name: \"aviw_aMCCR_ChecklistsSignatures\", filePrimkey: \"e20e9a04-4987-4bc8-acf5-bea7575ba0ee\" },{ name: \"aviw_aDocument_Documents\", filePrimkey: \"615d20c2-4183-44bd-b15c-fe09c6127280\" },{ name: \"arpt_aWorkPermit_WorkPermits\", filter: \"No=6278\" },]})\n{COMPONENT}(gConcatinatedFiles.value, \"test-zip.zip\").then(() => {console.log(\"get done\")})}",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "name": "saveFilesAsync",
+      "description": "",
+      "type": "Function",
+      "category": "WIN/Concatinate",
+      "path": "WIN365.vue.composables.ConcatinateFile.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFiles",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [
+            {
+              "name": "files",
+              "type": "Array",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFile",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "name",
+                      "type": "String",
+                      "description": "Name of report or file",
+                      "required": false
+                    },
+                    {
+                      "name": "filePrimkey",
+                      "type": "String",
+                      "description": "PrimKey of file",
+                      "required": false
+                    },
+                    {
+                      "name": "filter",
+                      "type": "String",
+                      "description": "Filterstring for report",
+                      "required": false
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "pFileName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the file",
+          "example": "",
+          "required": true
+        },
+        {
+          "name": "pViewName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the view",
+          "example": "",
+          "required": true
+        },
+        {
+          "name": "pPrimKey",
+          "type": "String",
+          "default": "null",
+          "description": "For overwriting files.",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const gConcatinatedFiles = ref({files: [{ name: \"aviw_aMCCR_ChecklistsSignatures\", filePrimkey: \"e20e9a04-4987-4bc8-acf5-bea7575ba0ee\" },{ name: \"aviw_aDocument_Documents\", filePrimkey: \"615d20c2-4183-44bd-b15c-fe09c6127280\" },{ name: \"arpt_aWorkPermit_WorkPermits\", filter: \"No=6278\" },]})\n{COMPONENT}(gConcatinatedFiles.value, \"test-save.pdf\", \"atbv_aMCCR_ChecklistsSignatures\").then(() => {console.log(\"save done\")})",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "name": "zipFilesAsync",
+      "description": "zipps files",
+      "type": "Function",
+      "category": "WIN/Concatinate",
+      "path": "WIN365.vue.composables.ConcatinateFile.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [
+        {
+          "name": "pFiles",
+          "type": "Object",
+          "default": "null",
+          "description": "",
+          "params": [
+            {
+              "name": "files",
+              "type": "Array",
+              "default": "null",
+              "params": [
+                {
+                  "name": "pFile",
+                  "type": "Object",
+                  "params": [
+                    {
+                      "name": "name",
+                      "type": "String",
+                      "description": "Name of report or file",
+                      "required": false
+                    },
+                    {
+                      "name": "filePrimkey",
+                      "type": "String",
+                      "description": "PrimKey of file",
+                      "required": false
+                    },
+                    {
+                      "name": "filter",
+                      "type": "String",
+                      "description": "Filterstring for report",
+                      "required": false
+                    }
+                  ],
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ],
+          "required": true
+        },
+        {
+          "name": "pFileName",
+          "type": "String",
+          "default": "null",
+          "description": "Name of the file",
+          "example": "",
+          "required": true
+        }
+      ],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "const gConcatinatedFiles = ref({files: [{ name: \"aviw_aMCCR_ChecklistsSignatures\", filePrimkey: \"e20e9a04-4987-4bc8-acf5-bea7575ba0ee\" },{ name: \"aviw_aDocument_Documents\", filePrimkey: \"615d20c2-4183-44bd-b15c-fe09c6127280\" },{ name: \"arpt_aWorkPermit_WorkPermits\", filter: \"No=6278\" },]})\n{COMPONENT}(gConcatinatedFiles.value, \"test-save.pdf\", \"atbv_aMCCR_ChecklistsSignatures\").then(() => {console.log(\"save done\")})",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "name": "Cropper",
+      "description": "Image cropper",
+      "type": "Component",
+      "category": "General",
+      "path": "o365.vue.components.Cropper.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "dataobject for images",
+          "example": "dsPersonsImages",
+          "required": true
+        },
+        {
+          "name": "fieldName",
+          "type": "String",
+          "default": "null",
+          "description": "image ref column field",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "aspectRatio",
+          "type": "Number",
+          "default": "3/4",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "disableAspectRatioUnlocking",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "disableUserRatios",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "src",
+          "type": "String",
+          "default": "null",
+          "description": "Image url source",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "wrapperClass",
+          "type": "String | CSS classes",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "cropper",
+          "type": "Ref",
+          "description": "Ref for Cropper Element"
+        },
+        {
+          "name": "cropperControl",
+          "type": "Ref",
+          "description": "",
+          "params": [
+            {
+              "name": "dataObject",
+              "type": "DataObject"
+            },
+            {
+              "name": "fieldName",
+              "type": "String"
+            },
+            {
+              "name": "aspectRatio",
+              "type": "Number"
+            },
+            {
+              "name": "cropperFunctions",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "openModal",
+                  "type": "Function",
+                  "params": []
+                },
+                {
+                  "name": "closeModal",
+                  "type": "Function",
+                  "params": []
+                },
+                {
+                  "name": "getResult",
+                  "type": "Function",
+                  "params": [],
+                  "description": "Gets result of cropping."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "Persons Image",
+          "code": "<{COMPONENT} :dataObject=\"dsImages\" :src=\"`/nt/api/file/view/sviw_System_PersonsImages/${dsImages.current.PrimKey}/${dsImages.current.FileRef}`\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "name": "NumberEditor",
+      "description": "Basically same as {COMPONENT=62}",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.inputEditors.jsx",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modalValue",
+          "type": "Number",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "column",
+          "type": "Object",
+          "default": "",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "default": "",
+          "description": "",
+          "example": "1234.567",
+          "required": false
+        },
+        {
+          "name": "returnAsString",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "example": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "",
+          "syntax": "@update:modelValue=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "elRef",
+          "type": "Ref",
+          "description": "element ref"
+        },
+        {
+          "name": "activateEditor",
+          "type": "Function",
+          "description": "Activates editor"
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} v-model=\"dsPurchaseOrdersItems.current.UnitPrice\" format=\"1234.567\" />",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "name": "API",
+      "description": "Api functions",
+      "type": "Module",
+      "category": "General",
+      "path": "o365.modules.data.api.ts",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "request",
+          "type": "Function",
+          "description": "Alternative for fetch",
+          "params": [
+            {
+              "name": "pOptions",
+              "type": "Object",
+              "decription": "",
+              "params": [
+                {
+                  "name": "requestInfo",
+                  "type": "String | RequestInfo",
+                  "description": "",
+                  "required": true
+                },
+                {
+                  "name": "method",
+                  "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+                  "description": "Method for request",
+                  "required": false
+                },
+                {
+                  "name": "headers",
+                  "type": "Object",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "body",
+                  "type": "BodyInit",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "mode",
+                  "type": "RequestMode",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "credentials",
+                  "type": "RequestCredentials",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "cache",
+                  "type": "default | force-cache | no-cache | no-store | only-if-cached | reload",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "redirect",
+                  "type": "error | follow | manual",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "integrity",
+                  "type": "String",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "keepalive",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "abortSignal",
+                  "type": "AbortSignal",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseStatusHandler",
+                  "type": "Function | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseBodyHandler",
+                  "type": "ResponseHandler | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "showErrorDialog",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "skipJwtCheck",
+                  "type": "Boolean",
+                  "description": "Skips Json web token check",
+                  "required": false
+                }
+              ],
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestGet",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "pOptions",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "requestInfo",
+                  "type": "String | RequestInfo",
+                  "description": "",
+                  "required": true
+                },
+                {
+                  "name": "method",
+                  "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+                  "description": "Method for request",
+                  "required": false
+                },
+                {
+                  "name": "headers",
+                  "type": "Object",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "body",
+                  "type": "BodyInit",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "mode",
+                  "type": "RequestMode",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "credentials",
+                  "type": "RequestCredentials",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "cache",
+                  "type": "default | force-cache | no-cache | no-store | only-if-cached | reload",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "redirect",
+                  "type": "error | follow | manual",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "integrity",
+                  "type": "String",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "keepalive",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "abortSignal",
+                  "type": "AbortSignal",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseStatusHandler",
+                  "type": "Function | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "responseBodyHandler",
+                  "type": "ResponseHandler | Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "showErrorDialog",
+                  "type": "Boolean",
+                  "description": "",
+                  "required": false
+                },
+                {
+                  "name": "skipJwtCheck",
+                  "type": "Boolean",
+                  "description": "Skips Json web token check",
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "requestPost",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "abortSignal",
+              "type": "AbortSignal",
+              "required": false
+            },
+            {
+              "name": "credentials",
+              "type": "RequestCredentials",
+              "default": "same-origin",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestFileCustomHeaders",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "headers",
+              "type": "Object",
+              "description": "",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "requestText",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "method",
+              "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+              "default": "GET",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestHtml",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            },
+            {
+              "name": "method",
+              "type": "GET | HEAD | POST | PUT | DELETE | CONNECT | OPTIONS | TRACE | PATCH",
+              "default": "GET",
+              "required": true
+            }
+          ]
+        },
+        {
+          "name": "requestFile",
+          "type": "Function",
+          "description": "",
+          "params": [
+            {
+              "name": "url",
+              "type": "String",
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "BodyInit",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example request",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestGet",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestPost",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestFileCustomHeaders",
+          "content": "",
+          "code": "{COMPONENT}.requestFileCustomHeaders(`/file/view/reporting/arpt_aMeeting_Meetings/arpt_aMeeting_Meetings.pdf?Filter=ID=${dsMinutesOfMeetings.current.ID}`, '', { method: 'GET', headers: new Headers({ 'Accept': 'application/json', 'Content-type': 'application/json; charset=utf-8', 'X-NT-API': 'false' }) }).then(async (pResponse) => {})",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestText",
+          "content": "",
+          "code": "",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestHtml",
+          "content": "TBA",
+          "code": "{COMPONENT}.requestFile(`/nt/file/view/reporting/arpt_aMeeting_Meetings/arpt_aMeeting_Meetings.pdf`, { filter: `ID=${dsMinutesOfMeetings.current.ID}`}).then(async (pResponse) => {})",
+          "language": "javascript"
+        },
+        {
+          "title": "Example requestFile",
+          "content": "Can be used to get reports",
+          "code": "{COMPONENT}.requestFile(`/nt/file/view/reporting/arpt_aMeeting_Meetings/arpt_aMeeting_Meetings.pdf`, { filter: `ID=${dsMinutesOfMeetings.current.ID}`}).then(async (pResponse) => {})",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "name": "ActionSave",
+      "description": "Save action for dataobject",
+      "type": "Component",
+      "category": "Form/Actions",
+      "path": "o365.vue.components.Action.Save.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "row",
+          "type": "Row",
+          "default": "null",
+          "description": "For use on rows",
+          "required": false
+        },
+        {
+          "name": "as",
+          "type": "String",
+          "description": "element",
+          "default": "button",
+          "required": false
+        },
+        {
+          "name": "disabledClasses",
+          "type": "String",
+          "default": "",
+          "required": false
+        },
+        {
+          "name": "onAfter",
+          "type": "Function",
+          "description": "On After",
+          "default": "null",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "onSave",
+          "description": "",
+          "syntax": "@onSave=\"\""
+        },
+        {
+          "name": "saved",
+          "description": "",
+          "syntax": "@saved=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} class=\"btn btn-sm btn-primary\" :dataObject=\"dsPurchaseOrders\">{{ $t('Save') }}</{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "name": "ActionCancel",
+      "description": "Cancels dataobject changes",
+      "type": "Component",
+      "category": "Form/Actions",
+      "path": "o365.vue.components.Action.Cancel.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "row",
+          "type": "Row",
+          "default": "null",
+          "description": "For use on rows",
+          "required": false
+        },
+        {
+          "name": "as",
+          "type": "String",
+          "description": "element",
+          "default": "button",
+          "required": false
+        },
+        {
+          "name": "enabledWithoutChanges",
+          "type": "Boolean",
+          "description": "will always be active no matter if changes or not",
+          "default": "false",
+          "required": false
+        },
+        {
+          "name": "disabledClasses",
+          "type": "String",
+          "default": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "canceled",
+          "description": "",
+          "syntax": "@canceled=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} class=\"btn btn-sm btn-outline-primary\" :dataObject=\"dsPurchaseOrders\">{{ $t('Cancel') }}</{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "name": "ActionDelete",
+      "description": "Deletes shit",
+      "type": "Component",
+      "category": "Form/Actions",
+      "path": "o365.vue.components.Action.Delete.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "example": "",
+          "required": false
+        },
+        {
+          "name": "row",
+          "type": "Row",
+          "default": "null",
+          "description": "For use on rows",
+          "required": false
+        },
+        {
+          "name": "confirm",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Asks for confirmation before actually deleting",
+          "required": false
+        },
+        {
+          "name": "softDelete",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Will only soft delete",
+          "required": false
+        },
+        {
+          "name": "confirmOptions",
+          "type": "Object",
+          "description": "options for confirmation",
+          "params": [
+            {
+              "name": "title",
+              "type": "String",
+              "default": "null",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "default": "null",
+              "description": "",
+              "required": false
+            },
+            {
+              "name": "btnTextOk",
+              "type": "String",
+              "default": "Delete",
+              "description": "Text for ok button on confirmation",
+              "required": false
+            },
+            {
+              "name": "btnClassOk",
+              "type": "String | CSS classes",
+              "default": "btn-primary",
+              "description": "Classes for ok button on confirmation",
+              "required": false
+            },
+            {
+              "name": "btnClassCancel",
+              "type": "String | CSS classes",
+              "default": "btn-outline-primary",
+              "description": "Classes for cancel button on confirmation",
+              "required": false
+            }
+          ],
+          "default": "null",
+          "required": false
+        },
+        {
+          "name": "as",
+          "type": "String",
+          "description": "element",
+          "default": "button",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "<{COMPONENT} class=\"btn btn-sm btn-outline-danger\" :dataObject=\"dsPurchaseOrders\">{{ $t('Delete') }}</{COMPONENT}>",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "name": "SignaturePad",
+      "description": "Signaturepad",
+      "type": "Component",
+      "category": "WIN",
+      "path": "WIn365.vue.components.SignaturePad.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables all inputs",
+          "required": false
+        },
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "atbl_aPerson_PersonsSignatures",
+          "description": "Data Source for saving signatures",
+          "required": false
+        },
+        {
+          "name": "autoloadSignature",
+          "type": "Boolean",
+          "default": "false",
+          "description": "autoloads current users signature",
+          "required": false
+        },
+        {
+          "name": "person_id",
+          "type": "Number",
+          "default": "Your person id",
+          "description": "For setting signature for other person",
+          "required": false
+        },
+        {
+          "name": "disableSignatureSave",
+          "type": "Boolean",
+          "default": "false",
+          "description": "Disables saving signature to persons signature table ",
+          "required": false
+        },
+        {
+          "name": "width",
+          "type": "Number",
+          "default": "800",
+          "description": "Width of signature field",
+          "required": false
+        },
+        {
+          "name": "height",
+          "type": "Number",
+          "default": "atbl_aPerson_PersonsSignatures",
+          "description": "Height of signature field",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "description": "Card header",
+          "template": "#header"
+        }
+      ],
+      "events": [
+        {
+          "name": "onSign",
+          "description": "returns blob and fileref",
+          "syntax": "@onSign=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "description": ""
+        },
+        {
+          "name": "signaturePad",
+          "type": "Ref",
+          "description": ""
+        },
+        {
+          "name": "vSignatureIsCompleted",
+          "type": "Boolean",
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "name": "useDebounce",
+      "description": "Great for input fields",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "WIN365.vue.composables.helpers.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "functions",
+          "type": "Object",
+          "params": [
+            {
+              "name": "debounce",
+              "type": "Function",
+              "params": [
+                {
+                  "name": "pFunc",
+                  "type": "Function",
+                  "required": true
+                },
+                {
+                  "name": "pWait",
+                  "type": "Number",
+                  "default": "1000",
+                  "description": "Milliseconds to wait",
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ],
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "name": "AddExternalPersonModal",
+      "description": "Dialog for adding external persons",
+      "type": "Component",
+      "category": "General",
+      "path": "WIN365.vue.components.AddExternalPersonModal.vue",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "onSubmit",
+          "description": "",
+          "params": [
+            {
+              "name": "pData",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "FirstName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "LastName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "Initials",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "Email",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "Company_ID",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "CompanyName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "PhoneNumber",
+                  "type": "String",
+                  "required": false
+                },
+                {
+                  "name": "PhoneNumberOffice",
+                  "type": "String",
+                  "required": false
+                },
+                {
+                  "name": "Domain_ID",
+                  "type": "Number",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "syntax": "@onSubmit=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "",
+          "type": "",
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 93,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
