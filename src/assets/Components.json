@@ -8293,6 +8293,142 @@
     },
     {
       "id": 91,
+      "name": "useDebounce",
+      "description": "Great for input fields",
+      "type": "Function",
+      "category": "Utilities",
+      "path": "WIN365.vue.composables.helpers.ts",
+      "pathtype": "Object",
+      "props": [],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "functions",
+          "type": "Object",
+          "params": [
+            {
+              "name": "debounce",
+              "type": "Function",
+              "params": [
+                {
+                  "name": "pFunc",
+                  "type": "Function",
+                  "required": true
+                },
+                {
+                  "name": "pWait",
+                  "type": "Number",
+                  "default": "1000",
+                  "description": "Milliseconds to wait",
+                  "required": false
+                }
+              ],
+              "required": false
+            }
+          ],
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "name": "AddExternalPersonModal",
+      "description": "Dialog for adding external persons",
+      "type": "Component",
+      "category": "General",
+      "path": "WIN365.vue.components.AddExternalPersonModal.vue",
+      "pathtype": "Direct",
+      "props": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "onSubmit",
+          "description": "",
+          "params": [
+            {
+              "name": "pData",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "FirstName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "LastName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "Initials",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "Email",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "Company_ID",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "CompanyName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "PhoneNumber",
+                  "type": "String",
+                  "required": false
+                },
+                {
+                  "name": "PhoneNumberOffice",
+                  "type": "String",
+                  "required": false
+                },
+                {
+                  "name": "Domain_ID",
+                  "type": "Number",
+                  "required": true
+                }
+              ]
+            }
+          ],
+          "syntax": "@onSubmit=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "",
+          "type": "",
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 93,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
