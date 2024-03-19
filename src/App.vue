@@ -23,7 +23,7 @@
           <div class="col-lg-12 mx-auto text-start">
             <p class="lead mb-4">{{ selectedTab?.description }}</p>
 
-            <AutoComplete :multiple="false" :getData="getData" field="value" v-model="vSelectedValue" :freeSolo="true" />
+            <!-- <AutoComplete :multiple="false" :getData="getData" field="value" v-model="vSelectedValue" :freeSolo="true" /> -->
 
             <Section v-if="selectedTab?.path" title="Import">
               <CodeBlock disable-code-formatting language="javascript" :code="generateImportString(selectedTab)" />
