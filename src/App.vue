@@ -58,7 +58,7 @@
                   <ul class="list-group">
                     <li class="list-group-item" v-for="({ title, content, code, imports, language }, vSnippetIndex) in selectedTab?.snippets" :key="vSnippetIndex">
                       <div class="card bg-transparent border-0">
-                        <a class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center" role="button" :href="`#snippet-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" :aria-expanded="selectedTab?.snippets.length < 2" :aria-controls="`snippet-collapse-${vSnippetIndex}`">
+                        <a class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center" role="button" :href="`#tab-${selectedTab.id}-snippets-collapse-${vSnippetIndex}`" data-bs-toggle="collapse" :aria-expanded="selectedTab?.snippets.length < 2" :aria-controls="`tab-${selectedTab.id}-snippets-collapse-${vSnippetIndex}`">
                           {{ title }}
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@
                             />
                           </svg>
                         </a>
-                        <div class="collapse border-top" :id="`snippet-collapse-${vSnippetIndex}`" :class="{ 'show': selectedTab?.snippets.length < 2}">
+                        <div class="collapse border-top" :id="`tab-${selectedTab.id}-snippets-collapse-${vSnippetIndex}`" :class="{ 'show': selectedTab?.snippets.length < 2}">
                           <div class="card-body" v-if="content">
                             <p class="card-text">{{ content }}</p>
                           </div>
