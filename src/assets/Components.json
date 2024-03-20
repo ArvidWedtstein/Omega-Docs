@@ -8411,13 +8411,7 @@
         }
       ],
       "params": [],
-      "exposes": [
-        {
-          "name": "",
-          "type": "",
-          "description": ""
-        }
-      ],
+      "exposes": [],
       "snippets": [
         {
           "title": "Example",
@@ -8429,6 +8423,69 @@
     },
     {
       "id": 93,
+      "name": "InfoItems",
+      "description": "For Datagrid statusbar",
+      "type": "Component",
+      "category": "Grid",
+      "path": "o365.vue.components.InfoItems.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "dataObject",
+          "type": "DataObject",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "layoutStatus",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noSelectClear",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "noFilterString",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "dataGridControl",
+          "type": "DataGridControl",
+          "default": "null",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [
+        {
+          "name": "recordcount",
+          "template": "#recordcount=\"{ dataObject, refreshRowCount }\""
+        }
+      ],
+      "events": [],
+      "params": [],
+      "exposes": [],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "TBA",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 94,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",
