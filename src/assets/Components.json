@@ -3761,7 +3761,7 @@
       "pathtype": "Direct",
       "props": [
         {
-          "name": ":bind",
+          "name": "bind",
           "type": "Row",
           "default": "null",
           "description": "Used to bind seleted values to your variables",
@@ -4725,7 +4725,7 @@
           "required": false
         },
         {
-          "name": "modalValue",
+          "name": "modelValue",
           "type": "Number | String",
           "default": "null",
           "description": "",
@@ -7506,7 +7506,7 @@
       "pathtype": "Direct",
       "props": [
         {
-          "name": "modalValue",
+          "name": "modelValue",
           "type": "Number",
           "default": "null",
           "description": "",
@@ -8486,6 +8486,226 @@
     },
     {
       "id": 94,
+      "name": "InputMask",
+      "description": "Forces a user to input in a certain way",
+      "type": "Component",
+      "category": "Form",
+      "path": "o365.vue.components.InputMask.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "modelValue",
+          "type": "any",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "slotChar",
+          "type": "String",
+          "default": "_",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "mask",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "autoClear",
+          "type": "Boolean",
+          "default": "true",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "normalizeOnBlur",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "unmask",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "readonly",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "skipUpdates",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "update:modelValue",
+          "description": "",
+          "syntax": "@update:modelValue=\"\""
+        },
+        {
+          "name": "focus",
+          "description": "",
+          "syntax": "@focus=\"\""
+        },
+        {
+          "name": "blur",
+          "description": "",
+          "syntax": "@blur=\"\""
+        },
+        {
+          "name": "keydown",
+          "description": "",
+          "syntax": "@keydown=\"\""
+        },
+        {
+          "name": "complete",
+          "description": "",
+          "syntax": "@complete=\"\""
+        },
+        {
+          "name": "keypress",
+          "description": "",
+          "syntax": "@keypress=\"\""
+        },
+        {
+          "name": "paste",
+          "description": "on copy paste",
+          "syntax": "@paste=\"\""
+        }
+      ],
+      "params": [],
+      "exposes": [
+        {
+          "name": "elRef",
+          "type": "Ref",
+          "description": "element ref"
+        },
+        {
+          "name": "focus",
+          "type": "Boolean",
+          "description": ""
+        },
+        {
+          "name": "isValueChecked",
+          "type": "Boolean",
+          "description": ""
+        },
+        {
+          "name": "positionIsFilled",
+          "type": "Boolean",
+          "description": ""
+        },
+        {
+          "name": "checkVal",
+          "type": "Function",
+          "params": [
+            {
+              "name": "allow",
+              "type": "Boolean",
+              "required": true
+            }
+          ],
+          "description": ""
+        },
+        {
+          "name": "isFilled",
+          "type": "Boolean",
+          "description": ""
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "name": "EmailInput",
+      "description": "",
+      "type": "Component",
+      "category": "WIN/Form",
+      "path": "WIN365.vue.components.EmailInput.vue",
+      "pathtype": "Direct",
+      "props": [
+        {
+          "name": "disabled",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "required",
+          "type": "Boolean",
+          "default": "false",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "modelValue",
+          "type": "String",
+          "default": "null",
+          "description": "",
+          "required": false
+        },
+        {
+          "name": "bind",
+          "type": "Function",
+          "default": "null",
+          "params": [
+            {
+              "name": "pSelected",
+              "type": "Tag[] | { Type: string, Email: string }[]"
+            }
+          ],
+          "description": "",
+          "required": false
+        }
+      ],
+      "slots": [],
+      "events": [],
+      "params": [],
+      "exposes": [
+        {
+          "name": "dsPersonsLkp",
+          "type": "DataObject",
+          "description": ""
+        },
+        {
+          "name": "tags",
+          "type": "Tag[] | { Type: string, Email: string }[]"
+        }
+      ],
+      "snippets": [
+        {
+          "title": "Example",
+          "content": "",
+          "code": "",
+          "language": "html"
+        }
+      ]
+    },
+    {
+      "id": 96,
       "name": "TEMPLATE",
       "description": "",
       "type": "TEMPLATE",

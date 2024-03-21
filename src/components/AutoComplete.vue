@@ -72,6 +72,9 @@ export type AutoCompleteProps = {
   getData?: () => Promise<ItemModel>
   getOptionLabel?: (pOption: Record<string, any>) => string;
   field: string;
+  /**
+   * Filters out the selected options
+   */
   filterSelectedOptions?: boolean;
   filterOperator?: 'beginswith' | 'contains' | 'endswith';
   multiple?: boolean;
