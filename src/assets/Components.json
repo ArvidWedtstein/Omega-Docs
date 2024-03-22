@@ -7193,6 +7193,27 @@
           "required": true
         },
         {
+          "name": "pdfs",
+          "type": "Array",
+          "default": "null",
+          "params": [
+            {
+              "name": "pPDFObject",
+              "type": "Object",
+              "params": [
+                {
+                  "name": "base64string",
+                  "type": "string",
+                  "default": "null",
+                  "required": true
+                }
+              ],
+              "required": false
+            }
+          ],
+          "required": false
+        },
+        {
           "name": "pFileName",
           "type": "String",
           "default": "null",
