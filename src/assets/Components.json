@@ -1801,6 +1801,14 @@
           "default": "null",
           "description": "",
           "required": false
+        },
+        {
+          "name": "boundFields",
+          "type": "Array",
+          "default": "null",
+          "description": "Specify fields here that need to be copied in addition to the field in the field prop.",
+          "example": "['OrgUnit']",
+          "required": false
         }
       ],
       "slots": [
